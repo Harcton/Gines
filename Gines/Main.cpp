@@ -41,12 +41,14 @@ int main(int argc, char** argv)
 
 
 	//run through the freetype test
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	{
-		Text testText;
-		if (testText.setFont("Fonts/Ponderosa.ttf", 14))
+		gines::Text testText;
+		if (testText.setFont("Fonts/Anonymous.ttf", 18))
+		//if (testText.setFont("Fonts/Ponderosa.ttf", 18))
+		//if (testText.setFont("Fonts/DroidSansMono.ttf", 18))	
 		{
 			testText.setPosition(1, WINDOW_HEIGHT - 1 - testText.getFontHeight());
 			testText.setString("Hey ma!I wanna be a rock star\nI told all my friends and bought myself a guitar\nWell the voice of disbelief was deafening\nThe look upon their faces, almost threatening\nAll that you could hear were cries of laughter\nSomeone even said I was a disaster, can you believe it ? (I can)\nHey ma!I wanna be a rock star\nI told all my friends and bought myself a guitar\nWell the voice of disbelief was deafening\nThe look upon their faces, almost threatening\nMaybe you'll be pleasantly surprised, you'd be right to trust me\nI believe the ghost of good news is gonna be haunting me\nWhy? I'll never know\nMaybe soon I'll find out\nI guess I'm in with a shout\nNever know if you don't try\nI don't know, I don't ask why\nThe voice of disbelief was deafening\nThe voice of disbelief was deafening\nHey ma!I wanna be a rock star\nHey ma why are you not listening?\nWhy are you not listening?\nThe voice of disbelief\nSaid the voice of disbelief\nHey ma!");

@@ -4,29 +4,32 @@
 #include <GL/glew.h>
 #include <string>
 
-class GLSLProgram
+namespace gines
 {
-public:
-	GLSLProgram();
-	~GLSLProgram();
+
+	class GLSLProgram
+	{
+	public:
+		GLSLProgram();
+		~GLSLProgram();
 
 
-	void compileShaders(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
-	void linkShaders();
-	void addAttribute(const std::string& attributeName);
+		void compileShaders(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+		void linkShaders();
+		void addAttribute(const std::string& attributeName);
 
-	GLint getUniformLocation(const std::string& uniformName);
+		GLint getUniformLocation(const std::string& uniformName);
 
-	void use();
-	void unuse();
+		void use();
+		void unuse();
 
-private:
-	void compileShader(const std::string& filePath, GLuint id);
-	int numberOfAttributes;
+	private:
+		void compileShader(const std::string& filePath, GLuint id);
+		int numberOfAttributes;
 
-	GLuint programID;
-	GLuint vertexShaderID;
-	GLuint fragmentShaderID;
-};
-
+		GLuint programID;
+		GLuint vertexShaderID;
+		GLuint fragmentShaderID;
+	};
+}
 #endif
