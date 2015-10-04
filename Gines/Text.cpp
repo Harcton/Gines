@@ -12,15 +12,13 @@ extern int WINDOW_HEIGHT;
 
 namespace gines
 {
-
+	static bool textRenderingInitialized = false;
+	static int textCount = 0;
 	static FT_Library* ft = nullptr;
-	GLuint vertexArrayID, vertexArrayData;
-	GLSLProgram textProgram;
-	std::vector<Face*> faces;
-	glm::mat4 projectionMatrix;
+	static GLSLProgram textProgram;
+	static std::vector<Face*> faces;
+	static glm::mat4 projectionMatrix;
 
-	bool textRenderingInitialized = false;
-	int textCount = 0;
 	void initializeTextRendering()
 	{
 		if (ft != nullptr)
@@ -89,6 +87,7 @@ namespace gines
 			{
 				if (size == faces[i]->fontSize)
 				{//Already loaded
+					std::cout << "\nFace already loaded";
 					face = faces[i];
 					face->referenceCount++;
 					return true;
@@ -99,7 +98,6 @@ namespace gines
 		//Create a new face
 		faces.push_back(new Face);
 		face = faces.back();
-
 		face->ftFace = new FT_Face;
 
 		FT_Error error = FT_New_Face(*ft, fontPath, 0, face->ftFace);
@@ -160,10 +158,10 @@ namespace gines
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		projectionMatrix = glm::ortho(0.0f, float(WINDOW_WIDTH), 0.0f, float(WINDOW_HEIGHT));
-		glGenVertexArrays(1, &vertexArrayID);
-		glGenBuffers(1, &vertexArrayData);
-		glBindVertexArray(vertexArrayID);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
+		glGenVertexArrays(1, &face->vertexArrayID);
+		glGenBuffers(1, &face->vertexArrayData);
+		glBindVertexArray(face->vertexArrayID);
+		glBindBuffer(GL_ARRAY_BUFFER, face->vertexArrayData);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
 		// The 2D quad requires 6 vertices of 4 floats each so we reserve 6 * 4 floats of memory.
 		// Because we'll be updating the content of the VBO's memory quite often we'll allocate the memory with GL_DYNAMIC_DRAW.
@@ -178,6 +176,7 @@ namespace gines
 
 	void Text::render()
 	{
+
 		//Enable blending
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -185,17 +184,30 @@ namespace gines
 		textProgram.use();
 		glUniformMatrix4fv(textProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 		glUniform3f(textProgram.getUniformLocation("textColor"), red, green, blue);
+
 		glActiveTexture(GL_TEXTURE0);
-		glBindVertexArray(vertexArrayID);
+		glBindVertexArray(face->vertexArrayID);
+
+		//Do an update if required
+		//if (doUpdate)
+			//updateVertexData();
+
+		//TESTING
+		glyphsToRender = 0;
+		/////////
 
 		int x = beginX;
 		int y = beginY;
-
+		
 		// Iterate through all characters
 		std::string::const_iterator c;
 		for (c = string.begin(); c != string.end(); c++)
-			if (*c != '\n')
-			{
+		if (*c != '\n')
+		{
+			//TESTING
+			glyphsToRender++;
+			/////////
+
 			Character ch = face->characters[*c];
 
 			GLfloat xpos = x + ch.bearing.x * scale;
@@ -205,7 +217,8 @@ namespace gines
 			GLfloat h = ch.size.y * scale;
 
 			// Update VBO for each character
-			GLfloat vertices[6][4] = {
+			GLfloat vertices[6][4] =
+			{
 					{ xpos, ypos + h, 0.0, 0.0 },
 					{ xpos, ypos, 0.0, 1.0 },
 					{ xpos + w, ypos, 1.0, 1.0 },
@@ -219,7 +232,7 @@ namespace gines
 			glBindTexture(GL_TEXTURE_2D, ch.textureID);
 
 			// Update content of VBO memory
-			glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
+			glBindBuffer(GL_ARRAY_BUFFER, face->vertexArrayData);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -228,39 +241,63 @@ namespace gines
 
 			// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 			x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
-			}
-			else
-			{//new line
-				x = beginX;
-				//y -= (face->top + face->bottom + lineSpacing) * scale;
-				y -= face->height + lineSpacing;
-			}
+		}
+		else
+		{//new line
+			x = beginX;
+			//y -= (face->top + face->bottom + lineSpacing) * scale;
+			y -= face->height + lineSpacing;
+		}
 
 		//Unbinds / unuse program
 		glBindVertexArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		textProgram.unuse();
 	}
+
+	void Text::updateVertexData()
+	{
+		//...TODO
+
+		doUpdate = false;
+	}
+
+
 	void Text::setString(std::string str)
 	{
 		string = str;
 	}
-	void Text::setPosition(int xPos, int yPos)
+	void Text::setPosition(vec2f& vec)
 	{
-		beginX = xPos;
-		beginY = yPos;
+		beginX = vec.x;
+		beginY = vec.y;
+		doUpdate = true;
 	}
-	void Text::setColor(float r, float g, float b, float a)
+	void Text::updatePositionTo(vec2f& vec)
 	{
-		red = r;
-		green = g;
-		blue = b;
-		alpha = a;
+		if (vec.x == beginX)
+			if (vec.y == beginY)
+				return;
+		setPosition(vec);
 	}
-
+	void Text::translate(vec2f& vec)
+	{
+		beginX += vec.x;
+		beginY += vec.y;
+		doUpdate = true;
+	}
+	void Text::setColor(vec4f& vec)
+	{
+		red = vec.x;
+		green = vec.y;
+		blue = vec.z;
+		alpha = vec.w;
+	}
 	int Text::getFontHeight()
 	{
 		return face->height;
 	}
 
 }
+
+

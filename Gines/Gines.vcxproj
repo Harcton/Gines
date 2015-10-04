@@ -79,6 +79,7 @@
     <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Gines.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="Text.h" />
   </ItemGroup>
