@@ -21,9 +21,9 @@ namespace gines
 		glm::ivec2 bearing;    // Offset from baseline to left/top of glyph
 		GLuint     advance;    // Offset to advance to next glyph
 	};
-	struct Face
+	struct Font
 	{
-		~Face()
+		~Font()
 		{
 			if (ftFace != nullptr)
 			{
@@ -48,12 +48,11 @@ namespace gines
 		~Text();
 
 		bool setFont(char* fontPath, int size);
+		bool setFontSize(int size);
 		void render();
-		void updateVertexData();
 		void setString(std::string str);
 		void setColor(vec4f& col);
 		void setPosition(vec2f& vec);
-		void updatePositionTo(vec2f& vec);
 		void translate(vec2f& vec);
 
 		int getFontHeight();
@@ -61,13 +60,19 @@ namespace gines
 		//TESTING
 		int glyphsToRender = 0;
 	private:
-		bool doUpdate = true;
-		float red = 0.0f, green = 0.0f, blue = 0.0f, alpha = 1.0f;
-		std::string string;
-		int beginX = 0, beginY = 0;
+		float red = 0.0f;
+		float green = 0.0f;
+		float blue = 0.0f;
+		float alpha = 1.0f;
 		float scale = 1.0f;
-		Face* face;
+		int beginX = 0;
+		int beginY = 0;
 		int lineSpacing = 0;
+
+		std::string string;
+		Font* font = nullptr;
+
+		void unreferenceFont();
 
 	};
 }

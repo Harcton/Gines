@@ -16,7 +16,7 @@ namespace gines
 	static int textCount = 0;
 	static FT_Library* ft = nullptr;
 	static GLSLProgram textProgram;
-	static std::vector<Face*> faces;
+	static std::vector<Font*> fonts;
 	static glm::mat4 projectionMatrix;
 
 	void initializeTextRendering()
@@ -61,56 +61,79 @@ namespace gines
 	}
 	Text::~Text()
 	{
-		//if face becomes useless, remove
-		if (--face->referenceCount <= 0)
-		{
-			for (unsigned int i = 0; i < faces.size(); i++)
-				if (faces[i] == face)
-				{
-				faces.erase(faces.begin() + i);
-				delete face;
-				}
-		}
-
+		unreferenceFont();
 		textCount--;
 		if (textCount == 0)
 		{
 			uninitializeTextRendering();
 		}
 	}
+	void Text::unreferenceFont()
+	{
+		//if face becomes useless, remove
+		if (--font->referenceCount <= 0)
+		{
+			for (unsigned int i = 0; i < fonts.size(); i++)
+				if (fonts[i] == font)
+				{
+				fonts.erase(fonts.begin() + i);
+				delete font;
+				font = nullptr;
+				return;
+				}
+		}
+	}
+	bool Text::setFontSize(int size)
+	{
+		//No font loaded
+		if (font == nullptr)
+			return false;
+		
+		//The size already matches
+		if (font->fontSize == size)
+			return true;
 
+		//Get new font face
+		char* fontPath = font->fontPath;
+		unreferenceFont();
+		setFont(fontPath, size);
+		return true;
+	}
 	bool Text::setFont(char* fontPath, int size)
 	{
-		for (unsigned int i = 0; i < faces.size(); i++)
+		if (font != nullptr)
+			unreferenceFont();
+
+		for (unsigned int i = 0; i < fonts.size(); i++)
 		{
-			if (fontPath == faces[i]->fontPath)
+			if (fontPath == fonts[i]->fontPath)
 			{
-				if (size == faces[i]->fontSize)
+				if (size == fonts[i]->fontSize)
 				{//Already loaded
 					std::cout << "\nFace already loaded";
-					face = faces[i];
-					face->referenceCount++;
+					font = fonts[i];
+					font->referenceCount++;
 					return true;
 				}
 			}
 		}
 
-		//Create a new face
-		faces.push_back(new Face);
-		face = faces.back();
-		face->ftFace = new FT_Face;
+		//Create a new font
+		fonts.push_back(new Font);
+		font = fonts.back();
+		font->ftFace = new FT_Face;
 
-		FT_Error error = FT_New_Face(*ft, fontPath, 0, face->ftFace);
+		FT_Error error = FT_New_Face(*ft, fontPath, 0, font->ftFace);
 		if (error)
 		{
 			std::cout << "\nFreetype error: Failed to load font \"" << fontPath << "\" code: " << error;
 			return false;
 		}
 
-		face->fontPath = fontPath;
-		face->fontSize = size;
-		face->referenceCount = 1;
-		FT_Face* ftFace = face->ftFace;
+		font->fontPath = fontPath;
+		font->fontSize = size;
+		font->referenceCount = 1;
+		FT_Face* ftFace = font->ftFace;
 		FT_Set_Pixel_Sizes(*ftFace, 0, size);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -152,16 +175,16 @@ namespace gines
 				glm::ivec2((*ftFace)->glyph->bitmap_left, (*ftFace)->glyph->bitmap_top),
 				(*ftFace)->glyph->advance.x
 			};
-			face->characters.insert(std::pair<GLchar, Character>(c, character));
+			font->characters.insert(std::pair<GLchar, Character>(c, character));
 		}
-		face->height = (*face->ftFace)->height / 64.0f;
+		font->height = (*font->ftFace)->height / 64.0f;
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		projectionMatrix = glm::ortho(0.0f, float(WINDOW_WIDTH), 0.0f, float(WINDOW_HEIGHT));
-		glGenVertexArrays(1, &face->vertexArrayID);
-		glGenBuffers(1, &face->vertexArrayData);
-		glBindVertexArray(face->vertexArrayID);
-		glBindBuffer(GL_ARRAY_BUFFER, face->vertexArrayData);
+		glGenVertexArrays(1, &font->vertexArrayID);
+		glGenBuffers(1, &font->vertexArrayData);
+		glBindVertexArray(font->vertexArrayID);
+		glBindBuffer(GL_ARRAY_BUFFER, font->vertexArrayData);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
 		// The 2D quad requires 6 vertices of 4 floats each so we reserve 6 * 4 floats of memory.
 		// Because we'll be updating the content of the VBO's memory quite often we'll allocate the memory with GL_DYNAMIC_DRAW.
@@ -176,7 +199,6 @@ namespace gines
 
 	void Text::render()
 	{
-
 		//Enable blending
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -186,11 +208,8 @@ namespace gines
 		glUniform3f(textProgram.getUniformLocation("textColor"), red, green, blue);
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindVertexArray(face->vertexArrayID);
+		glBindVertexArray(font->vertexArrayID);
 
-		//Do an update if required
-		//if (doUpdate)
-			//updateVertexData();
 
 		//TESTING
 		glyphsToRender = 0;
@@ -208,7 +227,7 @@ namespace gines
 			glyphsToRender++;
 			/////////
 
-			Character ch = face->characters[*c];
+			Character ch = font->characters[*c];
 
 			GLfloat xpos = x + ch.bearing.x * scale;
 			GLfloat ypos = y - (ch.size.y - ch.bearing.y) * scale;
@@ -232,7 +251,7 @@ namespace gines
 			glBindTexture(GL_TEXTURE_2D, ch.textureID);
 
 			// Update content of VBO memory
-			glBindBuffer(GL_ARRAY_BUFFER, face->vertexArrayData);
+			glBindBuffer(GL_ARRAY_BUFFER, font->vertexArrayData);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -245,8 +264,7 @@ namespace gines
 		else
 		{//new line
 			x = beginX;
-			//y -= (face->top + face->bottom + lineSpacing) * scale;
-			y -= face->height + lineSpacing;
+			y -= font->height + lineSpacing;
 		}
 
 		//Unbinds / unuse program
@@ -254,15 +272,7 @@ namespace gines
 		glBindTexture(GL_TEXTURE_2D, 0);
 		textProgram.unuse();
 	}
-
-	void Text::updateVertexData()
-	{
-		//...TODO
-
-		doUpdate = false;
-	}
-
-
+	
 	void Text::setString(std::string str)
 	{
 		string = str;
@@ -271,20 +281,11 @@ namespace gines
 	{
 		beginX = vec.x;
 		beginY = vec.y;
-		doUpdate = true;
-	}
-	void Text::updatePositionTo(vec2f& vec)
-	{
-		if (vec.x == beginX)
-			if (vec.y == beginY)
-				return;
-		setPosition(vec);
 	}
 	void Text::translate(vec2f& vec)
 	{
 		beginX += vec.x;
 		beginY += vec.y;
-		doUpdate = true;
 	}
 	void Text::setColor(vec4f& vec)
 	{
@@ -295,7 +296,7 @@ namespace gines
 	}
 	int Text::getFontHeight()
 	{
-		return face->height;
+		return font->height;
 	}
 
 }
