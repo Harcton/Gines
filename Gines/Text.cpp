@@ -51,14 +51,13 @@ namespace gines
 	}
 
 
-	Text::Text(const drawMode::DrawMode& mode)
+	Text::Text()
 	{
 		textCount++;
 		if (!textRenderingInitialized)
 		{
 			initializeTextRendering();
 		}
-		mDrawMode = mode;
 	}
 	Text::~Text()
 	{
@@ -134,7 +133,7 @@ namespace gines
 				GL_RED,
 				(*ftFace)->glyph->bitmap.width,
 				(*ftFace)->glyph->bitmap.rows,
-				1.01f,
+				0,
 				GL_RED,
 				GL_UNSIGNED_BYTE,
 				(*ftFace)->glyph->bitmap.buffer
@@ -149,9 +148,9 @@ namespace gines
 			// Now store character for later use
 			Character character = {
 				texture,
-				(*ftFace)->glyph->advance.x,
 				glm::ivec2((*ftFace)->glyph->bitmap.width, (*ftFace)->glyph->bitmap.rows),
 				glm::ivec2((*ftFace)->glyph->bitmap_left, (*ftFace)->glyph->bitmap_top),
+				(*ftFace)->glyph->advance.x
 			};
 			face->characters.insert(std::pair<GLchar, Character>(c, character));
 		}
