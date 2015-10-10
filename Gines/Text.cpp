@@ -102,7 +102,12 @@ namespace gines
 	bool Text::setFont(char* fontPath, int size)
 	{
 		if (font != nullptr)
-			unreferenceFont();
+		{unreferenceFont();}
+
+
+		if (vertexArrayID == 0)
+		{glGenVertexArrays(1, &vertexArrayID);}
+
 
 		for (unsigned int i = 0; i < fonts.size(); i++)
 		{
@@ -113,6 +118,7 @@ namespace gines
 					std::cout << "\nFace already loaded";
 					font = fonts[i];
 					font->referenceCount++;
+					doUpdate = true;
 					return true;
 				}
 			}
@@ -169,7 +175,8 @@ namespace gines
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 			// Now store character for later use
-			Character character = {
+			Character character =
+			{
 				texture,
 				glm::ivec2((*ftFace)->glyph->bitmap.width, (*ftFace)->glyph->bitmap.rows),
 				glm::ivec2((*ftFace)->glyph->bitmap_left, (*ftFace)->glyph->bitmap_top),
@@ -177,15 +184,27 @@ namespace gines
 			};
 			font->characters.insert(std::pair<GLchar, Character>(c, character));
 		}
-		font->height = (*font->ftFace)->height / 64.0f;
 
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		font->height = (*font->ftFace)->size->metrics.height >> 6;
 		projectionMatrix = glm::ortho(0.0f, float(WINDOW_WIDTH), 0.0f, float(WINDOW_HEIGHT));
-		glGenVertexArrays(1, &font->vertexArrayID);
-		glGenBuffers(1, &font->vertexArrayData);
-		glBindVertexArray(font->vertexArrayID);
-		glBindBuffer(GL_ARRAY_BUFFER, font->vertexArrayData);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+
+		doUpdate = true;
+
+
+		return true;
+	}
+	void Text::updateBuffers()
+	{
+		//This function should be called everytime the number of glyphs to render changes
+		updateGlyphsToRender();
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glBindVertexArray(vertexArrayID);
+
+		if (vertexArrayData != 0)
+			glDeleteBuffers(1, &vertexArrayData);
+		glGenBuffers(1, &vertexArrayData);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4 * glyphsToRender, NULL, GL_DYNAMIC_DRAW);
 		// The 2D quad requires 6 vertices of 4 floats each so we reserve 6 * 4 floats of memory.
 		// Because we'll be updating the content of the VBO's memory quite often we'll allocate the memory with GL_DYNAMIC_DRAW.
 		glEnableVertexAttribArray(0);
@@ -193,40 +212,19 @@ namespace gines
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
-		return true;
-	}
 
-
-	void Text::render()
-	{
-		//Enable blending
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		textProgram.use();
-		glUniformMatrix4fv(textProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-		glUniform3f(textProgram.getUniformLocation("textColor"), red, green, blue);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindVertexArray(font->vertexArrayID);
-
-
-		//TESTING
-		glyphsToRender = 0;
-		/////////
 
 		int x = beginX;
 		int y = beginY;
-		
-		// Iterate through all characters
-		std::string::const_iterator c;
-		for (c = string.begin(); c != string.end(); c++)
-		if (*c != '\n')
-		{
-			//TESTING
-			glyphsToRender++;
-			/////////
 
+		// Iterate through all characters
+		delete[] textures;
+		textures = new GLuint[glyphsToRender];
+		GLfloat* vertices = new GLfloat[24 * glyphsToRender];
+		int _index = 0;
+		for (auto c = string.begin(); c != string.end(); c++)
+			if (*c != '\n')
+			{
 			Character ch = font->characters[*c];
 
 			GLfloat xpos = x + ch.bearing.x * scale;
@@ -236,36 +234,100 @@ namespace gines
 			GLfloat h = ch.size.y * scale;
 
 			// Update VBO for each character
-			GLfloat vertices[6][4] =
-			{
-					{ xpos, ypos + h, 0.0, 0.0 },
-					{ xpos, ypos, 0.0, 1.0 },
-					{ xpos + w, ypos, 1.0, 1.0 },
+			vertices[_index * 24 + 0] = xpos;
+			vertices[_index * 24 + 1] = ypos + h;
+			vertices[_index * 24 + 2] = 0.0f;
+			vertices[_index * 24 + 3] = 0.0f;
 
-					{ xpos, ypos + h, 0.0, 0.0 },
-					{ xpos + w, ypos, 1.0, 1.0 },
-					{ xpos + w, ypos + h, 1.0, 0.0 }
-			};
+			vertices[_index * 24 + 4] = xpos;
+			vertices[_index * 24 + 5] = ypos;
+			vertices[_index * 24 + 6] = 0.0f;
+			vertices[_index * 24 + 7] = 1.0f;
+
+			vertices[_index * 24 + 8] = xpos + w;
+			vertices[_index * 24 + 9] = ypos;
+			vertices[_index * 24 + 10] = 1.0f;
+			vertices[_index * 24 + 11] = 1.0f;
+
+			vertices[_index * 24 + 12] = xpos;
+			vertices[_index * 24 + 13] = ypos + h;
+			vertices[_index * 24 + 14] = 0.0f;
+			vertices[_index * 24 + 15] = 0.0f;
+
+			vertices[_index * 24 + 16] = xpos + w;
+			vertices[_index * 24 + 17] = ypos;
+			vertices[_index * 24 + 18] = 1.0f;
+			vertices[_index * 24 + 19] = 1.0f;
+
+			vertices[_index * 24 + 20] = xpos + w;
+			vertices[_index * 24 + 21] = ypos + h;
+			vertices[_index * 24 + 22] = 1.0f;
+			vertices[_index * 24 + 23] = 0.0f;
+
+			//{
+			//		{ xpos, ypos + h, 0.0, 0.0 },
+			//		{ xpos, ypos, 0.0, 1.0 },
+			//		{ xpos + w, ypos, 1.0, 1.0 },
+
+			//		{ xpos, ypos + h, 0.0, 0.0 },
+			//		{ xpos + w, ypos, 1.0, 1.0 },
+			//		{ xpos + w, ypos + h, 1.0, 0.0 }
+			//};
 
 			// Render glyph texture over quad
-			glBindTexture(GL_TEXTURE_2D, ch.textureID);
-
-			// Update content of VBO memory
-			glBindBuffer(GL_ARRAY_BUFFER, font->vertexArrayData);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			// Render quad
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			textures[_index] = ch.textureID;
 
 			// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 			x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+			_index++;
+			}
+			else
+			{//new line
+				x = beginX;
+				y -= font->height + lineSpacing;
+			}
+
+
+		//Submit data
+		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 24 * glyphsToRender, vertices);
+		delete[] vertices;
+		doUpdate = false;
+
+	}
+	void Text::updateGlyphsToRender()
+	{
+		glyphsToRender = 0;
+		for (auto c = string.begin(); c != string.end(); c++)
+			if (*c != '\n')
+			{
+				glyphsToRender++;
+			}
+	}
+
+	void Text::render()
+	{
+		if (doUpdate)
+			updateBuffers();
+
+		//Enable blending
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		textProgram.use();
+		glUniformMatrix4fv(textProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+		glUniform3f(textProgram.getUniformLocation("textColor"), red, green, blue);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindVertexArray(vertexArrayID);
+		
+		for (int i = 0; i < glyphsToRender; i++)
+		{//Draw
+			glBindTexture(GL_TEXTURE_2D, textures[i]);
+			glDrawArrays(GL_TRIANGLES, i * 6, 6);
 		}
-		else
-		{//new line
-			x = beginX;
-			y -= font->height + lineSpacing;
-		}
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
 
 		//Unbinds / unuse program
 		glBindVertexArray(0);
@@ -276,16 +338,19 @@ namespace gines
 	void Text::setString(std::string str)
 	{
 		string = str;
+		doUpdate = true;
 	}
 	void Text::setPosition(vec2f& vec)
 	{
 		beginX = vec.x;
 		beginY = vec.y;
+		doUpdate = true;
 	}
 	void Text::translate(vec2f& vec)
 	{
 		beginX += vec.x;
 		beginY += vec.y;
+		doUpdate = true;
 	}
 	void Text::setColor(vec4f& vec)
 	{
@@ -302,3 +367,91 @@ namespace gines
 }
 
 
+/*
+
+
+
+
+
+
+void Text::render()
+{
+//Enable blending
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+textProgram.use();
+glUniformMatrix4fv(textProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+glUniform3f(textProgram.getUniformLocation("textColor"), red, green, blue);
+
+glActiveTexture(GL_TEXTURE0);
+glBindVertexArray(font->vertexArrayID);
+
+
+//TESTING
+glyphsToRender = 0;
+/////////
+
+int x = beginX;
+int y = beginY;
+
+// Iterate through all characters
+std::string::const_iterator c;
+for (c = string.begin(); c != string.end(); c++)
+if (*c != '\n')
+{
+//TESTING
+glyphsToRender++;
+/////////
+
+Character ch = font->characters[*c];
+
+GLfloat xpos = x + ch.bearing.x * scale;
+GLfloat ypos = y - (ch.size.y - ch.bearing.y) * scale;
+
+GLfloat w = ch.size.x * scale;
+GLfloat h = ch.size.y * scale;
+
+// Update VBO for each character
+GLfloat vertices[6][4] =
+{
+{ xpos, ypos + h, 0.0, 0.0 },
+{ xpos, ypos, 0.0, 1.0 },
+{ xpos + w, ypos, 1.0, 1.0 },
+
+{ xpos, ypos + h, 0.0, 0.0 },
+{ xpos + w, ypos, 1.0, 1.0 },
+{ xpos + w, ypos + h, 1.0, 0.0 }
+};
+
+// Render glyph texture over quad
+glBindTexture(GL_TEXTURE_2D, ch.textureID);
+
+// Update content of VBO memory
+glBindBuffer(GL_ARRAY_BUFFER, font->vertexArrayData);
+glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+// Render quad
+glDrawArrays(GL_TRIANGLES, 0, 6);
+
+// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+}
+else
+{//new line
+x = beginX;
+y -= font->height + lineSpacing;
+}
+
+//Unbinds / unuse program
+glBindVertexArray(0);
+glBindTexture(GL_TEXTURE_2D, 0);
+textProgram.unuse();
+}
+
+
+
+
+
+*/

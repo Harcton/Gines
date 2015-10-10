@@ -32,7 +32,6 @@ namespace gines
 			}
 		}
 
-		GLuint vertexArrayID = 0, vertexArrayData = 0;
 		FT_Face* ftFace = nullptr;
 		char* fontPath;
 		int fontSize;
@@ -57,8 +56,11 @@ namespace gines
 
 		int getFontHeight();
 
-		//TESTING
 		int glyphsToRender = 0;
+		GLuint vertexArrayID = 0, vertexArrayData = 0;
+		void updateGlyphsToRender();
+		void updateBuffers(); 
+		GLuint* textures = nullptr;
 	private:
 		float red = 0.0f;
 		float green = 0.0f;
@@ -68,6 +70,7 @@ namespace gines
 		int beginX = 0;
 		int beginY = 0;
 		int lineSpacing = 0;
+		bool doUpdate = true;
 
 		std::string string;
 		Font* font = nullptr;
