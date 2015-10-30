@@ -15,7 +15,7 @@ public:
 	void keyRelease(unsigned int keyID);
 	void handleInput();
 
-	bool isKeyPressed(unsigned int keyID);
+	bool isKeyHeld(unsigned int keyID);
 
 private:
 	std::unordered_map <unsigned int, bool> keyMap;

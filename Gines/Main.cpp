@@ -138,37 +138,37 @@ void handleInput()
 
 		// These will likely be handled within the inputManager's handleInput function in the future. Will remain here for now.
 
-		if (inputManager.isKeyPressed(SDLK_ESCAPE))
+		if (inputManager.isKeyHeld(SDLK_ESCAPE))
 		{
 			run = false;
 		}
-		if (inputManager.isKeyPressed(SDLK_RETURN))
+		if (inputManager.isKeyHeld(SDLK_RETURN))
 		{
 			increaseTextCount();
 			std::cout << "\nText count increased! texts.size(): " << texts.size();
 		}
-		if (inputManager.isKeyPressed(SDLK_UP))
+		if (inputManager.isKeyHeld(SDLK_UP))
 		{
 			for (unsigned i = 0; i < texts.size(); i++)
 			{
 				texts[i]->translate(glm::vec2(0, float(moveSpeed * (float(i + 1) / texts.size()))));
 			}
 		}
-		if (inputManager.isKeyPressed(SDLK_DOWN))
+		if (inputManager.isKeyHeld(SDLK_DOWN))
 		{
 			for (unsigned i = 0; i < texts.size(); i++)
 			{
 				texts[i]->translate(glm::vec2(0, float(-moveSpeed * (float(i + 1) / texts.size()))));
 			}
 		}
-		if (inputManager.isKeyPressed(SDLK_LEFT))
+		if (inputManager.isKeyHeld(SDLK_LEFT))
 		{
 			for (unsigned i = 0; i < texts.size(); i++)
 			{
 				texts[i]->translate(glm::vec2(float(-moveSpeed * (float(i + 1) / texts.size())), 0));
 			}
 		}
-		if (inputManager.isKeyPressed(SDLK_RIGHT))
+		if (inputManager.isKeyHeld(SDLK_RIGHT))
 		{
 			for (unsigned i = 0; i < texts.size(); i++)
 			{
