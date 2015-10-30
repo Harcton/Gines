@@ -4,7 +4,9 @@
 #include "Time.h"
 #include "Text.h"
 
+#define FPS_REFRESH_RATE 5
 
+extern int WINDOW_HEIGHT;
 
 namespace gines
 {
@@ -39,7 +41,8 @@ namespace gines
 			return false;
 		}
 
-		fpsCounter->setColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+		fpsCounter->setColor(glm::vec4(0.12f, 0.45f, 0.07f, 1.0f));
+		fpsCounter->setPosition(glm::vec2(5, WINDOW_HEIGHT - fpsCounter->getFontHeight()));
 
 		initialized = true;
 		return true;
@@ -57,7 +60,7 @@ namespace gines
 	}
 	void endFPS()
 	{
-		static const int NUM_SAMPLES = 6;
+		static const int NUM_SAMPLES = 20;
 		static Uint32 deltaTimes[NUM_SAMPLES];
 		static int currentFrame = 0;
 
@@ -89,17 +92,21 @@ namespace gines
 		else
 			fps = 0;
 
-
-
-
-		fpsCounter->setString("FPS: ");//std::to_string(fps));
-		fpsCounter->render();
+		static int frameCounter = 0;
+		if (++frameCounter >= FPS_REFRESH_RATE)
+		{
+			fpsCounter->setString("FPS: " + std::to_string(int(fps)));
+			frameCounter = 0;
+		}
 
 		//Limit FPS = delay return
 		Uint32 frameTicks = SDL_GetTicks() - startTicks;
 		if (1000.0f / maxFPS > frameTicks)
 			SDL_Delay(Uint32(1000.0f / maxFPS) - frameTicks);
 	}
-
+	void drawFPS()
+	{
+		fpsCounter->render();
+	}
 
 }

@@ -16,7 +16,6 @@ namespace gines
 	bool initialize()
 	{
 		SDL_Init(SDL_INIT_VIDEO);
-
 		mWindow = SDL_CreateWindow("SDL project",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
@@ -28,14 +27,11 @@ namespace gines
 			return false;
 		}
 
-		renderingContex = SDL_GL_CreateContext(mWindow);
-		if (renderingContex == NULL)
+		if ((renderingContex = SDL_GL_CreateContext(mWindow)) == NULL)
 		{
 			std::cout << "\nInitialization failed! Failed to create SDL rendering context!";
 			return false;
 		}
-
-
 
 		if (glewInit() != GLEW_OK)
 		{
@@ -43,24 +39,35 @@ namespace gines
 			return false;
 		}
 
-
-		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
-
-
 		if (!gines::initializeTime())
 		{
 			std::cout << "\nInitialization failed! Failed to initialize time!";
 			return false;
 		}
 
-
+		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
 		std::cout << "\nPowered by... Gines (2015)";
 		return true;
 	}
 
 	void uninitialize()
 	{
+		uninitializeTime();
+	}
 
 
+
+
+
+	void beginMainLoop()
+	{
+		beginFPS();
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+	void endMainLoop()
+	{
+		drawFPS();
+		SDL_GL_SwapWindow(mWindow);
+		endFPS();
 	}
 }

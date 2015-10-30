@@ -264,16 +264,6 @@ namespace gines
 			vertices[_index * 24 + 22] = 1.0f;
 			vertices[_index * 24 + 23] = 0.0f;
 
-			//{
-			//		{ xpos, ypos + h, 0.0, 0.0 },
-			//		{ xpos, ypos, 0.0, 1.0 },
-			//		{ xpos + w, ypos, 1.0, 1.0 },
-
-			//		{ xpos, ypos + h, 0.0, 0.0 },
-			//		{ xpos + w, ypos, 1.0, 1.0 },
-			//		{ xpos + w, ypos + h, 1.0, 0.0 }
-			//};
-
 			// Render glyph texture over quad
 			textures[_index] = ch.textureID;
 

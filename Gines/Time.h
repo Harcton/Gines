@@ -15,6 +15,8 @@ namespace gines
 	void uninitializeTime();
 	void beginFPS();
 	void endFPS();
+	void drawFPS();
+
 }
 
 #endif

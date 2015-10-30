@@ -6,6 +6,8 @@ namespace gines
 	bool initialize();
 	void uninitialize();
 
+	void beginMainLoop();
+	void endMainLoop();
 
 }
 
