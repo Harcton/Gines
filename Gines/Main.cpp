@@ -22,9 +22,30 @@ extern int WINDOW_HEIGHT;
 
 
 
+//Test console function
+void testConsole(std::vector<std::string>& consoleWords)
+{
+	gines::console.log("Test command success. Other parameters used in command:");
+	if (consoleWords.size() == 1)
+		gines::console.log("\t[None]");
+
+	for (unsigned i = 1; i < consoleWords.size(); i++)
+	{
+		gines::console.log("[" + std::to_string(i) + "] " + consoleWords[i]);
+	}
+}
+
+
 int main(int argc, char** argv)
 {
 	gines::initialize();
+
+	gines::console.addConsoleCommand("test", testConsole);
+	gines::console.addVariable("fps", gines::showFps);
+	gines::console.addVariable("run", run);
+	gines::console.addVariable("fontSize", gines::consoleFontSize);
+
+	
 
 	//Game loop
 	while (run)
@@ -65,7 +86,7 @@ void handleInput()
 	{
 		run = false;
 	}
-	if (gines::inputManager.isKeyPressed(SDLK_RETURN))
+	if (gines::inputManager.isKeyPressed(SDLK_RCTRL))
 	{
 		increaseTextCount();
 		std::cout << "\nText count increased! texts.size(): " << texts.size();

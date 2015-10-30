@@ -4,6 +4,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Gines.h"
 #include "Text.h"
 #include "GLSLProgram.h"
 
@@ -349,6 +350,11 @@ namespace gines
 	int Text::getFontHeight()
 	{
 		return font->height;
+	}
+
+	glm::vec4& Text::getColorRef()
+	{
+		return color;
 	}
 
 }
