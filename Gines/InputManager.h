@@ -1,6 +1,6 @@
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
-
+#include <glm\glm.hpp>
 #include <unordered_map>
 //#include <SDL\SDL.h>
 //#include "Gines.h"
@@ -18,7 +18,7 @@ namespace gines
 
 		void keyPress(unsigned int keyID);
 		void keyRelease(unsigned int keyID);
-		void handleInput();
+		void setMouseCoordinates(float x, float y);
 
 		// Returns true if a key is held down
 
@@ -28,9 +28,14 @@ namespace gines
 
 		bool isKeyPressed(unsigned int keyID);
 
+		// Gets
+		glm::vec2 getMouseCoordinates() const { return mouseCoordinates; };
+
 	private:
 		std::unordered_map <unsigned int, bool> keyMap;
 		std::unordered_map <unsigned int, bool> previousKeyMap;
+		
+		glm::vec2 mouseCoordinates;
 
 		bool wasKeyHeld(unsigned int keyID);
 	};

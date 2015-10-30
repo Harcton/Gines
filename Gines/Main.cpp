@@ -98,6 +98,11 @@ void handleInput()
 			texts[i]->translate(glm::vec2(float(moveSpeed * (float(i + 1) / texts.size())), 0));
 		}
 	}
+	if (gines::inputManager.isKeyHeld(SDL_BUTTON_LEFT))
+	{
+		glm::vec2 mouseCoordinates = gines::inputManager.getMouseCoordinates();
+		std::cout << mouseCoordinates.x << "  " << mouseCoordinates.y << std::endl;
+	}
 }
 void increaseTextCount()
 {
