@@ -51,6 +51,7 @@ int main(int argc, char** argv)
 
 
 		///////
+		inputManager.update();
 		handleInput();
 		for (unsigned i = 0; i < texts.size(); i++)
 		{texts[i]->render();}
