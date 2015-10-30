@@ -8,22 +8,16 @@
 #include "Text.h"
 #include "Gines.h"
 #include "InputManager.h"
+#include "Console.h"
 #include "Time.h"
 
 
-
-// InputManager initialization.
-InputManager inputManager;
-//
 
 //DEEBUGGIA...
 void handleInput();
 void increaseTextCount();
 bool run = true;
 std::vector<gines::Text*> texts;
-
-
-extern SDL_Window *mWindow;
 extern int WINDOW_HEIGHT;
 
 
@@ -32,35 +26,28 @@ int main(int argc, char** argv)
 {
 	gines::initialize();
 
-
 	//Game loop
 	while (run)
 	{
 		gines::beginMainLoop();
 
-
 		//Event handling
 		handleInput();
 
-
 		//Rendering
 		for (unsigned i = 0; i < texts.size(); i++)
-		{texts[i]->render();}
-
-		
+		{texts[i]->render();}		
 
 		gines::endMainLoop();
 	}
 
-
-	///////
+	///////DEBUG
 	//Deallocate text memory...
 	while (!texts.empty())
 	{
 		delete texts.back();
 		texts.pop_back();
-	}
-	///////
+	}//////EoDEBUG
 
 
 	return gines::uninitialize();
@@ -72,60 +59,39 @@ int main(int argc, char** argv)
 //DEEBUGGIA...
 void handleInput()
 {
-	static SDL_Event mEvent;
-	while (SDL_PollEvent(&mEvent))
-	{
-		switch (mEvent.type)
-		{
-		default:
-			break;
-		case SDL_KEYDOWN:
-			inputManager.keyPress(mEvent.key.keysym.sym);
-			break;
-		case SDL_KEYUP:
-			inputManager.keyRelease(mEvent.key.keysym.sym);
-			break;
-		case SDL_QUIT:
-			run = false;
-			break;
-		}
-	}
-
-
-
 	float moveSpeed = 5 * texts.size();
 	// These will likely be handled within the inputManager's handleInput function in the future. Will remain here for now.
-	if (inputManager.isKeyHeld(SDLK_ESCAPE))
+	if (gines::inputManager.isKeyHeld(SDLK_ESCAPE))
 	{
 		run = false;
 	}
-	if (inputManager.isKeyHeld(SDLK_RETURN))
+	if (gines::inputManager.isKeyPressed(SDLK_RETURN))
 	{
 		increaseTextCount();
 		std::cout << "\nText count increased! texts.size(): " << texts.size();
 	}
-	if (inputManager.isKeyHeld(SDLK_UP))
+	if (gines::inputManager.isKeyHeld(SDLK_UP))
 	{
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(0, float(moveSpeed * (float(i + 1) / texts.size()))));
 		}
 	}
-	if (inputManager.isKeyHeld(SDLK_DOWN))
+	if (gines::inputManager.isKeyHeld(SDLK_DOWN))
 	{
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(0, float(-moveSpeed * (float(i + 1) / texts.size()))));
 		}
 	}
-	if (inputManager.isKeyHeld(SDLK_LEFT))
+	if (gines::inputManager.isKeyHeld(SDLK_LEFT))
 	{
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(float(-moveSpeed * (float(i + 1) / texts.size())), 0));
 		}
 	}
-	if (inputManager.isKeyHeld(SDLK_RIGHT))
+	if (gines::inputManager.isKeyHeld(SDLK_RIGHT))
 	{
 		for (unsigned i = 0; i < texts.size(); i++)
 		{

@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="Gines.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -83,6 +84,7 @@
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Console.h" />
     <ClInclude Include="Gines.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="InputManager.h" />

@@ -1,20 +1,24 @@
-#include <SDL\SDL.h>
+#include "Gines.h"
+#include "Time.h"
+
+#include <SDL/SDL.h>
 #include <GL/glew.h>
 #include <iostream>
 
-#include "Gines.h"
-#include "Time.h"
-#include "InputManager.h"
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
 SDL_GLContext renderingContex;
 SDL_Window *mWindow = nullptr;
-extern InputManager inputManager;
 
 
 namespace gines
 {
+	//"Singleton" classes
+	InputManager inputManager;
+	Console console;
+
+
 	bool initialize()
 	{
 		SDL_Init(SDL_INIT_VIDEO);
@@ -47,6 +51,13 @@ namespace gines
 			return false;
 		}
 
+		if (console.initialize() != 0)
+		{
+			std::cout << "\nInitialization failed! Failed to initialize console!";
+			return false;
+		}
+
+
 		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
 		std::cout << "\nPowered by... Gines (2015)";
 		return true;
@@ -55,6 +66,7 @@ namespace gines
 	int uninitialize()
 	{
 		uninitializeTime();
+		console.unitialize();
 
 		std::cout << "\nExited succesfully";
 		std::getchar();
@@ -70,10 +82,12 @@ namespace gines
 		beginFPS();
 		glClear(GL_COLOR_BUFFER_BIT);
 		inputManager.update();
+		console.update();
+		console.render();
+		drawFPS();
 	}
 	void endMainLoop()
 	{
-		drawFPS();
 		SDL_GL_SwapWindow(mWindow);
 		endFPS();
 	}
