@@ -127,6 +127,7 @@ int main(int argc, char** argv)
 
 
 //DEEBUGGIA...
+
 void handleInput()
 {
 	float moveSpeed = texts.size();
@@ -141,7 +142,7 @@ void handleInput()
 
 			// Useless, Teogod shalt smite this commented area once he graces us with his presence.
 
-			/*
+			
 			switch (mEvent.key.keysym.sym)
 			{
 			case SDLK_ESCAPE:
@@ -169,7 +170,7 @@ void handleInput()
 				break;
 			}
 			break;
-			*/
+			
 
 		case SDL_KEYUP:
 			inputManager.keyRelease(mEvent.key.keysym.sym);
@@ -221,7 +222,10 @@ void handleInput()
 		}
 		
 	}
+	
 }
+
+
 void calculateFPS()
 {
 	static const int NUM_SAMPLES = 6;
