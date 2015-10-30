@@ -50,6 +50,7 @@ int main(int argc, char** argv)
 
 
 		//Event handling
+		inputManager.update();
 		handleInput();
 
 
@@ -85,97 +86,65 @@ int main(int argc, char** argv)
 //DEEBUGGIA...
 void handleInput()
 {
-	float moveSpeed = texts.size();
-	SDL_Event mEvent;
+	static SDL_Event mEvent;
 	while (SDL_PollEvent(&mEvent))
 	{
 		switch (mEvent.type)
 		{
+		default:
+			break;
 		case SDL_KEYDOWN:
 			inputManager.keyPress(mEvent.key.keysym.sym);
 			break;
-
-			// Useless, Teogod shalt smite this commented area once he graces us with his presence.
-
-			/*
-			switch (mEvent.key.keysym.sym)
-			{
-			case SDLK_ESCAPE:
-				run = false;
-				break;
-			case SDLK_RETURN:
-				increaseTextCount();
-				std::cout << "\nText count increased! texts.size(): " << texts.size();
-				break;
-			case SDLK_UP:
-				for (unsigned i = 0; i < texts.size(); i++)
-				{texts[i]->translate(vec2f(0, float(moveSpeed * (float(i+1)/texts.size()))));}
-				break;
-			case SDLK_DOWN:
-				for (unsigned i = 0; i < texts.size(); i++)
-				{texts[i]->translate(vec2f(0, float(-moveSpeed * (float(i + 1) / texts.size()))));}
-				break;
-			case SDLK_LEFT:
-				for (unsigned i = 0; i < texts.size(); i++)
-				{texts[i]->translate(vec2f(float(-moveSpeed * (float(i + 1) / texts.size())), 0));}
-				break;
-			case SDLK_RIGHT:
-				for (unsigned i = 0; i < texts.size(); i++)
-				{texts[i]->translate(vec2f(float(moveSpeed * (float(i + 1) / texts.size())), 0));}
-				break;
-			}
-			break;
-			*/
-
 		case SDL_KEYUP:
 			inputManager.keyRelease(mEvent.key.keysym.sym);
 			break;
-
 		case SDL_QUIT:
 			run = false;
 			break;
 		}
+	}
 
-		// These will likely be handled within the inputManager's handleInput function in the future. Will remain here for now.
 
-		if (inputManager.isKeyHeld(SDLK_ESCAPE))
+
+	float moveSpeed = 5 * texts.size();
+	// These will likely be handled within the inputManager's handleInput function in the future. Will remain here for now.
+	if (inputManager.isKeyHeld(SDLK_ESCAPE))
+	{
+		run = false;
+	}
+	if (inputManager.isKeyHeld(SDLK_RETURN))
+	{
+		increaseTextCount();
+		std::cout << "\nText count increased! texts.size(): " << texts.size();
+	}
+	if (inputManager.isKeyHeld(SDLK_UP))
+	{
+		for (unsigned i = 0; i < texts.size(); i++)
 		{
-			run = false;
+			texts[i]->translate(glm::vec2(0, float(moveSpeed * (float(i + 1) / texts.size()))));
 		}
-		if (inputManager.isKeyHeld(SDLK_RETURN))
+	}
+	if (inputManager.isKeyHeld(SDLK_DOWN))
+	{
+		for (unsigned i = 0; i < texts.size(); i++)
 		{
-			increaseTextCount();
-			std::cout << "\nText count increased! texts.size(): " << texts.size();
+			texts[i]->translate(glm::vec2(0, float(-moveSpeed * (float(i + 1) / texts.size()))));
 		}
-		if (inputManager.isKeyHeld(SDLK_UP))
+	}
+	if (inputManager.isKeyHeld(SDLK_LEFT))
+	{
+		for (unsigned i = 0; i < texts.size(); i++)
 		{
-			for (unsigned i = 0; i < texts.size(); i++)
-			{
-				texts[i]->translate(glm::vec2(0, float(moveSpeed * (float(i + 1) / texts.size()))));
-			}
+			texts[i]->translate(glm::vec2(float(-moveSpeed * (float(i + 1) / texts.size())), 0));
 		}
-		if (inputManager.isKeyHeld(SDLK_DOWN))
+	}
+	if (inputManager.isKeyHeld(SDLK_RIGHT))
+	{
+		for (unsigned i = 0; i < texts.size(); i++)
 		{
-			for (unsigned i = 0; i < texts.size(); i++)
-			{
-				texts[i]->translate(glm::vec2(0, float(-moveSpeed * (float(i + 1) / texts.size()))));
-			}
+			texts[i]->translate(glm::vec2(float(moveSpeed * (float(i + 1) / texts.size())), 0));
 		}
-		if (inputManager.isKeyHeld(SDLK_LEFT))
-		{
-			for (unsigned i = 0; i < texts.size(); i++)
-			{
-				texts[i]->translate(glm::vec2(float(-moveSpeed * (float(i + 1) / texts.size())), 0));
-			}
-		}
-		if (inputManager.isKeyHeld(SDLK_RIGHT))
-		{
-			for (unsigned i = 0; i < texts.size(); i++)
-			{
-				texts[i]->translate(glm::vec2(float(moveSpeed * (float(i + 1) / texts.size())), 0));
-			}
-		}
-		
 	}
 }
 void increaseTextCount()
