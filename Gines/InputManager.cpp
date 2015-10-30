@@ -5,7 +5,7 @@
 
 namespace gines
 {
-	InputManager::InputManager()
+	InputManager::InputManager() : mouseCoordinates(0.0f)
 	{
 	}
 
@@ -35,10 +35,20 @@ namespace gines
 			case SDL_KEYUP:
 				gines::inputManager.keyRelease(mEvent.key.keysym.sym);
 				break;
+			case SDL_MOUSEMOTION:
+				inputManager.setMouseCoordinates(mEvent.motion.x, mEvent.motion.y);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				inputManager.keyPress(mEvent.button.button);
+				break;
+			case SDL_MOUSEBUTTONUP:
+				inputManager.keyRelease(mEvent.button.button);
+				break;
 			case SDL_QUIT:
 				//TODO QUIT GAME
 				break;
 			}
+			
 		}
 	}
 
@@ -50,6 +60,12 @@ namespace gines
 	void InputManager::keyRelease(unsigned int keyID)
 	{
 		keyMap[keyID] = false;
+	}
+
+	void InputManager::setMouseCoordinates(float x, float y)
+	{
+		mouseCoordinates.x = x;
+		mouseCoordinates.y = y;
 	}
 
 	bool InputManager::isKeyHeld(unsigned int keyID)
