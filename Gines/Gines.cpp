@@ -1,14 +1,16 @@
-#include "Gines.h"
-#include "Time.h"
 #include <SDL\SDL.h>
 #include <GL/glew.h>
 #include <iostream>
+
+#include "Gines.h"
+#include "Time.h"
+#include "InputManager.h"
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
 SDL_GLContext renderingContex;
 SDL_Window *mWindow = nullptr;
-
+extern InputManager inputManager;
 
 
 namespace gines
@@ -50,9 +52,13 @@ namespace gines
 		return true;
 	}
 
-	void uninitialize()
+	int uninitialize()
 	{
 		uninitializeTime();
+
+		std::cout << "\nExited succesfully";
+		std::getchar();
+		return 0;
 	}
 
 
@@ -63,6 +69,7 @@ namespace gines
 	{
 		beginFPS();
 		glClear(GL_COLOR_BUFFER_BIT);
+		inputManager.update();
 	}
 	void endMainLoop()
 	{

@@ -4,7 +4,7 @@
 namespace gines
 {
 	bool initialize();
-	void uninitialize();
+	int uninitialize();
 
 	void beginMainLoop();
 	void endMainLoop();

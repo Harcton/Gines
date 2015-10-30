@@ -30,27 +30,16 @@ extern int WINDOW_HEIGHT;
 
 int main(int argc, char** argv)
 {
-	if (!gines::initialize())
-	{
-		std::getchar();
-		return false;
-	}
+	gines::initialize();
 
 
-
-
-	/////////////////////////
-	// Test area...
-	increaseTextCount();
-
-	//Temp game loop
+	//Game loop
 	while (run)
 	{
 		gines::beginMainLoop();
 
 
 		//Event handling
-		inputManager.update();
 		handleInput();
 
 
@@ -63,21 +52,18 @@ int main(int argc, char** argv)
 		gines::endMainLoop();
 	}
 
+
+	///////
 	//Deallocate text memory...
 	while (!texts.empty())
 	{
 		delete texts.back();
 		texts.pop_back();
 	}
-
-	// End of test area....
-	/////////////////////////
+	///////
 
 
-	gines::uninitialize();
-	std::cout << "\nExited succesfully";
-	std::getchar();
-	return 0;
+	return gines::uninitialize();
 }
 
 
