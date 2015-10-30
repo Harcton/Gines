@@ -50,9 +50,9 @@ namespace gines
 		bool setFontSize(int size);
 		void render();
 		void setString(std::string str);
-		void setColor(vec4f& col);
-		void setPosition(vec2f& vec);
-		void translate(vec2f& vec);
+		void setColor(glm::vec4& col);
+		void setPosition(glm::vec2& vec);
+		void translate(glm::vec2& vec);
 
 		int getFontHeight();
 
@@ -62,13 +62,9 @@ namespace gines
 		void updateBuffers(); 
 		GLuint* textures = nullptr;
 	private:
-		float red = 0.0f;
-		float green = 0.0f;
-		float blue = 0.0f;
-		float alpha = 1.0f;
+		glm::vec2 position;
+		glm::vec4 color;
 		float scale = 1.0f;
-		int beginX = 0;
-		int beginY = 0;
 		int lineSpacing = 0;
 		bool doUpdate = true;
 
