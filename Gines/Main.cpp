@@ -46,20 +46,20 @@ int main(int argc, char** argv)
 	//Temp game loop
 	while (run)
 	{
-		gines::beginFPS();
-		glClear(GL_COLOR_BUFFER_BIT);
+		gines::beginMainLoop();
 
 
-		///////
+		//Event handling
 		handleInput();
+
+
+		//Rendering
 		for (unsigned i = 0; i < texts.size(); i++)
 		{texts[i]->render();}
-		SDL_GL_SwapWindow(mWindow);
-		///////
 
 		
 
-		gines::endFPS();
+		gines::endMainLoop();
 	}
 
 	//Deallocate text memory...
