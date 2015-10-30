@@ -20,7 +20,7 @@ void InputManager::keyRelease(unsigned int keyID)
 	keyMap[keyID] = false;
 }
 
-bool InputManager::isKeyPressed(unsigned int keyID)
+bool InputManager::isKeyHeld(unsigned int keyID)
 {
 	auto it = keyMap.find(keyID);
 	if (it != keyMap.end())
