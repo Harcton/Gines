@@ -10,8 +10,8 @@
 #include "InputManager.h"
 #include "Console.h"
 #include "Time.h"
-
-
+#include "Sprite.h"
+#include "lodepng.h"
 
 //DEEBUGGIA...
 void handleInput();
@@ -19,7 +19,7 @@ void increaseTextCount();
 bool run = true;
 std::vector<gines::Text*> texts;
 extern int WINDOW_HEIGHT;
-
+Sprite sprite;
 
 
 int main(int argc, char** argv)
@@ -37,6 +37,7 @@ int main(int argc, char** argv)
 		//Rendering
 		for (unsigned i = 0; i < texts.size(); i++)
 		{texts[i]->render();}		
+	
 
 		gines::endMainLoop();
 	}
@@ -132,4 +133,35 @@ void increaseTextCount()
 		glyphsToRender += texts[i]->glyphsToRender;
 	std::cout << "\nGlyphs to render: " << glyphsToRender;
 }
+
+GLuint readTexture(const std::string& path) {
+	
+	std::string fullpath(path);
+	std::vector<unsigned char> png;
+
+	lodepng::load_file(png, fullpath);
+	std::vector<unsigned char> pixels;
+	GLuint id;
+	size_t width, height;
+	width = height = 0;
+	size_t error = lodepng::decode(pixels, width, height, png.data(), png.size());
+
+	if (error) {
+		std::fprintf(stderr, "Error loading texture file %s\n", lodepng_error_text(error));
+		return false;
+	}
+	// create new name for texture
+	glGenTextures(1, &id);
+	// bind it so we can modify it
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	// unbind
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return id;
+}
+
+
 /////////////
