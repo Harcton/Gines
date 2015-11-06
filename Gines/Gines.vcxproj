@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Error.hpp" />
     <ClInclude Include="Gines.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="InputManager.h" />
