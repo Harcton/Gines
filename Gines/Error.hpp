@@ -31,7 +31,7 @@ enum PhysicsError {
 	General = 7000,
 };
 
-int Error(GinesError error) {
+void Error(GinesError error) {
 	switch (error)
 	{
 	case General:
@@ -43,7 +43,7 @@ int Error(GinesError error) {
 	}
 }
 
-int Error(TimeError error) {
+void Error(TimeError error) {
 	switch (error)
 	{
 	case General:
@@ -55,7 +55,7 @@ int Error(TimeError error) {
 	}
 }
 
-int Error(TextError error) {
+void Error(TextError error) {
 	switch (error)
 	{
 	case General:
@@ -67,7 +67,7 @@ int Error(TextError error) {
 	}
 }
 
-int Error(GLSLProgramError error) {
+void Error(GLSLProgramError error) {
 	switch (error)
 	{
 	case General:
@@ -79,7 +79,7 @@ int Error(GLSLProgramError error) {
 	}
 }
 
-int Error(ResourceManagerError error) {
+void Error(ResourceManagerError error) {
 	switch (error)
 	{
 	case General:
@@ -91,7 +91,7 @@ int Error(ResourceManagerError error) {
 	}
 }
 
-int Error(InputManagerError error) {
+void Error(InputManagerError error) {
 	switch (error)
 	{
 	case General:
@@ -103,7 +103,7 @@ int Error(InputManagerError error) {
 	}
 }
 
-int Error(PhysicsError error) {
+void Error(PhysicsError error) {
 	switch (error)
 	{
 	case General:
