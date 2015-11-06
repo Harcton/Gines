@@ -10,13 +10,21 @@ extern int WINDOW_HEIGHT;
 
 namespace gines
 {
+	//Global variables
+	extern char* ginesFontPath;
+	int fpsCounterFontSize = 40;
+	bool showFps = true;
+
+
+	//Local variables
 	float fps = 0;
 	float maxFPS = 60;
 	Uint32 deltaTime = 0;
 	float runTime = 0;
 	Uint32 startTicks = 0;
 	gines::Text* fpsCounter;
-	bool initialized = false;
+	static bool initialized = false;
+	static int previousFontSize = fpsCounterFontSize;
 
 
 
@@ -35,7 +43,7 @@ namespace gines
 			return false;
 		}
 
-		if (!fpsCounter->setFont("Fonts/Anonymous.ttf", 40))
+		if (!fpsCounter->setFont(ginesFontPath, fpsCounterFontSize))
 		{
 			std::cout << "\nInitialization failed! Failed to set up fps counter!";
 			return false;
@@ -57,6 +65,13 @@ namespace gines
 	{
 		startTicks = SDL_GetTicks();
 		runTime += deltaTime / 1000.0f;
+
+		//Update fps counter font size if needed
+		if (previousFontSize != fpsCounterFontSize)
+		{
+			fpsCounter->setFont(ginesFontPath, fpsCounterFontSize);
+			previousFontSize = fpsCounterFontSize;
+		}
 	}
 	void endFPS()
 	{
@@ -78,19 +93,29 @@ namespace gines
 
 		currentFrame++;
 		if (currentFrame < NUM_SAMPLES)
+		{
 			count = currentFrame;
+		}
 		else
+		{
 			count = NUM_SAMPLES;
+		}
 
 		float deltaTimeAverage = 0;
 		for (int i = 0; i < count; i++)
+		{
 			deltaTimeAverage += deltaTimes[i];
+		}
 		deltaTimeAverage /= count;
 
 		if (deltaTimeAverage > 0)
+		{
 			fps = 1000.0f / deltaTimeAverage;
+		}
 		else
+		{
 			fps = 0;
+		}
 
 		static int frameCounter = 0;
 		if (++frameCounter >= FPS_REFRESH_RATE)
@@ -102,11 +127,17 @@ namespace gines
 		//Limit FPS = delay return
 		Uint32 frameTicks = SDL_GetTicks() - startTicks;
 		if (1000.0f / maxFPS > frameTicks)
+		{
 			SDL_Delay(Uint32(1000.0f / maxFPS) - frameTicks);
+		}
+
 	}
 	void drawFPS()
 	{
-		fpsCounter->render();
+		if (showFps)
+		{
+			fpsCounter->render();
+		}
 	}
 
 }

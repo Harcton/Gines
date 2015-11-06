@@ -17,7 +17,7 @@ namespace gines
 	//"Singleton" classes
 	InputManager inputManager;
 	Console console;
-
+	char* ginesFontPath = "Fonts/Anonymous.ttf";
 
 	bool initialize()
 	{
@@ -62,7 +62,6 @@ namespace gines
 		std::cout << "\nPowered by... Gines (2015)";
 		return true;
 	}
-
 	int uninitialize()
 	{
 		uninitializeTime();
@@ -73,21 +72,17 @@ namespace gines
 		return 0;
 	}
 
-
-
-
-
 	void beginMainLoop()
 	{
 		beginFPS();
 		glClear(GL_COLOR_BUFFER_BIT);
 		inputManager.update();
 		console.update();
-		console.render();
-		drawFPS();
 	}
 	void endMainLoop()
 	{
+		console.render();
+		drawFPS();
 		SDL_GL_SwapWindow(mWindow);
 		endFPS();
 	}

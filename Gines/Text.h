@@ -9,7 +9,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "Gines.h"
+
 
 
 namespace gines
@@ -61,6 +61,7 @@ namespace gines
 		void updateGlyphsToRender();
 		void updateBuffers(); 
 		GLuint* textures = nullptr;
+		glm::vec4& getColorRef();
 	private:
 		glm::vec2 position;
 		glm::vec4 color;

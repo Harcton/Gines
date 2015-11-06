@@ -10,6 +10,7 @@ namespace gines
 	extern float fps;
 	extern float maxFPS;
 	extern Uint32 deltaTime;
+	extern bool showFps;
 
 	bool initializeTime();
 	void uninitializeTime();
