@@ -74,7 +74,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gines.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -84,11 +86,14 @@
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Error.hpp" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gines.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Time.h" />
