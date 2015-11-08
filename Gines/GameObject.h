@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <memory>
 #include "Component.h"
 
 class GameObject
@@ -15,7 +16,7 @@ public:
 
 	void draw();
 	void update();
-	void addComponent(std::string componentName, Component* component);
+	void addComponent(std::string componentName, std::unique_ptr<Component> component);
 	void removeComponent(std::string componentName);
 
 	//Rotate object relative to current rotation
@@ -44,7 +45,7 @@ private:
 	vector2 objectPosition;
 	float objectRotation;
 	vector2 objectScale;
-	std::vector<Component*> components;
+	std::vector<std::unique_ptr<Component>> components;
 	std::map<std::string, size_t> componentPosition;
 };
 #endif

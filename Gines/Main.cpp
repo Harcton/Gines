@@ -44,6 +44,11 @@ int main(int argc, char** argv)
 {
 	gines::initialize();
 
+	//GameObject Test
+	GameObject go;
+	go.addComponent("Physics", std::make_unique<PhysicsComponent>(15));
+	go.removeComponent("Physics");
+
 	gines::console.addConsoleCommand("test", testConsole);
 	gines::console.addVariable("fps", gines::showFps);
 	gines::console.addVariable("run", run);

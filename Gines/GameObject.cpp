@@ -16,15 +16,14 @@ void GameObject::update() {
 
 }
 
-void GameObject::addComponent(std::string componentName, Component* component) {
-	components.push_back(component);
+void GameObject::addComponent(std::string componentName, std::unique_ptr<Component> component) {
+	components.push_back(std::move(component));
 	componentPosition.insert(std::make_pair(componentName, components.size()-1));
 }
 
 void GameObject::removeComponent(std::string componentName) {
 	auto it = componentPosition.find(componentName);
 	if (it != componentPosition.end()) {
-		delete components[it->second];
 		components[it->second] = nullptr;
 		componentPosition.erase(it);
 	}
