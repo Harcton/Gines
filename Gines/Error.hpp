@@ -2,117 +2,168 @@
 #define Error_hpp_
 
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <time.h>
 
-enum GinesError {
+enum class GinesError {
 	General = 1000,
 };
 
-enum TimeError {
+enum class TimeError {
 	General = 2000,
 };
 
-enum TextError {
+enum class TextError {
 	General = 3000,
 };
 
-enum GLSLProgramError {
+enum class GLSLProgramError {
 	General = 4000,
 };
 
-enum ResourceManagerError {
+enum class ResourceManagerError {
 	General = 5000,
 };
 
-enum InputManagerError {
+enum class InputManagerError {
 	General = 6000,
 };
 
-enum PhysicsError {
+enum class PhysicsError {
 	General = 7000,
 };
 
+enum class ComponentError {
+	General = 8000,
+};
+
+void logError(std::string errorText)
+{
+	time_t rawtime;
+	struct tm timeinfo;
+	time(&rawtime);
+	localtime_s(&timeinfo, &rawtime);
+
+	std::stringstream errorMsg;
+	errorMsg << "[" << timeinfo.tm_mday << "." << timeinfo.tm_mon + 1 << "." << timeinfo.tm_year + 1900 << " - " << timeinfo.tm_hour << ":" << timeinfo.tm_min << ":" << timeinfo.tm_sec << "] - " << errorText << std::endl;
+
+	std::cout << errorMsg.str() << std::endl;
+	std::ofstream log_file("ErrorLog.txt", std::ios_base::out | std::ios_base::app);
+	log_file << errorMsg.str();
+	system("pause");
+}
+
 void Error(GinesError error) {
+	std::string errorText;
 	switch (error)
 	{
-	case General:
-		std::cout << "Gines General Error: " << error << std::endl;
+	case GinesError::General:
+		errorText = "Gines General Error: 1000";
 		break;
 	default:
-		std::cout << "Gines Undefined Error: " << error << std::endl;
+		errorText = "Gines Undefined Error";
 		break;
 	}
+	logError(errorText);
 }
 
 void Error(TimeError error) {
+	std::string errorText;
 	switch (error)
 	{
-	case General:
-		std::cout << "Time General Error: " << error << std::endl;
+	case TimeError::General:
+		errorText = "Time General Error: 2000";
 		break;
 	default:
-		std::cout << "Time Undefined Error: " << error << std::endl;
+		errorText = "Time Undefined Error";
 		break;
 	}
+	logError(errorText);
 }
 
 void Error(TextError error) {
+	std::string errorText;
 	switch (error)
 	{
-	case General:
-		std::cout << "Text General Error: " << error << std::endl;
+	case TextError::General:
+		errorText = "Text General Error: 3000";
 		break;
 	default:
-		std::cout << "Text Undefined Error: " << error << std::endl;
+		errorText = "Text Undefined Error";
 		break;
 	}
+	logError(errorText);
 }
 
 void Error(GLSLProgramError error) {
+	std::string errorText;
 	switch (error)
 	{
-	case General:
-		std::cout << "GLSL Program General Error: " << error << std::endl;
+	case GLSLProgramError::General:
+		errorText = "GLSL Program General Error: 4000";
 		break;
 	default:
-		std::cout << "GLSL Program Undefined Error: " << error << std::endl;
+		errorText = "GLSL Program Undefined Error";
 		break;
 	}
+	logError(errorText);
 }
 
 void Error(ResourceManagerError error) {
+	std::string errorText;
 	switch (error)
 	{
-	case General:
-		std::cout << "Resource Manager General Error: " << error << std::endl;
+	case ResourceManagerError::General:
+		errorText = "Resource Manager General Error: 5000";
 		break;
 	default:
-		std::cout << "Resource Manager Undefined Error: " << error << std::endl;
+		errorText = "Resource Manager Undefined Error";
 		break;
 	}
+	logError(errorText);
 }
 
 void Error(InputManagerError error) {
+	std::string errorText;
 	switch (error)
 	{
-	case General:
-		std::cout << "Input Manager General Error: " << error << std::endl;
+	case InputManagerError::General:
+		errorText = "Input Manager General Error: 6000";
 		break;
 	default:
-		std::cout << "Input Manager Undefined Error: " << error << std::endl;
+		errorText = "Input Manager Undefined Error";
 		break;
 	}
+	logError(errorText);
 }
 
 void Error(PhysicsError error) {
+	std::string errorText;
 	switch (error)
 	{
-	case General:
-		std::cout << "Physics General Error: " << error << std::endl;
+	case PhysicsError::General:
+		errorText = "Physics General Error: 7000";
 		break;
 	default:
-		std::cout << "Physics Undefined Error: " << error << std::endl;
+		errorText = "Physics Undefined Error";
 		break;
 	}
+	logError(errorText);
 }
 
+void Error(ComponentError error) {
+	std::string errorText;
+	switch (error)
+	{
+	case ComponentError::General:
+		errorText = "Component General Error: 8000";
+		break;
+	default:
+		errorText = "Component Undefined Error";
+		break;
+	}
+	logError(errorText);
+}
 #endif

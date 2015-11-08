@@ -12,6 +12,7 @@
 #include "Time.h"
 #include "Sprite.h"
 #include "lodepng.h"
+#include "Error.hpp"
 
 //DEEBUGGIA...
 void handleInput();
