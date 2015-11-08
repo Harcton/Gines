@@ -1,7 +1,9 @@
 #ifndef Component_h_
 #define Component_h_
 
-class GameObject;
+struct vector2 {
+	size_t x, y;
+};
 
 class Component
 {
@@ -9,10 +11,7 @@ public:
 	Component();
 	~Component();
 
-	void update();
-
-	void setParent(GameObject* parent) { this->parent = parent; }
+	virtual void update();
 private:
-	GameObject* parent;
 };
 #endif

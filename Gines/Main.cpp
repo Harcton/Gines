@@ -13,6 +13,9 @@
 #include "Sprite.h"
 #include "lodepng.h"
 #include "Error.hpp"
+#include "Component.h"
+#include "PhysicsComponent.h"
+#include "GameObject.h"
 
 //DEEBUGGIA...
 void handleInput();

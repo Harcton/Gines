@@ -5,9 +5,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "PhysicsComponent.h"
-
-class Sprite;
+#include "Component.h"
 
 class GameObject
 {

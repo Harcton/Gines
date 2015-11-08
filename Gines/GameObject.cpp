@@ -17,7 +17,6 @@ void GameObject::update() {
 }
 
 void GameObject::addComponent(std::string componentName, Component* component) {
-	component->setParent(this);
 	components.push_back(component);
 	componentPosition.insert(std::make_pair(componentName, components.size()-1));
 }
