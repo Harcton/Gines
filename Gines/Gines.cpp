@@ -17,6 +17,8 @@ namespace gines
 	//"Singleton" classes
 	InputManager inputManager;
 	Console console;
+	GLSLProgram colorProgram;
+
 	char* ginesFontPath = "Fonts/Anonymous.ttf";
 
 	bool initialize()
@@ -57,11 +59,23 @@ namespace gines
 			return false;
 		}
 
+		// WIP, error c5060
+		// initializeShaders(); 
 
 		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
 		std::cout << "\nPowered by... Gines (2015)";
 		return true;
+
 	}
+
+	void initializeShaders()
+	{
+		colorProgram.compileShaders("Shaders/color.vertex", "Shaders/color.fragment");
+		colorProgram.addAttribute("vertexPosition");
+		colorProgram.addAttribute("vertexColor");
+		colorProgram.linkShaders();
+	}
+
 	int uninitialize()
 	{
 		uninitializeTime();

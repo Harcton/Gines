@@ -1,0 +1,22 @@
+#version 120
+//OpenGL ver 2.1
+
+in vec2 vertexPosition;
+in vec4 vertexColor;
+
+out vec4 fragmentColor;
+
+void main()
+{
+	//Setting the x,y position on screen
+	gl_Position.xy = vertexPosition;
+
+	//Position z is 0 due to 2D
+	gl_Position.z = 0.0;
+
+	//Indicates that the coordinates are normalized
+	gl_Position.w = 1.0;
+
+	//Passing color to fragment shader
+	fragmentColor = vertexColor;
+}

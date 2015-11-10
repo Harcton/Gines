@@ -64,10 +64,13 @@ int main(int argc, char** argv)
 		//Event handling
 		handleInput();
 
+		// gines::colorProgram.use();
+
 		//Rendering
 		for (unsigned i = 0; i < texts.size(); i++)
 		{texts[i]->render();}		
 	
+		// gines::colorProgram.unuse();
 
 		gines::endMainLoop();
 	}

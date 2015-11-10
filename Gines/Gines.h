@@ -1,6 +1,7 @@
 #ifndef GINES_H
 #define GINES_H
 
+#include "GLSLProgram.h"
 #include "InputManager.h"
 #include "Console.h"
 #include <glm/vec4.hpp>
@@ -10,6 +11,7 @@ namespace gines
 	//Singletons
 	extern InputManager inputManager;
 	extern Console console;
+	extern GLSLProgram colorProgram;
 
 	//Global variables
 	extern int consoleFontSize;
@@ -21,6 +23,7 @@ namespace gines
 	////Main source file functions
 	//Initialization
 	bool initialize();
+	void initializeShaders();
 	int uninitialize();
 	//Main loop
 	void beginMainLoop();

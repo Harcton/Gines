@@ -57,6 +57,9 @@
     <ClCompile Include="PhysicsComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLSLProgram.h">
@@ -104,5 +107,16 @@
     <ClInclude Include="Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\color.vertex">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\color.fragment">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
