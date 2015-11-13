@@ -44,7 +44,9 @@ namespace gines
 	{
 	public:
 		Text();
+		Text(const Text& original);
 		~Text();
+		void operator=(const Text& original);
 
 		bool setFont(char* fontPath, int size);
 		bool setFontSize(int size);
@@ -54,24 +56,26 @@ namespace gines
 		void setPosition(glm::vec2& vec);
 		void translate(glm::vec2& vec);
 
-		int getFontHeight();
-
-		int glyphsToRender = 0;
-		GLuint vertexArrayID = 0, vertexArrayData = 0;
 		void updateGlyphsToRender();
 		void updateBuffers(); 
-		GLuint* textures = nullptr;
+
+		//Getters
+		int getFontHeight();
 		glm::vec4& getColorRef();
+		int getGlyphsToRender();
+		std::string getString();
+
 	private:
+		int glyphsToRender = 0;
+		GLuint vertexArrayData = 0;
+		GLuint* textures = nullptr;
 		glm::vec2 position;
 		glm::vec4 color;
 		float scale = 1.0f;
 		int lineSpacing = 0;
 		bool doUpdate = true;
-
 		std::string string;
 		Font* font = nullptr;
-
 		void unreferenceFont();
 
 	};
