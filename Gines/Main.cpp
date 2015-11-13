@@ -54,7 +54,8 @@ int main(int argc, char** argv)
 	gines::console.addVariable("run", run);
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
-	
+	std::vector<gines::Text> textsv;
+	textsv.push_back(gines::Text());
 
 	//Game loop
 	while (run)

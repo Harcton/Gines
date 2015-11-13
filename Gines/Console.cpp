@@ -24,21 +24,23 @@ namespace gines
 	Console::~Console(){}
 	int Console::initialize()
 	{
-		consoleText.setFont(ginesFontPath, consoleFontSize);
-		consoleText.setColor(consoleTextColor);
-		consoleText.setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER));
-		consoleText.setString("><");
+		consoleText = new Text();
+		consoleText->setFont(ginesFontPath, consoleFontSize);
+		consoleText->setColor(consoleTextColor);
+		consoleText->setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER));
+		consoleText->setString("><");
 		log("Console initialized");
 
 		return 0;
 	}
 	void Console::unitialize()
 	{
-		//while (!lines.empty())
-		//{
-		//	delete lines.back();
-		//	lines.pop_back();
-		//}
+		while (!lines.empty())
+		{
+			delete lines.back();
+			lines.pop_back();
+		}
+		delete consoleText;
 	}
 	void Console::addVariable(std::string str, bool& var)
 	{
@@ -58,10 +60,16 @@ namespace gines
 	}
 	void Console::log(std::string str)
 	{
-		lines.push_back(Text());
-		lines.back().setFont(ginesFontPath, consoleFontSize);
-		lines.back().setColor(consoleTextColor);
-		lines.back().setString(str);
+		if (lines.size() >= consoleLines)
+		{
+			delete lines[0];//Delete data
+			lines.erase(lines.begin() + 0);//Delete pointer to deleted data
+		}
+		lines.push_back(new Text());
+		lines.back()->setFont(ginesFontPath, consoleFontSize);
+		lines.back()->setColor(consoleTextColor);
+		lines.back()->setString(str);
+
 		updateLinePositions();
 	}
 	void Console::update()
@@ -71,10 +79,10 @@ namespace gines
 			//Update console font size if needed
 			if (previousFontSize != consoleFontSize)
 			{
-				consoleText.setFont(ginesFontPath, consoleFontSize);
+				consoleText->setFont(ginesFontPath, consoleFontSize);
 				for (unsigned i = 0; i < lines.size(); i++)
 				{
-					lines[i].setFont(ginesFontPath, consoleFontSize);
+					lines[i]->setFont(ginesFontPath, consoleFontSize);
 				}
 				previousFontSize = consoleFontSize;
 			}
@@ -189,7 +197,7 @@ namespace gines
 
 			if (inputReceived)
 			{
-				consoleText.setString('>' + input + '<');
+				consoleText->setString('>' + input + '<');
 			}
 		}
 	}
@@ -207,7 +215,7 @@ namespace gines
 		}
 		for (unsigned i = 0; i < lines.size(); i++)
 		{
-			lines[lines.size() - 1 - i].setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER + lines.back().getFontHeight()*(i + lineFix)));
+			lines[lines.size() - 1 - i]->setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER + lines.back()->getFontHeight()*(i + lineFix)));
 		}
 	}
 	void Console::render()
@@ -219,8 +227,8 @@ namespace gines
 		}
 		for (auto i = lines.begin(); i < lines.end(); i++)
 		{
-			(*i).getColorRef().w = (visibility / 255.0f);
-			(*i).render();
+			(*i)->getColorRef().w = (visibility / 255.0f);
+			(*i)->render();
 		}
 
 		//Render console text
@@ -228,8 +236,8 @@ namespace gines
 		{
 			return;
 		}
-		consoleText.getColorRef().w = (visibility / 255.0f);
-		consoleText.render();
+		consoleText->getColorRef().w = (visibility / 255.0f);
+		consoleText->render();
 	}
 	void Console::executeConsole()
 	{
@@ -279,7 +287,7 @@ namespace gines
 		}
 
 		input = "";
-		consoleText.setString("><");
+		consoleText->setString("><");
 		if (!foundCommand)
 		{
 			log("Unknown command");

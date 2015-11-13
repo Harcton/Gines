@@ -80,6 +80,7 @@ namespace gines
 	{
 		uninitializeTime();
 		console.unitialize();
+		uninitializeTextRendering();
 
 		std::cout << "\nExited succesfully";
 		std::getchar();

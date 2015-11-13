@@ -7,7 +7,7 @@
 #include "Gines.h"
 #include "Text.h"
 #include "GLSLProgram.h"
-
+//#include "Error.hpp"
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
@@ -22,15 +22,20 @@ namespace gines
 
 	void initializeTextRendering()
 	{
+		if (textRenderingInitialized)
+		{
+			return;
+		}
+
 		if (ft != nullptr)
 		{
-			std::cout << "\nError in freetype library initialization: already exists!";
+			//logError("Error in freetype library initialization: already exists!");
 			return;
 		}
 		ft = new FT_Library;
 		if (FT_Init_FreeType(ft))
 		{
-			std::cout << "\nError: could not initialize FreeType Library" << std::endl;
+			//logError("could not initialize FreeType Library");
 			return;
 		}
 
@@ -39,36 +44,72 @@ namespace gines
 		textProgram.linkShaders();
 
 		textRenderingInitialized = true;
-		std::cout << "\nFreetype library initialized";
+		std::cout << "\nText rendering library initialized";
 	}
 	void uninitializeTextRendering()
 	{
+		if (!textRenderingInitialized)
+		{//Validate uninitialization
+			return;
+		}
+
+		//Uninitialize FreeType
 		FT_Done_FreeType(*ft);
 		delete ft;
 		ft = nullptr;
 
+		//Inform memory leaks
+		if (textCount != 0)
+		{
+			std::cout << "\nSome Text objects were not deallocated! Remaining gines::Text count: " << textCount;
+		}
+		if (fonts.size() != 0)
+		{
+			std::cout << "\nSome Font objects were not deallocated! Remaining font count: " << fonts.size();
+		}
+
+		//Uninitialization complete
+		std::cout << "\nText rendering uninitialized";
 		textRenderingInitialized = false;
-		std::cout << "\nFreetype library uninitialized";
 	}
 	
 	Text::~Text()
 	{
+		textCount--;
 		glDeleteBuffers(1, &vertexArrayData);
 		unreferenceFont();
-		textCount--;
-		if (textCount == 0)
+		if (textCount <= 0)
 		{
 			uninitializeTextRendering();
 		}
 	}
 	Text::Text()
-	{
+	{//Default constructor is called from copy constructor as well
 		textCount++;
 	}
 	Text::Text(const Text& original)
+	{//Copy constructor
+		glGenBuffers(1, &vertexArrayData);
+		string = original.string;
+		position = original.position;
+		color = original.color;
+		updateGlyphsToRender();
+		textures = nullptr;
+		font = nullptr;
+		scale = original.scale;
+		lineSpacing = original.lineSpacing;
+		
+		if (original.font != nullptr)
+		{
+			setFont(original.font->fontPath, original.font->fontSize);//Increases reference count
+			updateBuffers();
+		}
+	}
+	void Text::operator=(const Text& original)
 	{
-		textCount++;
-		std::cout << "\nCopy constructor called";
+		glDeleteBuffers(1, &vertexArrayData);
+		delete[] textures;
+		unreferenceFont();
 		glGenBuffers(1, &vertexArrayData);
 		string = original.string;
 		position = original.position;
@@ -79,16 +120,11 @@ namespace gines
 		scale = original.scale;
 		lineSpacing = original.lineSpacing;
 
-
 		if (original.font != nullptr)
 		{
 			setFont(original.font->fontPath, original.font->fontSize);//Increases reference count
 			updateBuffers();
 		}
-	}
-	void Text::operator=(const Text& original)
-	{
-		std::cout << "\nText = operator called";
 	}
 	void Text::unreferenceFont()
 	{
@@ -147,8 +183,7 @@ namespace gines
 			if (fontPath == fonts[i]->fontPath)
 			{
 				if (size == fonts[i]->fontSize)
-				{//Already loaded
-					std::cout << "\nFace already loaded";
+				{//Font already loaded
 					font = fonts[i];
 					font->referenceCount++;
 					doUpdate = true;
@@ -165,7 +200,8 @@ namespace gines
 		FT_Error error = FT_New_Face(*ft, fontPath, 0, font->ftFace);
 		if (error)
 		{
-			std::cout << "\nFreetype error: Failed to load font \"" << fontPath << "\" code: " << error;
+			//std::string errorString = "Freetype error: Failed to load font "; errorString += fontPath; errorString += " code: " + error;
+			//logError(errorString);
 			return false;
 		}
 
@@ -181,7 +217,7 @@ namespace gines
 			// Load character glyph
 			if (FT_Load_Char(*ftFace, c, FT_LOAD_RENDER))
 			{
-				std::cout << "\nfreetype error: Failed to load Glyph";
+				//logError("FreeType error: Failed to load Glyph");
 				return false;
 			}
 
@@ -332,7 +368,7 @@ namespace gines
 	{
 		if (doUpdate)
 			updateBuffers();
-
+		
 		//Enable blending
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
