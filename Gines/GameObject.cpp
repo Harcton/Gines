@@ -5,52 +5,22 @@ GameObject::GameObject() {
 }
 
 GameObject::~GameObject() {
-
-}
-
-void GameObject::draw() {
-
-}
-
-void GameObject::update() {
-
-}
-
-void GameObject::addComponent(std::string componentName, std::unique_ptr<Component> component) {
-	components.push_back(std::move(component));
-	componentPosition.insert(std::make_pair(componentName, components.size()-1));
-}
-
-void GameObject::removeComponent(std::string componentName) {
-	auto it = componentPosition.find(componentName);
-	if (it != componentPosition.end()) {
-		components[it->second] = nullptr;
-		componentPosition.erase(it);
+	//Free component memory
+	while (!components.empty())
+	{
+		delete components.back();
+		components.pop_back();
 	}
 }
-
-void GameObject::rotate(float rotate) {
-	objectRotation += rotate;
+void GameObject::update() {
+	for (unsigned i = 0; i < components.size(); i++)
+	{
+		components[i]->update();
+	}
 }
-
-void GameObject::rotation(float rotation) {
-	objectRotation = rotation;
-}
-
-void GameObject::move(vector2 move) {
-	objectPosition.x += move.x;
-	objectPosition.y += move.y;
-}
-
-void GameObject::setPosition(vector2 position) {
-	objectPosition = position;
-}
-
-void GameObject::scale(size_t scale) {
-	objectScale.x = scale;
-	objectScale.y = scale;
-}
-
-void GameObject::scale(vector2 scale) {
-	objectScale = scale;
+void GameObject::render() {
+	for (unsigned i = 0; i < components.size(); i++)
+	{
+		components[i]->render();
+	}
 }

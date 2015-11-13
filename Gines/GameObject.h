@@ -14,38 +14,84 @@ public:
 	GameObject();
 	~GameObject();
 
-	void draw();
 	void update();
-	void addComponent(std::string componentName, std::unique_ptr<Component> component);
-	void removeComponent(std::string componentName);
+	void render();
 
-	//Rotate object relative to current rotation
-	void rotate(float rotate);
+	/*Adds component of type T. If T is mono component and the object already has one instance
+	of that component then no component is added.*/
+	template <typename T>
+	void addComponent()
+	{
+		//Create component
+		T* newComponent = new T();
+		//Check if newComponent is a mono component, if it is then check whether there already is one
+		MonoComponent* mono = dynamic_cast<MonoComponent*>(newComponent);
+		if (mono != nullptr)
+		{//Component is mono component. Check for an existing instance of that component
+			if (getComponent<T>() != nullptr)
+			{//There is already component of this type, return
+				delete newComponent;
+				return;
+			}
+		}
+		//Convert the new component pointer (T*) into a Component* pointer
+		Component* cast = dynamic_cast<Component*>(newComponent);
+		components.push_back(cast);
+	}
 
-	//Set absolute rotation
-	void rotation(float rotation);
+	/*Returns true if the component was removed. False is returned if component is not found
+	*/
+	template<typename T>
+	bool removeComponent()
+	{
+		T* cast;
+		for (unsigned i = 0; i < components.size(); i++)
+		{
+			cast = dynamic_cast<T*>(components[i]);
+			if (cast != nullptr)
+			{
+				delete cast;
+				components.erase(components.begin() + i);
+				return true;//Component deleted
+			}
+		}
+		return false;//No component of given type T was found
+	}
 
-	//Move object relative to current position
-	void move(vector2 move);
+	/*Returns nullptr if no component of given type exists*/
+	template <typename T>
+	T* getComponent()
+	{
+		T* cast;
+		for (unsigned i = 0; i < components.size(); i++)
+		{
+			cast = dynamic_cast<T*>(components[i]);
+			if (cast != nullptr)
+			{
+				return cast;
+			}
+		}
+		return nullptr;
+	}
 
-	//Set absolute position
-	void setPosition(vector2 position);
-
-	//Uniform scale
-	void scale(size_t scale);
-
-	//Non-Uniform scale
-	void scale(vector2 scale);
-
-	//Gets
-	vector2 getPosition() { return objectPosition; }
-	float getRotation() { return objectRotation; }
-	vector2 getScale() { return objectScale; }
+	/*Returns nullptr if no components of given type exists*/
+	template <typename T>
+	std::vector<T*> getComponents()
+	{
+		std::vector<T*> _components;
+		T* cast;
+		for (unsigned i = 0; i < components.size(); i++)
+		{
+			cast = dynamic_cast<T*>(components[i]);
+			if (cast != nullptr)
+			{
+				_components.push_back(cast);
+			}
+		}
+		return _components;
+	}
+	
 private:
-	vector2 objectPosition;
-	float objectRotation;
-	vector2 objectScale;
-	std::vector<std::unique_ptr<Component>> components;
-	std::map<std::string, size_t> componentPosition;
+	std::vector<Component*> components;
 };
 #endif
