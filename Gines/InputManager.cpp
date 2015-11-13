@@ -1,6 +1,7 @@
 #include "InputManager.h"
 #include "Gines.h"
 #include <SDL/SDL_events.h>
+#include <SDL\SDL.h>
 
 
 namespace gines
@@ -45,7 +46,7 @@ namespace gines
 				inputManager.keyRelease(mEvent.button.button);
 				break;
 			case SDL_QUIT:
-				//TODO QUIT GAME
+				SDL_Quit();
 				break;
 			}
 			

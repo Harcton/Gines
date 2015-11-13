@@ -1,12 +1,12 @@
 #version 120 
 //OpenGL ver 2.1
 
-in vec4 fragmentColor;
+varying vec4 fragmentColor;
 
 //vec4 for R G B and alpha
-out vec4 color;
+//out vec4 color;
 
 void main()
 {
-	color = fragmentColor;
+	gl_FragColor = fragmentColor;
 }

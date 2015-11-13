@@ -304,7 +304,7 @@ namespace gines
 		consoleText->setString("><");
 		if (!foundCommand)
 		{
-			log("Unkown command");
+			log("Unknown command");
 		}
 	}
 	void Console::setVariable()

@@ -23,8 +23,9 @@ void increaseTextCount();
 bool run = true;
 std::vector<gines::Text*> texts;
 extern int WINDOW_HEIGHT;
+//
 Sprite sprite;
-
+//
 
 //Test console function
 void testConsole(std::vector<std::string>& consoleWords)
@@ -54,7 +55,7 @@ int main(int argc, char** argv)
 	gines::console.addVariable("run", run);
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
-	
+	sprite.initialize(glm::vec2(-1.0f, -1.0f), 1, 1);
 
 	//Game loop
 	while (run)
@@ -64,13 +65,17 @@ int main(int argc, char** argv)
 		//Event handling
 		handleInput();
 
-		// gines::colorProgram.use();
+		//Sprite & shader debugging
+		/* 
+		 gines::colorProgram.use();
+		 sprite.draw();
+		 gines::colorProgram.unuse();
+		*/
 
 		//Rendering
 		for (unsigned i = 0; i < texts.size(); i++)
 		{texts[i]->render();}		
-	
-		// gines::colorProgram.unuse();
+		
 
 		gines::endMainLoop();
 	}
