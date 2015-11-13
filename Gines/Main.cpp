@@ -168,7 +168,7 @@ void increaseTextCount()
 
 	int glyphsToRender = 0;
 	for (unsigned i = 0; i < texts.size(); i++)
-		glyphsToRender += texts[i]->glyphsToRender;
+		glyphsToRender += texts[i]->getGlyphsToRender();
 	std::cout << "\nGlyphs to render: " << glyphsToRender;
 }
 

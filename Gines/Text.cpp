@@ -50,18 +50,10 @@ namespace gines
 		textRenderingInitialized = false;
 		std::cout << "\nFreetype library uninitialized";
 	}
-
-
-	Text::Text()
-	{
-		textCount++;
-		if (!textRenderingInitialized)
-		{
-			initializeTextRendering();
-		}
-	}
+	
 	Text::~Text()
 	{
+		glDeleteBuffers(1, &vertexArrayData);
 		unreferenceFont();
 		textCount--;
 		if (textCount == 0)
@@ -69,8 +61,41 @@ namespace gines
 			uninitializeTextRendering();
 		}
 	}
+	Text::Text()
+	{
+		textCount++;
+	}
+	Text::Text(const Text& original)
+	{
+		textCount++;
+		std::cout << "\nCopy constructor called";
+		glGenBuffers(1, &vertexArrayData);
+		string = original.string;
+		position = original.position;
+		color = original.color;
+		updateGlyphsToRender();
+		textures = nullptr;
+		font = nullptr;
+		scale = original.scale;
+		lineSpacing = original.lineSpacing;
+
+
+		if (original.font != nullptr)
+		{
+			setFont(original.font->fontPath, original.font->fontSize);//Increases reference count
+			updateBuffers();
+		}
+	}
+	void Text::operator=(const Text& original)
+	{
+		std::cout << "\nText = operator called";
+	}
 	void Text::unreferenceFont()
 	{
+		if (font == nullptr)
+		{
+			return;
+		}
 		//if face becomes useless, remove
 		if (--font->referenceCount <= 0)
 		{
@@ -88,11 +113,15 @@ namespace gines
 	{
 		//No font loaded
 		if (font == nullptr)
+		{
 			return false;
+		}
 		
 		//The size already matches
 		if (font->fontSize == size)
+		{
 			return true;
+		}
 
 		//Get new font face
 		char* fontPath = font->fontPath;
@@ -102,13 +131,16 @@ namespace gines
 	}
 	bool Text::setFont(char* fontPath, int size)
 	{
+		//make sure text is initialized
+		if (!textRenderingInitialized)
+		{
+			initializeTextRendering();
+		}
+
 		if (font != nullptr)
-		{unreferenceFont();}
-
-
-		if (vertexArrayID == 0)
-		{glGenVertexArrays(1, &vertexArrayID);}
-
+		{
+			unreferenceFont();
+		}
 
 		for (unsigned int i = 0; i < fonts.size(); i++)
 		{
@@ -191,35 +223,34 @@ namespace gines
 
 		doUpdate = true;
 
-
 		return true;
 	}
 	void Text::updateBuffers()
 	{
+		if (!textRenderingInitialized)
+		{
+			return;
+		}
+
 		//This function should be called everytime the number of glyphs to render changes
 		updateGlyphsToRender();
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glBindVertexArray(vertexArrayID);
 
-		if (vertexArrayData != 0)
-			glDeleteBuffers(1, &vertexArrayData);
+		glDeleteBuffers(1, &vertexArrayData);
 		glGenBuffers(1, &vertexArrayData);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4 * glyphsToRender, NULL, GL_DYNAMIC_DRAW);
 		// The 2D quad requires 6 vertices of 4 floats each so we reserve 6 * 4 floats of memory.
 		// Because we'll be updating the content of the VBO's memory quite often we'll allocate the memory with GL_DYNAMIC_DRAW.
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-
-
 
 		int x = position.x;
 		int y = position.y;
 
 		// Iterate through all characters
-		delete[] textures;
+		if (textures != nullptr)
+		{
+			delete[] textures;
+		}
 		textures = new GLuint[glyphsToRender];
 		GLfloat* vertices = new GLfloat[24 * glyphsToRender];
 		int _index = 0;
@@ -282,6 +313,7 @@ namespace gines
 		//Submit data
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 24 * glyphsToRender, vertices);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		delete[] vertices;
 		doUpdate = false;
 
@@ -304,24 +336,25 @@ namespace gines
 		//Enable blending
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		textProgram.use();
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
 		glUniformMatrix4fv(textProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 		glUniform4f(textProgram.getUniformLocation("textColor"), color.r, color.g, color.b, color.a);
+		
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindVertexArray(vertexArrayID);
-		
 		for (int i = 0; i < glyphsToRender; i++)
 		{//Draw
 			glBindTexture(GL_TEXTURE_2D, textures[i]);
 			glDrawArrays(GL_TRIANGLES, i * 6, 6);
 		}
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
 
 		//Unbinds / unuse program
-		glBindVertexArray(0);
+		glDisableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		textProgram.unuse();
 	}
@@ -351,10 +384,16 @@ namespace gines
 	{
 		return font->height;
 	}
-
 	glm::vec4& Text::getColorRef()
 	{
 		return color;
 	}
-
+	int Text::getGlyphsToRender()
+	{
+		return glyphsToRender;
+	}
+	std::string Text::getString()
+	{
+		return string;
+	}
 }

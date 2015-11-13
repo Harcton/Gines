@@ -2,6 +2,7 @@
 #define CONSOLE_H
 #include <string>
 #include <vector>
+#include "Text.h"
 
 class Text;
 
@@ -58,8 +59,8 @@ namespace gines
 		int visibility = 255;
 		bool open = false;
 		std::string input;
-		Text* consoleText;
-		std::vector<Text*> lines;
+		Text consoleText;
+		std::vector<Text> lines;
 		float backspaceTimer = 0;
 		int backspaceAcceleration = 0;
 		std::vector<ConsoleCommand> commands;

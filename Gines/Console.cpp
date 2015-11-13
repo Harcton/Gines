@@ -1,4 +1,3 @@
-#include "Text.h"
 #include "Console.h"
 #include "Gines.h"
 #include <SDL/SDL_keycode.h>
@@ -9,9 +8,6 @@
 #define BACKSPACE_INTERVAL 75
 
 
-
-
-
 namespace gines
 {
 	//Global variables
@@ -19,45 +15,31 @@ namespace gines
 	int consoleFontSize = 20;
 	glm::vec4 consoleTextColor = glm::vec4(1.0f, 0.3f, 0.0f, 1.0f);
 	int consoleLines = 5;
-
-
+	
 	//Local variables
 	static int previousFontSize = consoleFontSize;
 	static  bool colorUpdated = true;
-
-
-
-	Console::Console()
-	{
-
-	}
-
-	Console::~Console()
-	{
-
-	}
-
+	
+	Console::Console(){}
+	Console::~Console(){}
 	int Console::initialize()
 	{
-		consoleText = new gines::Text();
-		consoleText->setFont(ginesFontPath, consoleFontSize);
-		consoleText->setColor(consoleTextColor);
-		consoleText->setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER));
-		consoleText->setString("><");
+		consoleText.setFont(ginesFontPath, consoleFontSize);
+		consoleText.setColor(consoleTextColor);
+		consoleText.setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER));
+		consoleText.setString("><");
 		log("Console initialized");
 
 		return 0;
 	}
 	void Console::unitialize()
 	{
-		delete consoleText;
-		while (!lines.empty())
-		{
-			delete lines.back();
-			lines.pop_back();
-		}
+		//while (!lines.empty())
+		//{
+		//	delete lines.back();
+		//	lines.pop_back();
+		//}
 	}
-
 	void Console::addVariable(std::string str, bool& var)
 	{
 		boolVariables.push_back(ConsoleVariable<bool>(str, var));
@@ -74,13 +56,12 @@ namespace gines
 	{
 		commands.push_back(ConsoleCommand(str, fnc));
 	}
-
 	void Console::log(std::string str)
 	{
-		lines.push_back(new Text());
-		lines.back()->setFont(ginesFontPath, consoleFontSize);
-		lines.back()->setColor(consoleTextColor);
-		lines.back()->setString(str);
+		lines.push_back(Text());
+		lines.back().setFont(ginesFontPath, consoleFontSize);
+		lines.back().setColor(consoleTextColor);
+		lines.back().setString(str);
 		updateLinePositions();
 	}
 	void Console::update()
@@ -90,16 +71,16 @@ namespace gines
 			//Update console font size if needed
 			if (previousFontSize != consoleFontSize)
 			{
-				consoleText->setFont(ginesFontPath, consoleFontSize);
+				consoleText.setFont(ginesFontPath, consoleFontSize);
 				for (unsigned i = 0; i < lines.size(); i++)
 				{
-					lines[i]->setFont(ginesFontPath, consoleFontSize);
+					lines[i].setFont(ginesFontPath, consoleFontSize);
 				}
 				previousFontSize = consoleFontSize;
 			}
 			if (!open)
 			{
-				visibility--;
+				visibility -= 20;
 			}
 		}
 
@@ -208,7 +189,7 @@ namespace gines
 
 			if (inputReceived)
 			{
-				consoleText->setString('>' + input + '<');
+				consoleText.setString('>' + input + '<');
 			}
 		}
 	}
@@ -222,15 +203,13 @@ namespace gines
 		int lineFix = 0;
 		if (open)
 		{
-			lineFix++;
+			lineFix = 1;
 		}
 		for (unsigned i = 0; i < lines.size(); i++)
 		{
-			lines[lines.size() - 1 - i]->setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER + lines.back()->getFontHeight()*(i + lineFix)));
+			lines[lines.size() - 1 - i].setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER + lines.back().getFontHeight()*(i + lineFix)));
 		}
 	}
-
-
 	void Console::render()
 	{
 		//Render lines
@@ -240,8 +219,8 @@ namespace gines
 		}
 		for (auto i = lines.begin(); i < lines.end(); i++)
 		{
-			(*i)->getColorRef().w = (visibility / 255.0f);
-			(*i)->render();
+			(*i).getColorRef().w = (visibility / 255.0f);
+			(*i).render();
 		}
 
 		//Render console text
@@ -249,10 +228,9 @@ namespace gines
 		{
 			return;
 		}
-		consoleText->getColorRef().w = (visibility / 255.0f);
-		consoleText->render();
+		consoleText.getColorRef().w = (visibility / 255.0f);
+		consoleText.render();
 	}
-
 	void Console::executeConsole()
 	{
 		//Record each word as a different element in console words vector
@@ -301,7 +279,7 @@ namespace gines
 		}
 
 		input = "";
-		consoleText->setString("><");
+		consoleText.setString("><");
 		if (!foundCommand)
 		{
 			log("Unknown command");
@@ -377,7 +355,6 @@ namespace gines
 			log("Unkown identifier [" + consoleWords[1] + "]!");
 		}
 	}
-
 	void Console::openConsole()
 	{
 		open = true;
