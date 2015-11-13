@@ -1,10 +1,10 @@
 #version 120
 //OpenGL ver 2.1
 
-in vec2 vertexPosition;
-in vec4 vertexColor;
+attribute vec2 vertexPosition;
+attribute vec4 vertexColor;
 
-out vec4 fragmentColor;
+varying vec4 fragmentColor;
 
 void main()
 {
