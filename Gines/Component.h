@@ -3,7 +3,6 @@
 #include <glm/vec2.hpp>
 #include <iostream>
 
-class GameObject;
 class Component
 {
 public:
@@ -11,7 +10,6 @@ public:
 	virtual ~Component(){};//Destructor hidden so that only removeComponent() or ~GameObject() can properly delete components
 	virtual void update(){}
 	virtual void render(){}
-
 protected:
 };
 
@@ -35,12 +33,16 @@ public:
 
 	//Rotate object relative to current rotation
 	void rotate(float rotate);
+
 	//Set absolute rotation
 	void setRotation(float newRotation);
+
 	//Move object relative to current position
 	void move(glm::vec2& move);
+
 	//Set absolute position
 	void setPosition(glm::vec2& position);
+
 	//Non-Uniform scale
 	void setScale(glm::vec2& scale);
 

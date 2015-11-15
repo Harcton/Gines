@@ -17,6 +17,11 @@ public:
 	void update();
 	void render();
 
+
+	//------------//
+	// COMPONENTS //
+	//------------//
+
 	/*Adds component of type T. If T is mono component and the object already has one instance
 	of that component then no component is added.*/
 	template <typename T>
@@ -26,10 +31,10 @@ public:
 		T* newComponent = new T();
 		//Check if newComponent is a mono component, if it is then check whether there already is one
 		MonoComponent* mono = dynamic_cast<MonoComponent*>(newComponent);
-		if (mono != nullptr)
-		{//Component is mono component. Check for an existing instance of that component
-			if (getComponent<T>() != nullptr)
-			{//There is already component of this type, return
+		if (mono != nullptr) {
+			//Component is mono component. Check for an existing instance of that component
+			if (getComponent<T>() != nullptr) {
+				//There is already component of this type, return
 				delete newComponent;
 				return;
 			}
@@ -90,8 +95,18 @@ public:
 		}
 		return _components;
 	}
+
+
+	//---------------//
+	// CHILD OBJECTS //
+	//---------------//
+
+	void addChild(std::string key, GameObject* child);
+	void removeChild(std::string key);
+	GameObject* getChild(std::string key);
 	
 private:
 	std::vector<Component*> components;
+	std::map<std::string, GameObject*> children;
 };
 #endif

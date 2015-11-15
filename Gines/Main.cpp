@@ -51,6 +51,11 @@ int main(int argc, char** argv)
 	go.addComponent<PhysicsComponent>();
 	go.addComponent<Transform>();
 	go.addComponent<Transform>();
+	GameObject go2;
+	GameObject go3;
+	go.addChild("GameObject 2", &go2);
+	go.addChild("GameObject 3", &go3);
+	go.removeChild("GameObject 2");
 	std::vector<Transform*> transforms = go.getComponents<Transform>();
 	if (transforms.size() > 0)
 	{//Found components
@@ -64,6 +69,7 @@ int main(int argc, char** argv)
 	{
 		std::cout << "\nNo transfrom components found";
 	}
+	//End Test
 		
 
 	gines::console.addConsoleCommand("test", testConsole);
