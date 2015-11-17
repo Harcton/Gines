@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <memory>
 #include "Component.h"
@@ -35,9 +35,11 @@ public:
 			//Component is mono component. Check for an existing instance of that component
 			if (getComponent<T>() != nullptr) {
 				//There is already component of this type, return
+				Error(GameObjectError::MonoComponentFound);
 				delete newComponent;
 				return;
 			}
+			Error(GameObjectError::AddingMonoComponent);
 		}
 		//Convert the new component pointer (T*) into a Component* pointer
 		Component* cast = dynamic_cast<Component*>(newComponent);
@@ -60,22 +62,22 @@ public:
 				return true;//Component deleted
 			}
 		}
+		Error(GameObjectError::ComponentNotFound);
 		return false;//No component of given type T was found
 	}
 
 	/*Returns nullptr if no component of given type exists*/
 	template <typename T>
-	T* getComponent()
-	{
+	T* getComponent() {
 		T* cast;
-		for (unsigned i = 0; i < components.size(); i++)
-		{
+		for (unsigned i = 0; i < components.size(); i++) {
 			cast = dynamic_cast<T*>(components[i]);
-			if (cast != nullptr)
-			{
+			if (cast != nullptr) {
 				return cast;
 			}
 		}
+		//getComponentia kutsutaan MonoObjectin lis‰‰misess‰, niin se tulostaa silloinkin virheen, vaikka mit‰‰n virhett‰ ei periaatteessa ole tapahtunut.
+		Error(GameObjectError::ComponentDoesNotExist);
 		return nullptr;
 	}
 
@@ -93,6 +95,9 @@ public:
 				_components.push_back(cast);
 			}
 		}
+		if (_components.size() == 0) {
+			Error(GameObjectError::ComponentsDoNotExist);
+		}
 		return _components;
 	}
 
@@ -107,6 +112,6 @@ public:
 	
 private:
 	std::vector<Component*> components;
-	std::map<std::string, GameObject*> children;
+	std::unordered_map<std::string, GameObject*> children;
 };
 #endif

@@ -7,7 +7,7 @@ class Component
 {
 public:
 	Component(){}
-	virtual ~Component(){};//Destructor hidden so that only removeComponent() or ~GameObject() can properly delete components
+	virtual ~Component(){}; //Destructor hidden so that only removeComponent() or ~GameObject() can properly delete components
 	virtual void update(){}
 	virtual void render(){}
 protected:
@@ -15,7 +15,6 @@ protected:
 
 class MonoComponent : public Component
 {
-	//Go figure out a better name
 	/*
 	If you want a gameobject to have a maxinum of 1 instance of a specific component, 
 	you can derive that component from MonoComponent instead of Component
@@ -27,7 +26,7 @@ class Transform : public MonoComponent
 {
 public:
 	Transform();
-	~Transform(){}
+	~Transform(){};
 
 	void update();
 

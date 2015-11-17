@@ -39,6 +39,24 @@ enum class ComponentError {
 	General = 8000,
 };
 
+enum class GameObjectError {
+	General						=	9000,
+	
+	AddComponentGeneral			=	9010,
+		MonoComponentFound		=	9011,
+		AddingMonoComponent		=	9012,
+		
+	RemoveComponentGeneral		=	9020,
+		ComponentNotFound		=	9021,
+
+	GetComponentGeneral			=	9030,
+		ComponentDoesNotExist	=	9031,
+
+	GetComponentsGeneral		=	9040,
+		ComponentsDoNotExist	=	9041,
+};
+
+//LogError is called from within the Error Function, do not use it.
 void logError(std::string errorText)
 {
 	time_t rawtime;
@@ -52,7 +70,6 @@ void logError(std::string errorText)
 	std::cout << errorMsg.str() << std::endl;
 	std::ofstream log_file("ErrorLog.txt", std::ios_base::out | std::ios_base::app);
 	log_file << errorMsg.str();
-	system("pause");
 }
 
 void Error(GinesError error) {
@@ -165,5 +182,46 @@ void Error(ComponentError error) {
 		break;
 	}
 	logError(errorText);
+}
+
+void Error(GameObjectError error) {
+	std::string errorText;
+	switch (error)
+	{
+	case GameObjectError::General:
+		errorText = "GameObject General Error: 9000";
+		break;
+	case GameObjectError::AddComponentGeneral:
+		errorText = "Something happened: 9010";
+		break;
+	case GameObjectError::MonoComponentFound:
+		errorText = "There can only be one instance of a component of the given type: 9011";
+		break;
+	case GameObjectError::AddingMonoComponent:
+		errorText = "Discard previous error, adding MonoComponent: 9012";
+		break;
+	case GameObjectError::RemoveComponentGeneral:
+		errorText = "Something happened: 9020";
+		break;
+	case GameObjectError::ComponentNotFound:
+		errorText = "Component could not be removed, because it was not found: 9021";
+		break;
+	case GameObjectError::GetComponentGeneral:
+		errorText = "Something happened: 9030";
+		break;
+	case GameObjectError::ComponentDoesNotExist:
+		errorText = "No component of the given type exist: 9031";
+		break;
+	case GameObjectError::GetComponentsGeneral:
+		errorText = "Something happened: 9040";
+		break;
+	case GameObjectError::ComponentsDoNotExist:
+		errorText = "No components of the given type exist: 9041";
+		break;
+	default:
+		errorText = "GameObject Undefined Error";
+		break;
+	}
+	logError(errorText); 
 }
 #endif
