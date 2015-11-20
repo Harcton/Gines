@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <memory>
 #include "Component.h"
@@ -14,38 +14,104 @@ public:
 	GameObject();
 	~GameObject();
 
-	void draw();
 	void update();
-	void addComponent(std::string componentName, std::unique_ptr<Component> component);
-	void removeComponent(std::string componentName);
+	void render();
 
-	//Rotate object relative to current rotation
-	void rotate(float rotate);
 
-	//Set absolute rotation
-	void rotation(float rotation);
+	//------------//
+	// COMPONENTS //
+	//------------//
 
-	//Move object relative to current position
-	void move(vector2 move);
+	/*Adds component of type T. If T is mono component and the object already has one instance
+	of that component then no component is added.*/
+	template <typename T>
+	void addComponent()
+	{
+		//Create component
+		T* newComponent = new T();
+		//Check if newComponent is a mono component, if it is then check whether there already is one
+		MonoComponent* mono = dynamic_cast<MonoComponent*>(newComponent);
+		if (mono != nullptr) {
+			//Component is mono component. Check for an existing instance of that component
+			if (getComponent<T>() != nullptr) {
+				//There is already component of this type, return
+				Error(GameObjectError::MonoComponentFound);
+				delete newComponent;
+				return;
+			}
+			Error(GameObjectError::AddingMonoComponent);
+		}
+		//Convert the new component pointer (T*) into a Component* pointer
+		Component* cast = dynamic_cast<Component*>(newComponent);
+		components.push_back(cast);
+	}
 
-	//Set absolute position
-	void setPosition(vector2 position);
+	/*Returns true if the component was removed. False is returned if component is not found
+	*/
+	template<typename T>
+	bool removeComponent()
+	{
+		T* cast;
+		for (unsigned i = 0; i < components.size(); i++)
+		{
+			cast = dynamic_cast<T*>(components[i]);
+			if (cast != nullptr)
+			{
+				delete cast;
+				components.erase(components.begin() + i);
+				return true;//Component deleted
+			}
+		}
+		Error(GameObjectError::ComponentNotFound);
+		return false;//No component of given type T was found
+	}
 
-	//Uniform scale
-	void scale(size_t scale);
+	/*Returns nullptr if no component of given type exists*/
+	template <typename T>
+	T* getComponent() {
+		T* cast;
+		for (unsigned i = 0; i < components.size(); i++) {
+			cast = dynamic_cast<T*>(components[i]);
+			if (cast != nullptr) {
+				return cast;
+			}
+		}
+		//getComponentia kutsutaan MonoObjectin lis‰‰misess‰, niin se tulostaa silloinkin virheen, vaikka mit‰‰n virhett‰ ei periaatteessa ole tapahtunut.
+		Error(GameObjectError::ComponentDoesNotExist);
+		return nullptr;
+	}
 
-	//Non-Uniform scale
-	void scale(vector2 scale);
+	/*Returns nullptr if no components of given type exists*/
+	template <typename T>
+	std::vector<T*> getComponents()
+	{
+		std::vector<T*> _components;
+		T* cast;
+		for (unsigned i = 0; i < components.size(); i++)
+		{
+			cast = dynamic_cast<T*>(components[i]);
+			if (cast != nullptr)
+			{
+				_components.push_back(cast);
+			}
+		}
+		if (_components.size() == 0) {
+			Error(GameObjectError::ComponentsDoNotExist);
+		}
+		return _components;
+	}
 
-	//Gets
-	vector2 getPosition() { return objectPosition; }
-	float getRotation() { return objectRotation; }
-	vector2 getScale() { return objectScale; }
+
+	//---------------//
+	// CHILD OBJECTS //
+	//---------------//
+
+	void addChild(std::string key, GameObject* child);
+	void removeChild(std::string key);
+	GameObject* getChild(std::string key);
+	
 private:
-	vector2 objectPosition;
-	float objectRotation;
-	vector2 objectScale;
-	std::vector<std::unique_ptr<Component>> components;
-	std::map<std::string, size_t> componentPosition;
+	std::vector<Component*> components;
+	std::unordered_map<std::string, GameObject*> children;
 };
 #endif

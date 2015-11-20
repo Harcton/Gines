@@ -6,11 +6,10 @@
 class PhysicsComponent : public Component
 {
 public:
-	PhysicsComponent(int asd);
+	PhysicsComponent();
 	~PhysicsComponent();
 	
 	void update();
 private:
-	size_t sad;
 };
 #endif

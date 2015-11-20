@@ -129,7 +129,7 @@ namespace gines
 		GLint location = glGetUniformLocation(programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX)
 		{
-			std::cout << "Uniform " + uniformName + " not found!";
+			std::cout << "Uniform " + uniformName + " not found!" << std::endl;
 			return 0;
 		}
 		return location;

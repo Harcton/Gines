@@ -14,6 +14,7 @@
 
 namespace gines
 {
+	void uninitializeTextRendering();
 	struct Character
 	{
 		GLuint     textureID;  // ID handle of the glyph texture

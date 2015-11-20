@@ -63,7 +63,7 @@ namespace gines
 		 initializeShaders(); 
 
 		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
-		std::cout << "\nPowered by... Gines (2015)";
+		std::cout << "\nPowered by... Gines (2015)" << std::endl;
 		return true;
 
 	}
@@ -80,6 +80,7 @@ namespace gines
 	{
 		uninitializeTime();
 		console.unitialize();
+		uninitializeTextRendering();
 
 		std::cout << "\nExited succesfully";
 		std::getchar();
