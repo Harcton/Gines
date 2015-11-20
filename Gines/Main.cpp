@@ -6,6 +6,7 @@
 #include <SDL/SDL.h>
 #include <glm/glm.hpp>
 
+#include "Error.hpp"
 #include "Text.h"
 #include "Gines.h"
 #include "InputManager.h"
@@ -13,7 +14,10 @@
 #include "Time.h"
 #include "Sprite.h"
 #include "lodepng.h"
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 #include "Component.h"
 #include "PhysicsComponent.h"
 #include "GameObject.h"
@@ -49,13 +53,18 @@ int main(int argc, char** argv)
 {
 	gines::initialize();
 
-	
+	Log::Message("asd", Log::Level::Fatal);
+
+	Log::Message("kakkaa", Log::Level::Info);
+
 	//GameObject Test
 	gines::GameObject go;
 	{
 		gines::GameObject go2("go 2");
+		
 		go2.createChild("child");
 		go2.createChild();
+<<<<<<< Updated upstream
 			go2.transform().print();
 		go2.addComponent<Transform>();
 			go2.transform().print();
@@ -63,6 +72,9 @@ int main(int argc, char** argv)
 			go2.transform().print();
 		go2.removeComponent<Transform>();
 			go2.transform().print();
+=======
+		//go2.addComponent<Transform>();
+>>>>>>> Stashed changes
 		gines::GameObject* o = gines::GameObject::getGameObject("go 2");
 	}
 	//End Test

@@ -39,7 +39,12 @@ namespace gines
 				//Component is mono component. Check for an existing instance of that component
 				if (getComponent<T>() != nullptr) {
 					//There is already component of this type, return
+<<<<<<< Updated upstream
 					Error(GameObjectError::MonoComponentFound);
+=======
+					
+					//Message::Log(GameObjectLog::MonoComponentFound);
+>>>>>>> Stashed changes
 					delete newComponent;
 					return;
 				}
