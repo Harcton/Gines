@@ -99,6 +99,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\GameObject\Components</Filter>
+    </ClCompile>
     <ClCompile Include="ImageLoader.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="IOManager.h">
       <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files\GameObject\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

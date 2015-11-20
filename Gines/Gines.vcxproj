@@ -92,6 +92,7 @@
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextureCache.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Text.h" />
     <ClInclude Include="TextureCache.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
