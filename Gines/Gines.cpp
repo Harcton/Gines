@@ -23,7 +23,8 @@ namespace gines
 
 	bool initialize()
 	{
-		Log::Message("Initialize started...", Log::Level::Info);
+		Message("asdasdasd", Log::Level::Trace);
+		Message("Initialize started...", Log::Level::Info);
 
 		SDL_Init(SDL_INIT_VIDEO);
 		mWindow = SDL_CreateWindow("SDL project",
@@ -33,31 +34,31 @@ namespace gines
 
 		if (mWindow == NULL)
 		{
-			Log::Message("Initialization failed! Failed to create window!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to create window!", Log::Level::Fatal);
 			return false;
 		}
 
 		if ((renderingContex = SDL_GL_CreateContext(mWindow)) == NULL)
 		{
-			Log::Message("Initialization failed! Failed to create SDL rendering context!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to create SDL rendering context!", Log::Level::Fatal);
 			return false;
 		}
 
 		if (glewInit() != GLEW_OK)
 		{
-			Log::Message("Initialization failed! Failed to initializez glew!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to initializez glew!", Log::Level::Fatal);
 			return false;
 		}
 
 		if (!gines::initializeTime())
 		{
-			Log::Message("Initialization failed! Failed to initialize time!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to initialize time!", Log::Level::Fatal);
 			return false;
 		}
 
 		if (console.initialize() != 0)
 		{
-			Log::Message("Initialization failed! Failed to initialize console!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to initialize console!", Log::Level::Fatal);
 			return false;
 		}
 
@@ -66,8 +67,8 @@ namespace gines
 		 initializeShaders(); 
 
 		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
-		Log::Message("Initialized successfully!", Log::Level::Info);
-		Log::Message("Powered by... Gines(2015)", Log::Level::Info);
+		Message("Initialized successfully!", Log::Level::Fatal);
+		Message("Powered by... Gines(2015)", Log::Level::Fatal);
 		return true;
 
 	}
@@ -87,7 +88,7 @@ namespace gines
 		console.unitialize();
 		uninitializeTextRendering();
 
-		std::cout << "\nExited succesfully";
+		Message("Exited succesfully", Log::Level::Info);
 		std::getchar();
 		return 0;
 	}

@@ -1,6 +1,7 @@
 #ifndef GLSLPROGRAM
 #define GLSLPROGRAM
 
+#include "Error.hpp"
 #include <GL/glew.h>
 #include <string>
 

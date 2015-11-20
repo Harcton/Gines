@@ -79,8 +79,8 @@ namespace gines
 
 			glDeleteShader(id);
 
-			if (errorLog.size() > 0){ std::printf("\n%s", &errorLog[0]); }
-			std::cout << "glGetShaderiv(id, GL_COMPILE_STATUS, &success) failed! (" + filePath + ")";
+			if (errorLog.size() > 0){ Message(&errorLog[0], Log::Level::Error); }
+			Message(("glGetShaderiv(id, GL_COMPILE_STATUS, &success) failed! (" + filePath + ")").c_str(), Log::Level::Error);
 		}
 	}
 	void GLSLProgram::linkShaders()
@@ -129,7 +129,7 @@ namespace gines
 		GLint location = glGetUniformLocation(programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX)
 		{
-			std::cout << "Uniform " + uniformName + " not found!" << std::endl;
+			Message(("Uniform " + uniformName + " not found!").c_str(), Log::Level::Error);
 			return 0;
 		}
 		return location;

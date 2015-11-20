@@ -34,7 +34,7 @@ public:
 		Fatal
 	};
 
-	static void Message(const char* message, Level level)
+	static void logMessage(const char* message, Level level, const char* file, int line)
 	{
 		//Save the current time
 		time_t rawtime;
@@ -42,7 +42,15 @@ public:
 		time(&rawtime);
 		localtime_s(&timeinfo, &rawtime);
 
+		char* tempMessage = (char*)message;
+		std::uint32_t i = 0;
+		while (tempMessage[i] != NULL) {
+			if (tempMessage[i] == '\n') { tempMessage[i] = NULL; }
+			i++;
+		}
+
 		std::stringstream Msg;
+		std::ofstream log_file("MessageLog.txt", std::ios_base::out | std::ios_base::app);
 
 		//Format time so it's uniform in all cases
 		if (timeinfo.tm_mday < 10) { Msg << "[0" << timeinfo.tm_mday << "."; }
@@ -53,44 +61,58 @@ public:
 		else { Msg << timeinfo.tm_hour << ":"; }
 		if (timeinfo.tm_min < 10) { Msg << "0" << timeinfo.tm_min << ":"; }
 		else { Msg << timeinfo.tm_min << ":"; }
-		if (timeinfo.tm_sec < 10) { Msg << "0" << timeinfo.tm_sec << "] "; }
-		else { Msg << timeinfo.tm_sec << "] "; }
+		if (timeinfo.tm_sec < 10) { Msg << "0" << timeinfo.tm_sec << "]"; }
+		else { Msg << timeinfo.tm_sec << "]"; }
 
 		//Print message and depending on the case do something else
+		//Filename and linenumber will be removed from some of the messages, but for debugging purposes will be left for now
 		switch (level)
 		{
 		case Log::Level::Trace:
-			Msg << "Trace: " << message << std::endl;
+			Msg << "\tTrace: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 			break;
 		case Log::Level::Debug:
-			Msg << "Debug: " << message << std::endl;
+			Msg << "\tDebug: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 			break;
 		case Log::Level::Info:
-			Msg << "Info: " << message << std::endl;
+			Msg << "\tInfo: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 			break;
 		case Log::Level::Warning:
-			Msg << "Warning: " << message << std::endl;
+			Msg << "\tWarning: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 			break;
 		case Log::Level::Error:
-			Msg << "Error: " << message << std::endl;
+			Msg << "\tError: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
+
+			//Handle error
+			//Coming in a long time ago
+			//Into a galaxy near you
 			system("pause");
 			break;
 		case Log::Level::Fatal:
-			Msg << "Fatal: " << message << std::endl;
+			Msg << "\tFatal: " << message << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
+			
 			system("pause");
+
+			//Save message to MessageLog.txt
+			log_file << Msg.str();
+			log_file.close();
+
+			std::terminate();
 			break;
 		default:
 			break;
 		}
 
 		//Save message to MessageLog.txt
-		std::ofstream log_file("MessageLog.txt", std::ios_base::out | std::ios_base::app);
 		log_file << Msg.str();
+		log_file.close();
 	}
 };
+
+#define Message(param1, param2) Log::logMessage(param1, param2, __FILE__, __LINE__)

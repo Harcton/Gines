@@ -30,29 +30,29 @@ namespace gines
 
 	bool initializeTime()
 	{
-		Log::Message("Time initialization started...", Log::Level::Info);
+		Message("Time initialization started...", Log::Level::Info);
 		if (initialized)
 		{
-			Log::Message("Time already initialized!", Log::Level::Info);
+			Message("Time already initialized!", Log::Level::Info);
 			return true;
 		}
 
 		fpsCounter = new Text();
 		if (!fpsCounter)
 		{
-			Log::Message("Initialization failed! Failed to create fpsCounter!", Log::Level::Error);
+			Message("Initialization failed! Failed to create fpsCounter!", Log::Level::Error);
 			return false;
 		}
 
 		if (!fpsCounter->setFont(ginesFontPath, fpsCounterFontSize))
 		{
-			Log::Message("Initialization failed! Failed to set up fps counter!", Log::Level::Error);
+			Message("Initialization failed! Failed to set up fps counter!", Log::Level::Error);
 			return false;
 		}
 
 		fpsCounter->setColor(glm::vec4(0.12f, 0.45f, 0.07f, 1.0f));
 		fpsCounter->setPosition(glm::vec2(5, WINDOW_HEIGHT - fpsCounter->getFontHeight()));
-		Log::Message("Time initialized successfully!", Log::Level::Info);
+		Message("Time initialized successfully!", Log::Level::Info);
 		initialized = true;
 		return true;
 	}

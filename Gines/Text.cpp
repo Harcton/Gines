@@ -22,22 +22,22 @@ namespace gines
 
 	void initializeTextRendering()
 	{
-		Log::Message("Text rendering initialization started...", Log::Level::Info);
+		Message("Text rendering initialization started...", Log::Level::Info);
 		if (textRenderingInitialized)
 		{
-			Log::Message("Text rendering already initialized!", Log::Level::Info);
+			Message("Text rendering already initialized!", Log::Level::Info);
 			return;
 		}
 
 		if (ft != nullptr)
 		{
-			Log::Message("Freetype library already exists!", Log::Level::Error);
+			Message("Freetype library already exists!", Log::Level::Error);
 			return;
 		}
 		ft = new FT_Library;
 		if (FT_Init_FreeType(ft))
 		{
-			Log::Message("Freetype library initialization failed!", Log::Level::Error);
+			Message("Freetype library initialization failed!", Log::Level::Error);
 			return;
 		}
 
@@ -46,7 +46,7 @@ namespace gines
 		textProgram.linkShaders();
 
 		textRenderingInitialized = true;
-		Log::Message("Text rendering library initialized successfully!", Log::Level::Info);
+		Message("Text rendering library initialized successfully!", Log::Level::Info);
 	}
 	void uninitializeTextRendering()
 	{
