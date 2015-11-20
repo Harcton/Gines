@@ -39,11 +39,11 @@ namespace gines
 				//Component is mono component. Check for an existing instance of that component
 				if (getComponent<T>() != nullptr) {
 					//There is already component of this type, return
-					Error(GameObjectError::MonoComponentFound);
+					Message::Log(GameObjectLog::MonoComponentFound);
 					delete newComponent;
 					return;
 				}
-				Error(GameObjectError::AddingMonoComponent);
+				Message::Log(GameObjectLog::AddingMonoComponent);
 			}
 			//Convert the new component pointer (T*) into a Component* pointer
 			Component* cast = dynamic_cast<Component*>(newComponent);
@@ -65,7 +65,7 @@ namespace gines
 					return true;//Component deleted
 				}
 			}
-			Error(GameObjectError::ComponentNotFound);
+			Message::Log(GameObjectLog::ComponentNotFound);
 			return false;//No component of given type T was found
 		}
 
@@ -80,7 +80,7 @@ namespace gines
 				}
 			}
 			//getComponentia kutsutaan MonoObjectin lis‰‰misess‰, niin se tulostaa silloinkin virheen, vaikka mit‰‰n virhett‰ ei periaatteessa ole tapahtunut.
-			Error(GameObjectError::ComponentDoesNotExist);
+			Message::Log(GameObjectLog::ComponentDoesNotExist);
 			return nullptr;
 		}
 
@@ -99,7 +99,7 @@ namespace gines
 				}
 			}
 			if (_components.size() == 0) {
-				Error(GameObjectError::ComponentsDoNotExist);
+				Message::Log(GameObjectLog::ComponentsDoNotExist);
 			}
 			return _components;
 		}

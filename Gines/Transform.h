@@ -1,5 +1,5 @@
-#ifndef TransformComponent_h_
-#define TransformComponent_h_
+#pragma once
+
 #include <glm/vec2.hpp>
 #include <iostream>
 #define _USE_MATH_DEFINES
