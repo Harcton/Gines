@@ -3,7 +3,8 @@
 
 #include "Component.h"
 
-class PhysicsComponent : public Component
+//Coming soon
+class PhysicsComponent : public MonoComponent
 {
 public:
 	PhysicsComponent();

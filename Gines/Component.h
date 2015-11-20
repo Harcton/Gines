@@ -2,6 +2,8 @@
 #define Component_h_
 #include <glm/vec2.hpp>
 #include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 class Component
 {
@@ -20,45 +22,6 @@ class MonoComponent : public Component
 	you can derive that component from MonoComponent instead of Component
 	*/
 };
-
-
-class Transform : public MonoComponent
-{
-public:
-	Transform();
-	~Transform(){};
-
-	void update();
-
-	//Rotate object relative to current rotation
-	void rotate(float rotate);
-
-	//Set absolute rotation
-	void setRotation(float newRotation);
-
-	//Move object relative to current position
-	void move(glm::vec2& move);
-
-	//Set absolute position
-	void setPosition(glm::vec2& position);
-
-	//Non-Uniform scale
-	void setScale(glm::vec2& scale);
-
-	//
-	//	Transform members, public or private?
-	//
-
-	glm::vec2 position;
-	glm::vec2 scale;
-	float rotation;
-
-	//Misc
-	void print();
-
-private:
-};
-
 
 
 /*
