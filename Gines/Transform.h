@@ -53,4 +53,3 @@ private:
 	glm::vec2 scale;
 	float rotation;
 };
-#endif

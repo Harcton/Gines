@@ -1,5 +1,6 @@
-#ifndef GINES_H
-#define GINES_H
+#pragma once
+
+#include "Error.hpp"
 
 #include "GLSLProgram.h"
 #include "InputManager.h"
@@ -30,7 +31,3 @@ namespace gines
 	void endMainLoop();
 
 }
-
-
-
-#endif

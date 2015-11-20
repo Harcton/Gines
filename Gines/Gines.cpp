@@ -23,6 +23,8 @@ namespace gines
 
 	bool initialize()
 	{
+		Log::Message("Initialize started...", Log::Level::Info);
+
 		SDL_Init(SDL_INIT_VIDEO);
 		mWindow = SDL_CreateWindow("SDL project",
 			SDL_WINDOWPOS_UNDEFINED,
@@ -31,39 +33,41 @@ namespace gines
 
 		if (mWindow == NULL)
 		{
-			std::cout << "\nInitialization failed! Failed to create window!";
+			Log::Message("Initialization failed! Failed to create window!", Log::Level::Fatal);
 			return false;
 		}
 
 		if ((renderingContex = SDL_GL_CreateContext(mWindow)) == NULL)
 		{
-			std::cout << "\nInitialization failed! Failed to create SDL rendering context!";
+			Log::Message("Initialization failed! Failed to create SDL rendering context!", Log::Level::Fatal);
 			return false;
 		}
 
 		if (glewInit() != GLEW_OK)
 		{
-			std::cout << "\nInitialization failed! Failed to initializez glew!";
+			Log::Message("Initialization failed! Failed to initializez glew!", Log::Level::Fatal);
 			return false;
 		}
 
 		if (!gines::initializeTime())
 		{
-			std::cout << "\nInitialization failed! Failed to initialize time!";
+			Log::Message("Initialization failed! Failed to initialize time!", Log::Level::Fatal);
 			return false;
 		}
 
 		if (console.initialize() != 0)
 		{
-			std::cout << "\nInitialization failed! Failed to initialize console!";
+			Log::Message("Initialization failed! Failed to initialize console!", Log::Level::Fatal);
 			return false;
 		}
 
 		// WIP, error c5060
+		
 		 initializeShaders(); 
 
 		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
-		std::cout << "\nPowered by... Gines (2015)" << std::endl;
+		Log::Message("Initialized successfully!", Log::Level::Info);
+		Log::Message("Powered by... Gines(2015)", Log::Level::Info);
 		return true;
 
 	}

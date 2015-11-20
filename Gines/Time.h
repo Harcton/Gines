@@ -1,5 +1,7 @@
 #ifndef TIME_H
 #define TIME_H
+
+#include "Error.hpp"
 #include <SDL\SDL_stdinc.h>
 
 
