@@ -43,6 +43,15 @@
     <Filter Include="Source Files\GameObject\Components">
       <UniqueIdentifier>{5f8bf375-0318-499e-beb8-ec03f9b6c7f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Caches">
+      <UniqueIdentifier>{679498ef-0567-45d2-80b4-b6efa3d2c973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Resources">
+      <UniqueIdentifier>{a75460f6-f76a-45f6-8e99-c455e9f2ece2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Caches">
+      <UniqueIdentifier>{05997fa9-4852-40d2-aa6d-e7ea0cf89ba0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -89,6 +98,15 @@
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageLoader.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCache.cpp">
+      <Filter>Source Files\Caches</Filter>
+    </ClCompile>
+    <ClCompile Include="IOManager.cpp">
+      <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +157,18 @@
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCache.h">
+      <Filter>Header Files\Caches</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTexture.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageLoader.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="IOManager.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

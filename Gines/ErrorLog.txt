@@ -1,0 +1,48 @@
+[20.11.2015 - 12:2:50] - No component of the given type exist: 9031
+[20.11.2015 - 12:2:50] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 12:2:50] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 12:22:10] - No component of the given type exist: 9031
+[20.11.2015 - 12:22:10] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 12:22:10] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 12:53:56] - No component of the given type exist: 9031
+[20.11.2015 - 12:53:56] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 12:53:56] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 12:54:13] - No component of the given type exist: 9031
+[20.11.2015 - 12:54:13] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 12:54:13] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 12:54:54] - No component of the given type exist: 9031
+[20.11.2015 - 12:54:54] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 12:54:54] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 13:58:20] - No component of the given type exist: 9031
+[20.11.2015 - 13:58:20] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 13:58:20] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:1:41] - No component of the given type exist: 9031
+[20.11.2015 - 14:1:41] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:1:41] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:3:43] - No component of the given type exist: 9031
+[20.11.2015 - 14:3:43] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:3:43] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:7:28] - No component of the given type exist: 9031
+[20.11.2015 - 14:7:28] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:7:28] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:7:51] - No component of the given type exist: 9031
+[20.11.2015 - 14:7:51] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:7:51] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:9:49] - No component of the given type exist: 9031
+[20.11.2015 - 14:9:49] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:9:49] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:10:17] - No component of the given type exist: 9031
+[20.11.2015 - 14:10:17] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:10:17] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:10:50] - No component of the given type exist: 9031
+[20.11.2015 - 14:10:50] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:10:50] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:10:59] - No component of the given type exist: 9031
+[20.11.2015 - 14:10:59] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:10:59] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:12:18] - No component of the given type exist: 9031
+[20.11.2015 - 14:12:18] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:12:18] - There can only be one instance of a component of the given type: 9011
+[20.11.2015 - 14:13:25] - No component of the given type exist: 9031
+[20.11.2015 - 14:13:26] - Discard previous error, adding MonoComponent: 9012
+[20.11.2015 - 14:13:26] - There can only be one instance of a component of the given type: 9011

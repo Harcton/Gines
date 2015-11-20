@@ -73,6 +73,7 @@ namespace gines
 		colorProgram.compileShaders("Shaders/color.vertex", "Shaders/color.fragment");
 		colorProgram.addAttribute("vertexPosition");
 		colorProgram.addAttribute("vertexColor");
+		colorProgram.addAttribute("vertexUV");
 		colorProgram.linkShaders();
 	}
 

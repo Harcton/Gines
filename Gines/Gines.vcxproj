@@ -80,7 +80,9 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gines.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
@@ -88,6 +90,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextureCache.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -98,13 +101,17 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gines.h" />
     <ClInclude Include="GLSLProgram.h" />
+    <ClInclude Include="GLTexture.h" />
+    <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="IOManager.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="TextureCache.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

@@ -16,6 +16,8 @@
 #include "Component.h"
 #include "PhysicsComponent.h"
 #include "GameObject.h"
+#include "GLTexture.h"
+#include "ImageLoader.h"
 
 //DEEBUGGIA...
 void handleInput();
@@ -25,6 +27,7 @@ std::vector<gines::Text*> texts;
 extern int WINDOW_HEIGHT;
 //
 Sprite sprite;
+GLTexture tex;
 //
 
 //Test console function
@@ -72,7 +75,10 @@ int main(int argc, char** argv)
 	gines::console.addVariable("run", run);
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
+	// Rendering debug initializations 
 	sprite.initialize(glm::vec2(-1.0f, -1.0f), 1, 1);
+	tex = ImageLoader::loadPNG("Textures/mr-gines.png");
+	// Rendering end 
 
 	//Game loop
 	while (run)
@@ -85,7 +91,12 @@ int main(int argc, char** argv)
 		//Sprite & shader debugging
 		
 		 gines::colorProgram.use();
+		 glActiveTexture(GL_TEXTURE0);
+		 glBindTexture(GL_TEXTURE_2D, tex.id);
+		 GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
+		 glUniform1i(textureLocation, 0);
 		 sprite.draw();
+		 glBindTexture(GL_TEXTURE_2D, 0);
 		 gines::colorProgram.unuse();
 		 go.update();
 		 go.render();

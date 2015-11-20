@@ -3,8 +3,12 @@
 
 attribute vec2 vertexPosition;
 attribute vec4 vertexColor;
-
+attribute vec2 vertexUV;
+varying vec2 fragmentPosition;
+varying vec2 fragmentUV;
 varying vec4 fragmentColor;
+
+
 
 void main()
 {
@@ -19,4 +23,6 @@ void main()
 
 	//Passing color to fragment shader
 	fragmentColor = vertexColor;
+	fragmentPosition = vertexPosition;
+	fragmentUV = vertexUV;
 }

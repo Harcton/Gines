@@ -36,29 +36,35 @@ void Sprite::initialize(glm::vec2 pos, int width, int height)
 		glGenBuffers(1, &vboID);
 	}
 
-	VertexPositionColor vertexData[6];
+	VertexPositionColorTexture vertexData[6];
 
 	vertexData[0].position.x = x + width;
 	vertexData[0].position.y = y + height;
+	vertexData[0].uv = glm::vec2(1.0f, 1.0f);
 
 	vertexData[1].position.x = x;
 	vertexData[1].position.y = y + height;
+	vertexData[1].uv = glm::vec2(0.0f, 1.0f);
 
 	vertexData[2].position.x = x;
 	vertexData[2].position.y = y;
+	vertexData[2].uv = glm::vec2(0.0f, 0.0f);
 
 	vertexData[3].position.x = x;
 	vertexData[3].position.y = y;
+	vertexData[3].uv = glm::vec2(0.0f, 0.0f);
 
 	vertexData[4].position.x = x + width;
 	vertexData[4].position.y = y;
+	vertexData[4].uv = glm::vec2(1.0f, 0.0f);
 
 	vertexData[5].position.x = x + width;
 	vertexData[5].position.y = y + height;
+	vertexData[5].uv = glm::vec2(1.0f, 1.0f);
 
 	for (int i = 0; i < 6; i++)
 	{
-		vertexData[i].color.r = 1;
+		vertexData[i].color.r = 0;
 		vertexData[i].color.g = 0;
 		vertexData[i].color.b = 1;
 		vertexData[i].color.a = 1;
@@ -69,6 +75,7 @@ void Sprite::initialize(glm::vec2 pos, int width, int height)
 	vertexData[1].color.b = 1;
 	vertexData[1].color.a = 1;
 
+	
 	vertexData[4].color.r = 1;
 	vertexData[4].color.g = 0;
 	vertexData[4].color.b = 0;
@@ -93,10 +100,12 @@ void Sprite::draw()
 
 	//Position attribute pointer
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColor), (void*)offsetof(VertexPositionColor, position));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, position));
 	
 	//Color attribute pointer
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColor), (void*)offsetof(VertexPositionColor, color));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, color));
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, uv));
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
