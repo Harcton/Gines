@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include "Component.h"
+#include "Transform.h"
 
 namespace gines
 {
@@ -44,6 +44,13 @@ namespace gines
 					return;
 				}
 				Error(GameObjectError::AddingMonoComponent);
+
+				//Check if transform
+				Transform* tf = dynamic_cast<Transform*>(newComponent);
+				if (tf != nullptr)
+				{//Set tranform
+					transformComponent = tf;
+				}
 			}
 			//Convert the new component pointer (T*) into a Component* pointer
 			Component* cast = dynamic_cast<Component*>(newComponent);
@@ -60,6 +67,13 @@ namespace gines
 				cast = dynamic_cast<T*>(components[i]);
 				if (cast != nullptr)
 				{
+					//Check if transform
+					Transform* tf = dynamic_cast<Transform*>(components[i]);
+					if (tf != nullptr)
+					{//Nullify transform pointer
+						transformComponent = nullptr;
+					}
+
 					delete cast;
 					components.erase(components.begin() + i);
 					return true;//Component deleted
@@ -130,12 +144,16 @@ namespace gines
 		void destroyChild(std::string childName);
 		void destroyChild(GameObject* childObject);
 
+
+		//Public members
+		Transform& transform();
+
 	private:
 		std::string name;
 		std::vector<Component*> components;
 		GameObject* parent = nullptr;
 		std::vector<GameObject*> children;
-
+		Transform* transformComponent;
 	};
 }
 #endif

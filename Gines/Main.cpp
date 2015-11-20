@@ -1,3 +1,4 @@
+#include "Error.hpp"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -12,7 +13,7 @@
 #include "Time.h"
 #include "Sprite.h"
 #include "lodepng.h"
-#include "Error.hpp"
+
 #include "Component.h"
 #include "PhysicsComponent.h"
 #include "GameObject.h"
@@ -52,7 +53,13 @@ int main(int argc, char** argv)
 		gines::GameObject go2("go 2");
 		go2.createChild("child");
 		go2.createChild();
+			go2.transform().print();
 		go2.addComponent<Transform>();
+			go2.transform().print();
+			go2.transform().move(glm::vec2(100, 150));
+			go2.transform().print();
+		go2.removeComponent<Transform>();
+			go2.transform().print();
 		gines::GameObject* o = gines::GameObject::getGameObject("go 2");
 	}
 	//End Test

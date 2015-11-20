@@ -1,4 +1,5 @@
 #include "GameObject.h"
+
 /*Game object global states
 	-It is possible to improve performance of game objects by avoiding certain actions
 	-For example, in the naming constructor we can use the GINES_GO_USE_INDEX_NAME bit to avoid the string= operation
@@ -8,6 +9,7 @@
 #define GINES_GO_STATE_DATA_TYPE int8_t//Update this type when number of state bits exceeds type's bit count
 static GINES_GO_STATE_DATA_TYPE GAME_OBJECT_STATE = GINES_GO_USE_INDEX_NAMING | GINES_GO_NOTIFY_PARENT;//Sets these bits to 1's
 static std::vector<gines::GameObject*> gameObjects;//All the game objects. TODO: better performance (getGameObject(stringName) goes through the entire vector)
+Transform nulltransform;
 namespace state
 {
 	void enable(GINES_GO_STATE_DATA_TYPE bit)
@@ -43,6 +45,8 @@ namespace gines
 {
 	GameObject::GameObject()
 	{//Default constructor
+		
+
 		//Called for every game object
 		static unsigned gameObjectIndex = 0;
 		gameObjectIndex++;
@@ -50,12 +54,10 @@ namespace gines
 		//Name each game object with index so that each object has a different name by default
 		if (state::isEnabled(GINES_GO_USE_INDEX_NAMING))//Check whether to avoid index naming this time
 		{//Use index naming
-			std::cout << "Naming with index\n";
 			name = "GameObject" + gameObjectIndex;
 		}
 		else
 		{//Do not name the object here
-			std::cout << "Avoided index naming\n";
 			state::enable(GINES_GO_USE_INDEX_NAMING);//Sets the state to use index naming next time
 		}
 		gameObjects.push_back(this);
@@ -73,14 +75,12 @@ namespace gines
 		if (state::isEnabled(GINES_GO_NOTIFY_PARENT))
 		{
 			if (parent != nullptr) {
-				std::cout << "\nNotifying parent from game object destructor";
 				parent->removeChild(this);
 			}
 		}
 		else
 		{
 			state::enable(GINES_GO_NOTIFY_PARENT);//Notify by default next time
-			std::cout << "\nAvoided parent notification from game object destructor";
 		}
 
 		//Free component memory
@@ -118,6 +118,15 @@ namespace gines
 		for (auto it : children) {
 			it->render();
 		}
+	}
+	Transform& GameObject::transform() {
+		if (transformComponent == nullptr)
+		{
+			//TODO: warning: trying to access transform component which does not exist
+			//logError("\nWarning: trying to access transform shortcut which does not exist!");
+			return nulltransform;
+		}
+		return *transformComponent;
 	}
 
 	//-----------------//
