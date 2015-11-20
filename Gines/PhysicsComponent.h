@@ -3,7 +3,6 @@
 
 #include "Component.h"
 
-class GameObject;
 class PhysicsComponent : public Component
 {
 public:
