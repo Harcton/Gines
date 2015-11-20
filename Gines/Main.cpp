@@ -45,27 +45,19 @@ int main(int argc, char** argv)
 {
 	gines::initialize();
 
-
+	
 	//GameObject Test
-	GameObject go;
-	go.addComponent<PhysicsComponent>();
-	go.addComponent<Transform>();
-	go.addComponent<Transform>();
-	std::vector<Transform*> transforms = go.getComponents<Transform>();
-	if (transforms.size() > 0)
-	{//Found components
-		std::cout << "\nFound " << transforms.size() << " transform components";
-		for (unsigned i = 0; i < transforms.size(); i++)
-		{
-			transforms[i]->print();
-		}
-	}
-	else
+	gines::GameObject go;
 	{
-		std::cout << "\nNo transfrom components found";
+		gines::GameObject go2("go 2");
+		go2.createChild("child");
+		go2.createChild();
+		go2.addComponent<Transform>();
+		gines::GameObject* o = gines::GameObject::getGameObject("go 2");
 	}
 	//End Test
-		
+	
+
 
 	gines::console.addConsoleCommand("test", testConsole);
 	gines::console.addVariable("fps", gines::showFps);
