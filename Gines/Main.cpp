@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 		handleInput();
 
 		//Sprite & shader debugging
-		/* 
+		/*
 		 gines::colorProgram.use();
 		 sprite.draw();
 		 gines::colorProgram.unuse();
