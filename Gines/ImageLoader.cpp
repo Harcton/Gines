@@ -13,16 +13,16 @@ GLTexture ImageLoader::loadPNG(std::string filePath)
 	unsigned int width;
 	unsigned int height;
 
-	if (IOManager::readToBuffer(filePath, in) == false)
+	if (IOManager::readToBuffer(filePath, in) == false) // can't read file
 	{
-		//fatal error
+		Message("Imageloader failed to read image to buffer!", Log::Level::Error);
 	}
 
 	int error = lodepng::decode(out, width, height, in.data(), in.size());
 
 	if (error != 0)
 	{
-		// decode failed with: error + std::to_string(error));
+		Message("PNG decoding failed!" , Log::Level::Error); // decode failed with: error + std::to_string(error));
 	}
 
 	glGenTextures(1, &(tex.id));

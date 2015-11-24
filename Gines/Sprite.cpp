@@ -64,7 +64,7 @@ void Sprite::initialize(glm::vec2 pos, int width, int height)
 
 	for (int i = 0; i < 6; i++)
 	{
-		vertexData[i].color.r = 0;
+		vertexData[i].color.r = 1;
 		vertexData[i].color.g = 0;
 		vertexData[i].color.b = 1;
 		vertexData[i].color.a = 1;

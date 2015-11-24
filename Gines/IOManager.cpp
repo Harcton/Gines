@@ -1,11 +1,14 @@
 #include "IOManager.h"
+#include "Error.hpp"
 
+//Reads a file to a buffer
 bool IOManager::readToBuffer(std::string filePath, std::vector<unsigned char>& buffer)
 {
 	std::ifstream file(filePath, std::ios::binary);
 	
 	if (file.fail())
 	{
+		Message("IOManager failed to read file!", Log::Level::Error);
 		perror(filePath.c_str());
 		return false;
 	}
