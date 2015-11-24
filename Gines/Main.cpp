@@ -97,6 +97,8 @@ int main(int argc, char** argv)
 		 sprite.draw();
 		 glBindTexture(GL_TEXTURE_2D, 0);
 		 gines::colorProgram.unuse();
+
+		 //
 		 go.update();
 		 go.render();
 

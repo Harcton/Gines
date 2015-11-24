@@ -61,14 +61,12 @@ namespace gines
 			Message("Initialization failed! Failed to initialize console!", Log::Level::Fatal);
 			return false;
 		}
-
-		// WIP, error c5060
 		
-		 initializeShaders(); 
+		initializeShaders(); 
 
 		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
-		Message("Initialized successfully!", Log::Level::Fatal);
-		Message("Powered by... Gines(2015)", Log::Level::Fatal);
+		Message("Initialized successfully!", Log::Level::Info);
+		Message("Powered by... Gines(2015)", Log::Level::Info);
 		return true;
 
 	}

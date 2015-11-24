@@ -1,6 +1,6 @@
 #version 120
 
-attribute vec2 TexCoords;
+varying vec2 fragCoords;
 //out vec4 color;
 
 uniform sampler2D text;
@@ -8,6 +8,6 @@ uniform vec4 textColor;
 
 void main()
 {    
-    vec4 sampled = vec4(1.0, 1.0, 1.0, texture2D(text, TexCoords).r);
+    vec4 sampled = vec4(1.0, 1.0, 1.0, texture2D(text, fragCoords).r);
     gl_FragColor = vec4(textColor) * sampled;
 }  

@@ -40,11 +40,11 @@ namespace gines
 			Message("Freetype library initialization failed!", Log::Level::Error);
 			return;
 		}
-
+		
 		textProgram.compileShaders("Shaders/text.vertex", "Shaders/text.fragment");
 		textProgram.addAttribute("vertex");
 		textProgram.linkShaders();
-
+		
 		textRenderingInitialized = true;
 		Message("Text rendering library initialized successfully!", Log::Level::Info);
 	}
