@@ -133,6 +133,7 @@ void handleInput()
 	if (gines::inputManager.isKeyHeld(SDLK_ESCAPE))
 	{
 		run = false;
+		SDL_Quit();
 	}
 	if (gines::inputManager.isKeyPressed(SDLK_RCTRL))
 	{
