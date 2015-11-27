@@ -24,12 +24,14 @@ namespace gines
 	Console::~Console(){}
 	int Console::initialize()
 	{
+		Message("Console initialization started..", Log::Level::Info);
 		consoleText = new Text();
 		consoleText->setFont(ginesFontPath, consoleFontSize);
 		consoleText->setColor(consoleTextColor);
 		consoleText->setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER));
 		consoleText->setString("><");
 		log("Console initialized");
+		Message("Console initialized successfully!", Log::Level::Info);
 
 		return 0;
 	}

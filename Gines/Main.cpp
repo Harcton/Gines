@@ -13,7 +13,6 @@
 #include "Time.h"
 #include "Sprite.h"
 #include "lodepng.h"
-
 #include "Component.h"
 #include "PhysicsComponent.h"
 #include "GameObject.h"
@@ -49,20 +48,23 @@ int main(int argc, char** argv)
 {
 	gines::initialize();
 
-	
 	//GameObject Test
 	gines::GameObject go;
 	{
 		gines::GameObject go2("go 2");
+		
 		go2.createChild("child");
 		go2.createChild();
 			go2.transform().print();
-		go2.addComponent<Transform>();
+			go2.transform().move(glm::vec2(100, 150));
+			go2.transform().print();
+		go2.addComponent<gines::Transform>();
 			go2.transform().print();
 			go2.transform().move(glm::vec2(100, 150));
 			go2.transform().print();
-		go2.removeComponent<Transform>();
+		go2.removeComponent<gines::Transform>();
 			go2.transform().print();
+		go2.addComponent<gines::Transform>();
 		gines::GameObject* o = gines::GameObject::getGameObject("go 2");
 	}
 	//End Test
@@ -76,7 +78,7 @@ int main(int argc, char** argv)
 
 	// Rendering debug initializations 
 	sprite.initialize(glm::vec2(-1.0f, -1.0f), 1, 1);
-	tex = ImageLoader::loadPNG("Textures/mr-gines.png");
+	tex = gines::ImageLoader::loadPNG("Textures/mr-gines.png");
 	// Rendering end 
 
 	//Game loop
@@ -97,6 +99,8 @@ int main(int argc, char** argv)
 		 sprite.draw();
 		 glBindTexture(GL_TEXTURE_2D, 0);
 		 gines::colorProgram.unuse();
+
+		 //
 		 go.update();
 		 go.render();
 
@@ -131,6 +135,7 @@ void handleInput()
 	if (gines::inputManager.isKeyHeld(SDLK_ESCAPE))
 	{
 		run = false;
+		SDL_Quit();
 	}
 	if (gines::inputManager.isKeyPressed(SDLK_RCTRL))
 	{
@@ -199,35 +204,5 @@ void increaseTextCount()
 		glyphsToRender += texts[i]->getGlyphsToRender();
 	std::cout << "\nGlyphs to render: " << glyphsToRender;
 }
-
-GLuint readTexture(const std::string& path) {
-	
-	std::string fullpath(path);
-	std::vector<unsigned char> png;
-
-	lodepng::load_file(png, fullpath);
-	std::vector<unsigned char> pixels;
-	GLuint id;
-	size_t width, height;
-	width = height = 0;
-	size_t error = lodepng::decode(pixels, width, height, png.data(), png.size());
-
-	if (error) {
-		std::fprintf(stderr, "Error loading texture file %s\n", lodepng_error_text(error));
-		return false;
-	}
-	// create new name for texture
-	glGenTextures(1, &id);
-	// bind it so we can modify it
-	glBindTexture(GL_TEXTURE_2D, id);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	// unbind
-	glBindTexture(GL_TEXTURE_2D, 0);
-	return id;
-}
-
 
 /////////////

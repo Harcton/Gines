@@ -1,13 +1,16 @@
 #include "PhysicsComponent.h"
 
-PhysicsComponent::PhysicsComponent() {
+namespace gines
+{
+	PhysicsComponent::PhysicsComponent() {
 
-}
+	}
 
-PhysicsComponent::~PhysicsComponent() {
+	PhysicsComponent::~PhysicsComponent() {
 
-}
+	}
 
-void PhysicsComponent::update() {
+	void PhysicsComponent::update() {
 
+	}
 }

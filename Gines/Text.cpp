@@ -22,29 +22,31 @@ namespace gines
 
 	void initializeTextRendering()
 	{
+		Message("Text rendering initialization started...", Log::Level::Info);
 		if (textRenderingInitialized)
 		{
+			Message("Text rendering already initialized!", Log::Level::Info);
 			return;
 		}
 
 		if (ft != nullptr)
 		{
-			//logError("Error in freetype library initialization: already exists!");
+			Message("Freetype library already exists!", Log::Level::Error);
 			return;
 		}
 		ft = new FT_Library;
 		if (FT_Init_FreeType(ft))
 		{
-			//logError("could not initialize FreeType Library");
+			Message("Freetype library initialization failed!", Log::Level::Error);
 			return;
 		}
-
+		
 		textProgram.compileShaders("Shaders/text.vertex", "Shaders/text.fragment");
 		textProgram.addAttribute("vertex");
 		textProgram.linkShaders();
-
+		
 		textRenderingInitialized = true;
-		std::cout << "\nText rendering library initialized";
+		Message("Text rendering library initialized successfully!", Log::Level::Info);
 	}
 	void uninitializeTextRendering()
 	{
