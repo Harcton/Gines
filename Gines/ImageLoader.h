@@ -5,12 +5,15 @@
 #include "GLTexture.h"
 #include <string>
 
-class ImageLoader
+namespace gines
 {
-public:
+	class ImageLoader
+	{
+	public:
 
-	static GLTexture loadPNG(std::string filePath);
+		static GLTexture loadPNG(std::string filePath);
 
-};
+	};
+}
 
 #endif

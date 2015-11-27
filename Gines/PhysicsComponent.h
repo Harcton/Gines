@@ -3,14 +3,17 @@
 
 #include "Component.h"
 
-//Coming soon
-class PhysicsComponent : public MonoComponent
+namespace gines
 {
-public:
-	PhysicsComponent();
-	~PhysicsComponent();
-	
-	void update();
-private:
-};
+	//Coming soon
+	class PhysicsComponent : public MonoComponent
+	{
+	public:
+		PhysicsComponent();
+		~PhysicsComponent();
+
+		void update();
+	private:
+	};
+}
 #endif

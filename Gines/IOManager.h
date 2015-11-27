@@ -6,12 +6,14 @@
 
 // Static class, no need for multiple instances of this class
 
-class IOManager
+namespace gines
 {
-public:
+	class IOManager
+	{
+	public:
 
-	//Reads file to a buffer
-	static bool readToBuffer(std::string filePath, std::vector<unsigned char>& buffer);
-};
-
+		//Reads file to a buffer
+		static bool readToBuffer(std::string filePath, std::vector<unsigned char>& buffer);
+	};
+}
 #endif

@@ -56,13 +56,15 @@ int main(int argc, char** argv)
 		go2.createChild("child");
 		go2.createChild();
 			go2.transform().print();
-		go2.addComponent<Transform>();
+			go2.transform().move(glm::vec2(100, 150));
+			go2.transform().print();
+		go2.addComponent<gines::Transform>();
 			go2.transform().print();
 			go2.transform().move(glm::vec2(100, 150));
 			go2.transform().print();
-		go2.removeComponent<Transform>();
+		go2.removeComponent<gines::Transform>();
 			go2.transform().print();
-		go2.addComponent<Transform>();
+		go2.addComponent<gines::Transform>();
 		gines::GameObject* o = gines::GameObject::getGameObject("go 2");
 	}
 	//End Test
@@ -76,7 +78,7 @@ int main(int argc, char** argv)
 
 	// Rendering debug initializations 
 	sprite.initialize(glm::vec2(-1.0f, -1.0f), 1, 1);
-	tex = ImageLoader::loadPNG("Textures/mr-gines.png");
+	tex = gines::ImageLoader::loadPNG("Textures/mr-gines.png");
 	// Rendering end 
 
 	//Game loop

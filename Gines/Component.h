@@ -5,25 +5,39 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-class Component
+namespace gines
 {
-public:
-	Component(){}
-	virtual ~Component(){}; //Destructor hidden so that only removeComponent() or ~GameObject() can properly delete components
-	virtual void update(){}
-	virtual void render(){}
-protected:
-};
+	class GameObject;
+	class Component
+	{
+	public:
+		Component(){}
+		virtual ~Component(){};
+		virtual void update(){}
+		virtual void render(){}
+		void setGameObject(gines::GameObject* object){ gameObject = object; }
+	protected:
+		gines::GameObject* gameObject;//A pointer to the game object that this component is attached to
+	};
 
-class MonoComponent : public Component
-{
-	/*
-	If you want a gameobject to have a maxinum of 1 instance of a specific component, 
-	you can derive that component from MonoComponent instead of Component
-	*/
-};
+	class MonoComponent : public Component
+	{
+		/*
+		If you want a gameobject to have a maxinum of 1 instance of a specific component,
+		you can derive that component from MonoComponent instead of Component
+		*/
+	};
 
+	class TransformableComponent : public Component
+	{ /*If a component requires some kind transformation data, it should be derived from transformable component*/
+	public:
+		TransformableComponent(){}
 
+	private:
+
+	};
+
+}
 /*
 ///////////////////////////////
 //  CREATING NEW COMPONENTS  //

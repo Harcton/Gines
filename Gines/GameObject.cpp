@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Error.hpp""
 
 /*Game object global states
 	-It is possible to improve performance of game objects by avoiding certain actions
@@ -8,44 +9,44 @@
 #define GINES_GO_NOTIFY_PARENT 2//Should the destructor call parent -> remove child
 #define GINES_GO_STATE_DATA_TYPE int8_t//Update this type when number of state bits exceeds type's bit count
 static GINES_GO_STATE_DATA_TYPE GAME_OBJECT_STATE = GINES_GO_USE_INDEX_NAMING | GINES_GO_NOTIFY_PARENT;//Sets these bits to 1's
-static std::vector<gines::GameObject*> gameObjects;//All the game objects. TODO: better performance (getGameObject(stringName) goes through the entire vector)
-Transform nulltransform;
-namespace state
-{
-	void enable(GINES_GO_STATE_DATA_TYPE bit)
-	{//Sets this bit to 1
-		GAME_OBJECT_STATE |= bit;
-	}
-	void disable(GINES_GO_STATE_DATA_TYPE bit)
-	{//Sets this bit to 0
-		GAME_OBJECT_STATE &= ~bit;
-	}
-	void toggle(GINES_GO_STATE_DATA_TYPE bit)
-	{//If this bit is 1, it is set to 0. If it is 0 it is set to 1 instead
-		GAME_OBJECT_STATE ^= bit;
-	}
-	bool isEnabled(GINES_GO_STATE_DATA_TYPE bit)
-	{//Returns true if this bit is 1
-		if (GAME_OBJECT_STATE & bit)
-			return true;
-		return false;
-	}
-}
-gines::GameObject* gines::GameObject::getGameObject(std::string gameObjectName) {
-	for (unsigned i = 0; i < gameObjects.size(); i++) {
-		if (gameObjects[i]->getNameReference() == gameObjectName) {
-			return gameObjects[i];
-		}
-	}
-	return nullptr;
-}
-
-
 namespace gines
 {
+	static std::vector<gines::GameObject*> gameObjects;//All the game objects. TODO: better performance (getGameObject(stringName) goes through the entire vector)
+	Transform nulltransform;
+	namespace state
+	{
+		void enable(GINES_GO_STATE_DATA_TYPE bit)
+		{//Sets this bit to 1
+			GAME_OBJECT_STATE |= bit;
+		}
+		void disable(GINES_GO_STATE_DATA_TYPE bit)
+		{//Sets this bit to 0
+			GAME_OBJECT_STATE &= ~bit;
+		}
+		void toggle(GINES_GO_STATE_DATA_TYPE bit)
+		{//If this bit is 1, it is set to 0. If it is 0 it is set to 1 instead
+			GAME_OBJECT_STATE ^= bit;
+		}
+		bool isEnabled(GINES_GO_STATE_DATA_TYPE bit)
+		{//Returns true if this bit is 1
+			if (GAME_OBJECT_STATE & bit)
+				return true;
+			return false;
+		}
+	}
+	GameObject* GameObject::getGameObject(std::string gameObjectName) {
+		for (unsigned i = 0; i < gameObjects.size(); i++) {
+			if (gameObjects[i]->getNameReference() == gameObjectName) {
+				return gameObjects[i];
+			}
+		}
+		return nullptr;
+	}
+
+
 	GameObject::GameObject()
 	{//Default constructor
-		
+
 
 		//Called for every game object
 		static unsigned gameObjectIndex = 0;
@@ -122,6 +123,7 @@ namespace gines
 	Transform& GameObject::transform() {
 		if (transformComponent == nullptr)
 		{
+			Message("Trying to access transform on game object that doesn't have one!", Log::Level::Warning);
 			//TODO: warning: trying to access transform component which does not exist
 			//logError("\nWarning: trying to access transform shortcut which does not exist!");
 			return nulltransform;

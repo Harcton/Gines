@@ -55,6 +55,7 @@ namespace gines
 			//Convert the new component pointer (T*) into a Component* pointer
 			Component* cast = dynamic_cast<Component*>(newComponent);
 			components.push_back(cast);
+			cast->setGameObject(this);
 		}
 
 		/*Returns true if the component was removed. False is returned if component is not found*/
