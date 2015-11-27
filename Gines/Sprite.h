@@ -4,16 +4,16 @@
 #include <glm\glm.hpp>
 #include <GL\glew.h>
 #include <cstddef>
-
+#include "GLTexture.h"
 #include "Vertex.h"
-
+#include <string>
 class Sprite
 {
 public:
 	Sprite();
 	~Sprite();
 
-	void initialize(glm::vec2 pos, int width, int height);
+	void initialize(glm::vec2 pos, int w, int h, std::string path);
 	void draw();
 
 private:
@@ -22,9 +22,8 @@ private:
 	int height;
 
 	////
-	float x;
-	float y;
 	GLuint vboID;
+	GLTexture tex;
 	////
 
 };

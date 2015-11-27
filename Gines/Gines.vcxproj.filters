@@ -155,9 +155,6 @@
     <ClInclude Include="PhysicsComponent.h">
       <Filter>Header Files\GameObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -175,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Header Files\GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

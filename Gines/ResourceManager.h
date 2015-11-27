@@ -1,12 +1,9 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
-#include <SDL/SDL.h>
-#include <fstream>
-#include <iostream>
-#include <list>
 #include <string>
-
+#include "TextureCache.h"
+#include "GLTexture.h"
 
 
 namespace gines
@@ -15,9 +12,10 @@ namespace gines
 	class ResourceManager
 	{
 	public:
+		static GLTexture getTexture(std::string path);
 
 	private:
-
+		static TextureCache texCache;
 	};
 
 }

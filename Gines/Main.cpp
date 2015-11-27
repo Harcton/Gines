@@ -5,6 +5,8 @@
 
 #include <SDL/SDL.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Text.h"
 #include "Gines.h"
@@ -17,7 +19,7 @@
 #include "PhysicsComponent.h"
 #include "GameObject.h"
 #include "GLTexture.h"
-#include "ImageLoader.h"
+#include "ResourceManager.h"
 
 //DEEBUGGIA...
 void handleInput();
@@ -26,8 +28,8 @@ bool run = true;
 std::vector<gines::Text*> texts;
 extern int WINDOW_HEIGHT;
 //
-Sprite sprite;
-GLTexture tex;
+Sprite debugsprite;
+std::vector<Sprite*> sprites;
 //
 
 //Test console function
@@ -76,9 +78,21 @@ int main(int argc, char** argv)
 	gines::console.addVariable("run", run);
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
+
+	glm::mat4 pasimatriisi = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f);
+
 	// Rendering debug initializations 
-	sprite.initialize(glm::vec2(-1.0f, -1.0f), 1, 1);
-	tex = gines::ImageLoader::loadPNG("Textures/mr-gines.png");
+	sprites.push_back(new Sprite());
+	sprites.back()->initialize(glm::vec2(0.0f, 0.0f), 500, 500, "Textures/mr-gines.png");
+	//debugsprite.initialize(glm::vec2(1.0f, 1.0f), 1, 1, "Textures/mr-gines.png");
+	
+	sprites.push_back(new Sprite());
+	sprites.back()->initialize(glm::vec2(-1.0f, -1.0f), 1, 1, "Textures/mr-gines.png");
+	sprites.push_back(new Sprite());
+	sprites.back()->initialize(glm::vec2(0.0f, -1.0f), 1, 1, "Textures/mr-gines.png");
+	sprites.push_back(new Sprite());
+	sprites.back()->initialize(glm::vec2(-1.0f, 0.0f), 1, 1, "Textures/mr-gines.png");
+
 	// Rendering end 
 
 	//Game loop
@@ -93,10 +107,14 @@ int main(int argc, char** argv)
 		
 		 gines::colorProgram.use();
 		 glActiveTexture(GL_TEXTURE0);
-		 glBindTexture(GL_TEXTURE_2D, tex.id);
-		 GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
-		 glUniform1i(textureLocation, 0);
-		 sprite.draw();
+
+		 glUniform1i(gines::colorProgram.getUniformLocation("texture1"), 0);
+		 glUniformMatrix4fv(gines::colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(pasimatriisi));
+		 for (int i = 0; i < sprites.size(); i++)
+		 {
+			 sprites[i]->draw();
+		 }
+		 //debugsprite.draw();
 		 glBindTexture(GL_TEXTURE_2D, 0);
 		 gines::colorProgram.unuse();
 
@@ -131,7 +149,7 @@ int main(int argc, char** argv)
 void handleInput()
 {
 	float moveSpeed = 5 * texts.size();
-	// These will likely be handled within the inputManager's handleInput function in the future. Will remain here for now.
+	
 	if (gines::inputManager.isKeyHeld(SDLK_ESCAPE))
 	{
 		run = false;

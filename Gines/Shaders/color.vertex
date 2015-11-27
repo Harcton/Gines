@@ -8,18 +8,12 @@ varying vec2 fragmentPosition;
 varying vec2 fragmentUV;
 varying vec4 fragmentColor;
 
-
+uniform mat4 projection;
 
 void main()
 {
 	//Setting the x,y position on screen
-	gl_Position.xy = vertexPosition;
-
-	//Position z is 0 due to 2D
-	gl_Position.z = 0.0;
-
-	//Indicates that the coordinates are normalized
-	gl_Position.w = 1.0;
+	gl_Position = projection * vec4(vertexPosition, 0.0, 1.0);
 
 	//Passing color to fragment shader
 	fragmentColor = vertexColor;
