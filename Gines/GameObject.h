@@ -18,6 +18,7 @@ namespace gines
 		GameObject();
 		GameObject(std::string gameObjectName);
 		~GameObject();
+		//TODO: =operator and copy constructor
 
 		void update();
 		void render();
@@ -114,13 +115,15 @@ namespace gines
 				}
 			}
 			if (_components.size() == 0) {
-				Error(GameObjectError::ComponentsDoNotExist);
+				Error(GameObjectError::ComponentsDoNotExist);//TODO maybe not error level? debug/trace level?
+				return nullptr;
 			}
 			return _components;
 		}
 
-		std::string getName(){ return name; }
-		std::string& getNameReference(){ return name; }
+		void rename(std::string newName){ name = newName; }
+		std::string getName(){ return name; }//Returns value copy
+		std::string& getNameReference(){ return name; }//Returns a reference to value
 
 		//-----------------//
 		// RELATED OBJECTS //
@@ -151,10 +154,12 @@ namespace gines
 
 	private:
 		std::string name;
-		std::vector<Component*> components;
 		GameObject* parent = nullptr;
-		std::vector<GameObject*> children;
 		Transform* transformComponent;
+
+		//Memory responsibilities
+		std::vector<GameObject*> children;
+		std::vector<Component*> components;
 	};
 }
 #endif

@@ -25,6 +25,7 @@ void increaseTextCount();
 bool run = true;
 std::vector<gines::Text*> texts;
 extern int WINDOW_HEIGHT;
+gines::GameObject go;
 //
 Sprite sprite;
 GLTexture tex;
@@ -49,24 +50,12 @@ int main(int argc, char** argv)
 	gines::initialize();
 
 	//GameObject Test
-	gines::GameObject go;
-	{
-		gines::GameObject go2("go 2");
-		
-		go2.createChild("child");
-		go2.createChild();
-			go2.transform().print();
-			go2.transform().move(glm::vec2(100, 150));
-			go2.transform().print();
-		go2.addComponent<gines::Transform>();
-			go2.transform().print();
-			go2.transform().move(glm::vec2(100, 150));
-			go2.transform().print();
-		go2.removeComponent<gines::Transform>();
-			go2.transform().print();
-		go2.addComponent<gines::Transform>();
-		gines::GameObject* o = gines::GameObject::getGameObject("go 2");
-	}
+	go.addComponent<gines::Transform>();
+	go.addComponent<gines::Text>();
+	gines::Text& textComponentReference = *go.getComponent<gines::Text>();
+	textComponentReference.setFont(gines::ginesFontPath, 50);
+	textComponentReference.setString("Game object text component");
+	textComponentReference.setColor(1.0f, 0.6f, 0.0f);
 	//End Test
 	
 
@@ -88,6 +77,7 @@ int main(int argc, char** argv)
 
 		//Event handling
 		handleInput();
+		//go.transform().print();
 
 		//Sprite & shader debugging
 		
@@ -144,6 +134,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_UP))
 	{
+		go.transform().move(glm::vec2(0, 1));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(0, float(moveSpeed * (float(i + 1) / texts.size()))));
@@ -151,6 +142,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_DOWN))
 	{
+		go.transform().move(glm::vec2(0, -1));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(0, float(-moveSpeed * (float(i + 1) / texts.size()))));
@@ -158,6 +150,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_LEFT))
 	{
+		go.transform().move(glm::vec2(-1, 0));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(float(-moveSpeed * (float(i + 1) / texts.size())), 0));
@@ -165,6 +158,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_RIGHT))
 	{
+		go.transform().move(glm::vec2(1, 0));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(float(moveSpeed * (float(i + 1) / texts.size())), 0));

@@ -27,16 +27,6 @@ namespace gines
 		you can derive that component from MonoComponent instead of Component
 		*/
 	};
-
-	class TransformableComponent : public Component
-	{ /*If a component requires some kind transformation data, it should be derived from transformable component*/
-	public:
-		TransformableComponent(){}
-
-	private:
-
-	};
-
 }
 /*
 ///////////////////////////////
