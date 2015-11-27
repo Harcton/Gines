@@ -3,6 +3,8 @@
 #include <SDL/SDL_events.h>
 #include <SDL\SDL.h>
 
+extern int WINDOW_WIDTH;
+extern int WINDOW_HEIGHT;
 
 namespace gines
 {
@@ -66,7 +68,7 @@ namespace gines
 	void InputManager::setMouseCoordinates(float x, float y)
 	{
 		mouseCoordinates.x = x;
-		mouseCoordinates.y = y;
+		mouseCoordinates.y = (y - WINDOW_HEIGHT) * -1;
 	}
 
 	bool InputManager::isKeyHeld(unsigned int keyID)

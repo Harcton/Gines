@@ -10,7 +10,7 @@ namespace gines
 
 		if (file.fail())
 		{
-			Message("IOManager failed to read file!", Log::Level::Error);
+			Message("IOManager failed to read file!", gines::Message::Error);
 			perror(filePath.c_str());
 			return false;
 		}

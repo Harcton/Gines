@@ -17,14 +17,14 @@ namespace gines
 
 		if (IOManager::readToBuffer(filePath, in) == false) // can't read file
 		{
-			Message("Imageloader failed to read image to buffer!", Log::Level::Error);
+			Message("Imageloader failed to read image to buffer!", gines::Message::Error);
 		}
 
 		int error = lodepng::decode(out, width, height, in.data(), in.size());
 
 		if (error != 0)
 		{
-			Message("PNG decoding failed!", Log::Level::Error); // decode failed with: error + std::to_string(error));
+			Message("PNG decoding failed!", gines::Message::Error); // decode failed with: error + std::to_string(error));
 		}
 
 		glGenTextures(1, &(tex.id));
