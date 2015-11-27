@@ -34,7 +34,7 @@ gines::GameObject camera3;
 gines::GameObject camera4;
 
 //
-Sprite sprite;
+gines::Sprite sprite;
 GLTexture tex;
 //
 

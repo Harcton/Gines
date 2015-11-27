@@ -6,27 +6,29 @@
 #include <cstddef>
 
 #include "Vertex.h"
-
-class Sprite
+#include "Component.h"
+namespace gines
 {
-public:
-	Sprite();
-	~Sprite();
+	class Sprite : public Component
+	{
+	public:
+		Sprite();
+		~Sprite();
 
-	void initialize(glm::vec2 pos, int width, int height);
-	void draw();
+		void initialize(glm::vec2 pos, int width, int height);
+		void draw();
 
-private:
-	glm::vec2 position;
-	int width;
-	int height;
+	private:
+		glm::vec2 position;
+		int width;
+		int height;
 
-	////
-	float x;
-	float y;
-	GLuint vboID;
-	////
+		////
+		float x;
+		float y;
+		GLuint vboID;
+		////
 
-};
-
+	};
+}
 #endif

@@ -58,11 +58,14 @@ namespace gines
 	}
 
 	float Transform::clampRotation() {
-		if (rotation > 2 * M_PI) {
-			rotation -= 2 * M_PI;
-		}
-		else if (rotation < 0) {
-			rotation += 2 * M_PI;
+		while (rotation < 0 || rotation > 2 * M_PI)
+		{
+			if (rotation > 2 * M_PI) {
+				rotation -= 2 * M_PI;
+			}
+			if (rotation < 0) {
+				rotation += 2 * M_PI;
+			}
 		}
 		return rotation;
 	}

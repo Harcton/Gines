@@ -2,8 +2,6 @@
 
 #include <glm/vec2.hpp>
 #include <iostream>
-#define _USE_MATH_DEFINES
-#include <math.h>
 #include "Component.h"
 
 
