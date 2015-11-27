@@ -9,6 +9,7 @@
 #include "GLSLProgram.h"
 #include "GameObject.h"
 #include "Transform.h"
+#include "Camera.h"
 //#include "Error.hpp"
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -20,7 +21,6 @@ namespace gines
 	static FT_Library* ft = nullptr;
 	static GLSLProgram textProgram;
 	static std::vector<Font*> fonts;
-	static glm::mat4 projectionMatrix;
 
 	void initializeTextRendering()
 	{
@@ -259,7 +259,6 @@ namespace gines
 		}
 
 		font->height = (*font->ftFace)->size->metrics.height >> 6;
-		projectionMatrix = glm::ortho(0.0f, float(WINDOW_WIDTH), 0.0f, float(WINDOW_HEIGHT));
 
 		doUpdate = true;
 
@@ -370,40 +369,45 @@ namespace gines
 
 	void Text::render()
 	{
-		if (gameObject != nullptr)
-			if (gameObjectPosition != gameObject->transform().getPosition())
-		{//Game object moved
-			gameObjectPosition = gameObject->transform().getPosition();
-			doUpdate = true;
+		for (unsigned c = 0; c < cameras.size(); c++)
+			if (cameras[c]->isEnabled())
+		{
+			cameras[c]->enableViewport();
+			if (gameObject != nullptr)
+				if (gameObjectPosition != gameObject->transform().getPosition())
+				{//Game object moved
+					gameObjectPosition = gameObject->transform().getPosition();
+					doUpdate = true;
+				}
+
+			if (doUpdate)
+				updateBuffers();
+
+			//Enable blending
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			textProgram.use();
+
+			glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
+			glUniformMatrix4fv(textProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cameras[c]->getCameraMatrix()));
+			glUniform4f(textProgram.getUniformLocation("textColor"), color.r, color.g, color.b, color.a);
+
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+			glActiveTexture(GL_TEXTURE0);
+			for (int i = 0; i < glyphsToRender; i++)
+			{//Draw
+				glBindTexture(GL_TEXTURE_2D, textures[i]);
+				glDrawArrays(GL_TRIANGLES, i * 6, 6);
+			}
+
+			//Unbinds / unuse program
+			glDisableVertexAttribArray(0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			textProgram.unuse();
 		}
-
-		if (doUpdate)
-			updateBuffers();
-		
-		//Enable blending
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		textProgram.use();
-
-		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayData);
-		glUniformMatrix4fv(textProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-		glUniform4f(textProgram.getUniformLocation("textColor"), color.r, color.g, color.b, color.a);
-		
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glActiveTexture(GL_TEXTURE0);
-		for (int i = 0; i < glyphsToRender; i++)
-		{//Draw
-			glBindTexture(GL_TEXTURE_2D, textures[i]);
-			glDrawArrays(GL_TRIANGLES, i * 6, 6);
-		}
-
-		//Unbinds / unuse program
-		glDisableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		textProgram.unuse();
 	}
 	
 	void Text::setString(std::string str)

@@ -18,14 +18,21 @@
 #include "GameObject.h"
 #include "GLTexture.h"
 #include "ImageLoader.h"
+#include "Camera.h"
 
 //DEEBUGGIA...
 void handleInput();
 void increaseTextCount();
 bool run = true;
 std::vector<gines::Text*> texts;
+extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 gines::GameObject go;
+gines::GameObject camera1;
+gines::GameObject camera2;
+gines::GameObject camera3;
+gines::GameObject camera4;
+
 //
 Sprite sprite;
 GLTexture tex;
@@ -49,6 +56,36 @@ int main(int argc, char** argv)
 {
 	gines::initialize();
 
+	//Camera test
+	camera1.addComponent<gines::Transform>();
+	camera1.addComponent<gines::Camera>();
+	camera1.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.0f, WINDOW_HEIGHT*0.5f), glm::vec2(WINDOW_WIDTH*0.25f, WINDOW_HEIGHT*0.25f));
+	camera1.addComponent<gines::Text>();
+	camera1.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera1.getComponent<gines::Text>()->setString("_C1");
+	camera1.getComponent<gines::Text>()->setColor(1.0f, 0.6f, 0.0f);
+	camera2.addComponent<gines::Transform>();
+	camera2.addComponent<gines::Camera>();
+	camera2.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f), glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f));
+	camera2.addComponent<gines::Text>();
+	camera2.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera2.getComponent<gines::Text>()->setString("_C2");
+	camera2.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
+	camera3.addComponent<gines::Transform>();
+	camera3.addComponent<gines::Camera>();
+	camera3.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.0f, WINDOW_HEIGHT*0.0f), glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f));
+	camera3.addComponent<gines::Text>();
+	camera3.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera3.getComponent<gines::Text>()->setString("_C3");
+	camera3.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
+	camera4.addComponent<gines::Transform>();
+	camera4.addComponent<gines::Camera>();
+	camera4.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.0f), glm::vec2(WINDOW_WIDTH*0.33f, WINDOW_HEIGHT*0.33f));
+	camera4.addComponent<gines::Text>();
+	camera4.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera4.getComponent<gines::Text>()->setString("_C4");
+	camera4.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
+
 	//GameObject Test
 	go.addComponent<gines::Transform>();
 	go.addComponent<gines::Text>();
@@ -60,6 +97,7 @@ int main(int argc, char** argv)
 	
 
 
+	//Console commands
 	gines::console.addConsoleCommand("test", testConsole);
 	gines::console.addVariable("fps", gines::showFps);
 	gines::console.addVariable("run", run);
@@ -93,6 +131,14 @@ int main(int argc, char** argv)
 		 //
 		 go.update();
 		 go.render();
+		 camera1.update();
+		 camera2.update();
+		 camera3.update();
+		 camera4.update();
+		 camera1.render();
+		 camera2.render();
+		 camera3.render();
+		 camera4.render();
 
 		//Rendering
 		for (unsigned i = 0; i < texts.size(); i++)
@@ -169,6 +215,63 @@ void handleInput()
 		glm::vec2 mouseCoordinates = gines::inputManager.getMouseCoordinates();
 		std::cout << mouseCoordinates.x << "  " << mouseCoordinates.y << std::endl;
 	}
+
+	//Camera movement
+	if (gines::inputManager.isKeyHeld(SDLK_w))
+		camera1.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_s))
+		camera1.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_d))
+		camera1.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_a))
+		camera1.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_e))
+		camera1.getComponent<gines::Camera>()->setScale(camera1.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_q))
+		camera1.getComponent<gines::Camera>()->setScale(camera1.getComponent<gines::Camera>()->getScale() - 0.01f);
+
+	//Camera2 movement
+	if (gines::inputManager.isKeyHeld(SDLK_i))
+		camera2.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_k))
+		camera2.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_l))
+		camera2.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_j))
+		camera2.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_o))
+		camera2.getComponent<gines::Camera>()->setScale(camera2.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_u))
+		camera2.getComponent<gines::Camera>()->setScale(camera2.getComponent<gines::Camera>()->getScale() - 0.01f);
+
+	//Camera3 movement
+	if (gines::inputManager.isKeyHeld(SDLK_UP))
+		camera3.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_DOWN))
+		camera3.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_RIGHT))
+		camera3.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_LEFT))
+		camera3.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_PAGEUP))
+		camera3.getComponent<gines::Camera>()->setScale(camera3.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_PAGEDOWN))
+		camera3.getComponent<gines::Camera>()->setScale(camera3.getComponent<gines::Camera>()->getScale() - 0.01f);
+
+	//Camera4 movement
+	if (gines::inputManager.isKeyHeld(SDLK_KP_8))
+		camera4.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_5))
+		camera4.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_6))
+		camera4.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_4))
+		camera4.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_9))
+		camera4.getComponent<gines::Camera>()->setScale(camera4.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_KP_7))
+		camera4.getComponent<gines::Camera>()->setScale(camera4.getComponent<gines::Camera>()->getScale() - 0.01f);
+
 }
 void increaseTextCount()
 {
