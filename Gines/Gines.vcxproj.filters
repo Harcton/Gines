@@ -184,5 +184,11 @@
     <None Include="Shaders\color.fragment">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Shaders\text.fragment">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\text.vertex">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
