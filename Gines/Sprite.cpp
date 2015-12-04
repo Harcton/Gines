@@ -30,10 +30,6 @@ Sprite::~Sprite()
 	
 	/////////////////////////
 
-
-
-	
-
 	VertexPositionColorTexture vertexData[6];
 
 	vertexData[0].position.x = position.x + width;
