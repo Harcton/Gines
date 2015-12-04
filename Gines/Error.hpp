@@ -68,7 +68,7 @@ namespace gines
 		switch (level)
 		{
 		case gines::Message::Trace:
-			Msg << "\tTrace: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
+			Msg << "\tTrace: " << tempMessage << std::endl;
 			std::cout << Msg.str();
 			break;
 		case gines::Message::Debug:
@@ -76,7 +76,7 @@ namespace gines
 			std::cout << Msg.str();
 			break;
 		case gines::Message::Info:
-			Msg << "\tInfo: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
+			Msg << "\tInfo: " << tempMessage << line << std::endl;
 			std::cout << Msg.str();
 			break;
 		case gines::Message::Warning:

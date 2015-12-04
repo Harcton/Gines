@@ -28,14 +28,13 @@ namespace gines
 		int width;
 		int height;
 		GLuint vboID;
+		GLTexture tex;
 
 		//Game object tracking
-		bool doPositionUpdate;
-		bool doRotationUpdate;
+		void updateBuffer();
+		bool doBufferUpdate;
 		glm::vec2 gameObjectPosition;	//Previous position of game object
 		float gameObjectRotation;		//Previous rotation of game object
-		void updatePosition();			
-		void updateRotation();
 
 	};
 }
