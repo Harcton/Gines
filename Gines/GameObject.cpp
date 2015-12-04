@@ -69,7 +69,6 @@ namespace gines
 		GameObject();
 		name = gameObjectName;
 	}
-
 	GameObject::~GameObject() {
 
 		//Notify parent object

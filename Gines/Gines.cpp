@@ -23,7 +23,6 @@ namespace gines
 
 	bool initialize()
 	{
-		Message("asdasdasd", gines::Message::Trace);
 		Message("Initialize started...", gines::Message::Info);
 
 		SDL_Init(SDL_INIT_VIDEO);

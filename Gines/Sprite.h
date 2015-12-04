@@ -6,8 +6,10 @@
 #include <cstddef>
 #include "GLTexture.h"
 #include "Vertex.h"
-#include <string>
-class Sprite
+#include "Component.h"
+namespace gines
+{
+	class Sprite : public Component
 {
 public:
 	Sprite();
@@ -27,5 +29,5 @@ private:
 	////
 
 };
-
+}
 #endif

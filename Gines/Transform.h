@@ -2,8 +2,6 @@
 
 #include <glm/vec2.hpp>
 #include <iostream>
-#define _USE_MATH_DEFINES
-#include <math.h>
 #include "Component.h"
 
 
@@ -31,12 +29,15 @@ namespace gines
 
 		//Move object relative to current position
 		void move(glm::vec2& move);
+		void move(float x, float y);
 
 		//Set absolute position
 		void setPosition(glm::vec2& newPosition);
+		void setPosition(float x, float y);
 
 		//Non-Uniform scale
 		void setScale(glm::vec2& newScale);
+		void setScale(float x, float y);
 
 		//Uniform scale
 		void setScale(float newScale);
@@ -51,7 +52,7 @@ namespace gines
 		void print();
 
 	private:
-		float clampRotation();
+		void clampRotation(float& rotation);
 		glm::vec2 position;
 		glm::vec2 scale;
 		float rotation;

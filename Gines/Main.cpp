@@ -20,16 +20,25 @@
 #include "GameObject.h"
 #include "GLTexture.h"
 #include "ResourceManager.h"
+#include "ImageLoader.h"
+#include "Camera.h"
 
 //DEEBUGGIA...
 void handleInput();
 void increaseTextCount();
 bool run = true;
 std::vector<gines::Text*> texts;
+extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
+gines::GameObject go;
+gines::GameObject camera1;
+gines::GameObject camera2;
+gines::GameObject camera3;
+gines::GameObject camera4;
+
 //
-Sprite debugsprite;
-std::vector<Sprite*> sprites;
+gines::Sprite sprite;
+GLTexture tex;
 //
 
 //Test console function
@@ -50,46 +59,56 @@ int main(int argc, char** argv)
 {
 	gines::initialize();
 
-	//GameObject Test
-	gines::GameObject go;
-	{
-		gines::GameObject go2("go 2");
+	//Camera test
+	camera1.addComponent<gines::Transform>();
+	camera1.addComponent<gines::Camera>();
+	camera1.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.0f, WINDOW_HEIGHT*0.5f), glm::vec2(WINDOW_WIDTH*0.25f, WINDOW_HEIGHT*0.25f));
+	camera1.addComponent<gines::Text>();
+	camera1.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera1.getComponent<gines::Text>()->setString("_C1");
+	camera1.getComponent<gines::Text>()->setColor(1.0f, 0.6f, 0.0f);
+	camera2.addComponent<gines::Transform>();
+	camera2.addComponent<gines::Camera>();
+	camera2.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f), glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f));
+	camera2.addComponent<gines::Text>();
+	camera2.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera2.getComponent<gines::Text>()->setString("_C2");
+	camera2.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
+	camera3.addComponent<gines::Transform>();
+	camera3.addComponent<gines::Camera>();
+	camera3.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.0f, WINDOW_HEIGHT*0.0f), glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f));
+	camera3.addComponent<gines::Text>();
+	camera3.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera3.getComponent<gines::Text>()->setString("_C3");
+	camera3.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
+	camera4.addComponent<gines::Transform>();
+	camera4.addComponent<gines::Camera>();
+	camera4.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.0f), glm::vec2(WINDOW_WIDTH*0.33f, WINDOW_HEIGHT*0.33f));
+	camera4.addComponent<gines::Text>();
+	camera4.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
+	camera4.getComponent<gines::Text>()->setString("_C4");
+	camera4.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
 		
-		go2.createChild("child");
-		go2.createChild();
-			go2.transform().print();
-			go2.transform().move(glm::vec2(100, 150));
-			go2.transform().print();
-		go2.addComponent<gines::Transform>();
-			go2.transform().print();
-			go2.transform().move(glm::vec2(100, 150));
-			go2.transform().print();
-		go2.removeComponent<gines::Transform>();
-			go2.transform().print();
-		go2.addComponent<gines::Transform>();
-		gines::GameObject* o = gines::GameObject::getGameObject("go 2");
-	}
+	//GameObject Test
+	go.addComponent<gines::Transform>();
+	go.addComponent<gines::Text>();
+	gines::Text& textComponentReference = *go.getComponent<gines::Text>();
+	textComponentReference.setFont(gines::ginesFontPath, 50);
+	textComponentReference.setString("Game object text component");
+	textComponentReference.setColor(1.0f, 0.6f, 0.0f);
 	//End Test
 	
 
 
+	//Console commands
 	gines::console.addConsoleCommand("test", testConsole);
 	gines::console.addVariable("fps", gines::showFps);
 	gines::console.addVariable("run", run);
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
 	// Rendering debug initializations 
-	sprites.push_back(new Sprite());
-	sprites.back()->initialize(glm::vec2(0.0f, 0.0f), 500, 500, "Textures/mr-gines.png");
-	//debugsprite.initialize(glm::vec2(1.0f, 1.0f), 1, 1, "Textures/mr-gines.png");
-	
-	sprites.push_back(new Sprite());
-	sprites.back()->initialize(glm::vec2(-1.0f, -1.0f), 1, 1, "Textures/mr-gines.png");
-	sprites.push_back(new Sprite());
-	sprites.back()->initialize(glm::vec2(0.0f, -1.0f), 1, 1, "Textures/mr-gines.png");
-	sprites.push_back(new Sprite());
-	sprites.back()->initialize(glm::vec2(-1.0f, 0.0f), 1, 1, "Textures/mr-gines.png");
-
+	sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100);
+	tex = gines::ImageLoader::loadPNG("Textures/mr-gines.png");
 	// Rendering end 
 
 	//Game loop
@@ -99,24 +118,30 @@ int main(int argc, char** argv)
 
 		//Event handling
 		handleInput();
+		//go.transform().print();
 
 		//Sprite & shader debugging
 		
 		 gines::colorProgram.use();
 		 glActiveTexture(GL_TEXTURE0);
-
-		 glUniform1i(gines::colorProgram.getUniformLocation("texture1"), 0);
-		 for (int i = 0; i < sprites.size(); i++)
-		 {
-			 sprites[i]->draw();
-		 }
-		 //debugsprite.draw();
+		 glBindTexture(GL_TEXTURE_2D, tex.id);
+		 GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
+		 glUniform1i(textureLocation, 0);
+		 sprite.draw();
 		 glBindTexture(GL_TEXTURE_2D, 0);
 		 gines::colorProgram.unuse();
 
 		 //
 		 go.update();
 		 go.render();
+		 camera1.update();
+		 camera2.update();
+		 camera3.update();
+		 camera4.update();
+		 camera1.render();
+		 camera2.render();
+		 camera3.render();
+		 camera4.render();
 
 		//Rendering
 		for (unsigned i = 0; i < texts.size(); i++)
@@ -158,6 +183,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_UP))
 	{
+		go.transform().move(glm::vec2(0, 1));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(0, float(moveSpeed * (float(i + 1) / texts.size()))));
@@ -165,6 +191,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_DOWN))
 	{
+		go.transform().move(glm::vec2(0, -1));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(0, float(-moveSpeed * (float(i + 1) / texts.size()))));
@@ -172,6 +199,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_LEFT))
 	{
+		go.transform().move(glm::vec2(-1, 0));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(float(-moveSpeed * (float(i + 1) / texts.size())), 0));
@@ -179,6 +207,7 @@ void handleInput()
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_RIGHT))
 	{
+		go.transform().move(glm::vec2(1, 0));
 		for (unsigned i = 0; i < texts.size(); i++)
 		{
 			texts[i]->translate(glm::vec2(float(moveSpeed * (float(i + 1) / texts.size())), 0));
@@ -189,6 +218,63 @@ void handleInput()
 		glm::vec2 mouseCoordinates = gines::inputManager.getMouseCoordinates();
 		std::cout << mouseCoordinates.x << "  " << mouseCoordinates.y << std::endl;
 	}
+
+	//Camera movement
+	if (gines::inputManager.isKeyHeld(SDLK_w))
+		camera1.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_s))
+		camera1.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_d))
+		camera1.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_a))
+		camera1.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_e))
+		camera1.getComponent<gines::Camera>()->setScale(camera1.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_q))
+		camera1.getComponent<gines::Camera>()->setScale(camera1.getComponent<gines::Camera>()->getScale() - 0.01f);
+
+	//Camera2 movement
+	if (gines::inputManager.isKeyHeld(SDLK_i))
+		camera2.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_k))
+		camera2.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_l))
+		camera2.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_j))
+		camera2.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_o))
+		camera2.getComponent<gines::Camera>()->setScale(camera2.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_u))
+		camera2.getComponent<gines::Camera>()->setScale(camera2.getComponent<gines::Camera>()->getScale() - 0.01f);
+
+	//Camera3 movement
+	if (gines::inputManager.isKeyHeld(SDLK_UP))
+		camera3.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_DOWN))
+		camera3.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_RIGHT))
+		camera3.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_LEFT))
+		camera3.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_PAGEUP))
+		camera3.getComponent<gines::Camera>()->setScale(camera3.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_PAGEDOWN))
+		camera3.getComponent<gines::Camera>()->setScale(camera3.getComponent<gines::Camera>()->getScale() - 0.01f);
+
+	//Camera4 movement
+	if (gines::inputManager.isKeyHeld(SDLK_KP_8))
+		camera4.transform().move(glm::vec2(0, 1));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_5))
+		camera4.transform().move(glm::vec2(0, -1));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_6))
+		camera4.transform().move(glm::vec2(1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_4))
+		camera4.transform().move(glm::vec2(-1, 0));
+	if (gines::inputManager.isKeyHeld(SDLK_KP_9))
+		camera4.getComponent<gines::Camera>()->setScale(camera4.getComponent<gines::Camera>()->getScale() + 0.01f);
+	if (gines::inputManager.isKeyHeld(SDLK_KP_7))
+		camera4.getComponent<gines::Camera>()->setScale(camera4.getComponent<gines::Camera>()->getScale() - 0.01f);
+
 }
 void increaseTextCount()
 {

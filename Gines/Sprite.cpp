@@ -1,5 +1,12 @@
+#include <glm/gtc/type_ptr.hpp>//glm::value_ptr
 #include "Sprite.h"
 #include "ResourceManager.h"
+#include "Camera.h"
+#include "GLSLProgram.h"
+
+namespace gines
+{
+	extern GLSLProgram colorProgram;
 
 Sprite::Sprite()
 {
@@ -12,24 +19,24 @@ Sprite::Sprite()
 Sprite::~Sprite()
 {
 	////
-	glDeleteBuffers(1, &vboID);
+		glDeleteBuffers(1, &vboID);
 	
 	////
 }
 
-void Sprite::initialize(glm::vec2 pos, int w, int h, std::string path)
+	void Sprite::initialize(glm::vec2 pos, int w, int h)
 {
 	tex = gines::ResourceManager::getTexture(path);
 	position = pos;
-	width = w;
-	height = h;
+		width = w;
+		height = h;
 
 	glGenBuffers(1, &vboID);
-
+	
 	/////////////////////////
 
-	
-	
+
+
 	
 
 	VertexPositionColorTexture vertexData[6];
@@ -89,6 +96,12 @@ void Sprite::initialize(glm::vec2 pos, int w, int h, std::string path)
 //////
 void Sprite::draw()
 {
+		for (unsigned c = 0; c < cameras.size(); c++)
+			if (cameras[c]->isEnabled())
+		{
+			cameras[c]->enableViewport();
+			glUniformMatrix4fv(colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cameras[c]->getCameraMatrix()));
+
 	glBindTexture(GL_TEXTURE_2D, tex.id);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboID);
@@ -100,7 +113,6 @@ void Sprite::draw()
 
 
 	//Position attribute pointer
-
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, position));
 	
 	//Color attribute pointer
@@ -117,4 +129,7 @@ void Sprite::draw()
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+	}
 //////
+
+}

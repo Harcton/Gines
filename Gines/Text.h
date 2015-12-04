@@ -9,6 +9,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include "Component.h"
+
 
 
 
@@ -41,7 +43,7 @@ namespace gines
 		int height = 0;
 	};
 
-	class Text
+	class Text : public Component
 	{
 	public:
 		Text();
@@ -54,6 +56,7 @@ namespace gines
 		void render();
 		void setString(std::string str);
 		void setColor(glm::vec4& col);
+		void setColor(float r, float g, float b, float a = 1.0f);
 		void setPosition(glm::vec2& vec);
 		void translate(glm::vec2& vec);
 
@@ -78,7 +81,7 @@ namespace gines
 		std::string string;
 		Font* font = nullptr;
 		void unreferenceFont();
-
+		glm::vec2 gameObjectPosition;//Game object position tracking
 	};
 }
 #endif
