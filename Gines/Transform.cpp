@@ -13,7 +13,6 @@ namespace gines
 		float radian = degree * (M_PI / 180);
 		rotation += radian;
 		clampRotation(rotation);
-		//sprite.updateRotation(rotation);
 	}
 
 	//Set absolute rotation using degrees
@@ -22,60 +21,50 @@ namespace gines
 		float radian = newDegree * (M_PI / 180);
 		rotation = radian;
 		clampRotation(rotation);
-		//sprite.updateRotation(rotation);
 	}
 
 	//Rotate object relative to current rotation using radians
 	void Transform::rotate(float radian) {
 		rotation += radian;
 		clampRotation(rotation);
-		//sprite.updateRotation(rotation);
 	}
 
 	//Set absolute rotation using radians
 	void Transform::setRotation(float newRadian) {
 		rotation = newRadian;
 		clampRotation(rotation);
-		//sprite.updateRotation(rotation);
 	}
 
 	//Move object relative to current position
 	void Transform::move(glm::vec2& move) {
 		position += move;
-		//sprite.updatePosition(position);
 	}
 
 	void Transform::move(float x, float y) {
 		position += glm::vec2(x, y);
-		//sprite.updatePosition(position);
 	}
 
 	//Set absolute position
 	void Transform::setPosition(glm::vec2& newPosition) {
 		position = newPosition;
-		//sprite.updatePosition(position);
 	}
 
 	void Transform::setPosition(float x, float y) {
 		position = glm::vec2(x, y);
-		//sprite.updatePosition(position);
 	}
 
 	//Non-Uniform scale
 	void Transform::setScale(glm::vec2& newScale) {
 		scale *= newScale;
-		//sprite.updateScale(scale);
 	}
 
 	void Transform::setScale(float x, float y) {
 		scale *= glm::vec2(x, y);
-		//sprite.updateScale(scale);
 	}
 
 	//Uniform scale
 	void Transform::setScale(float newScale) {
 		scale *= glm::vec2(newScale, newScale);
-		//sprite.updateScale(scale);
 	}
 
 	void Transform::clampRotation(float& rotation) {

@@ -10,24 +10,33 @@
 namespace gines
 {
 	class Sprite : public Component
-{
-public:
-	Sprite();
-	~Sprite();
+	{
+	public:
+		Sprite();
+		~Sprite();
 
 	void initialize(glm::vec2 pos, int w, int h, std::string path);
-	void draw();
+		void draw();
+		void setPosition(glm::vec2& newPosition);
+		void setPosition(float _x, float _y);
+		void setRotation(float newRotation);
+		void rotate(float incrementation);
 
-private:
-	glm::vec2 position;
-	int width;
-	int height;
+	private:
+		glm::vec2 position;
+		float rotation;
+		int width;
+		int height;
+		GLuint vboID;
 
-	////
-	GLuint vboID;
-	GLTexture tex;
-	////
+		//Game object tracking
+		bool doPositionUpdate;
+		bool doRotationUpdate;
+		glm::vec2 gameObjectPosition;	//Previous position of game object
+		float gameObjectRotation;		//Previous rotation of game object
+		void updatePosition();			
+		void updateRotation();
 
-};
+	};
 }
 #endif

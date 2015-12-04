@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Camera.h"
 #include "GLSLProgram.h"
+#include "GameObject.h"
 
 namespace gines
 {
@@ -20,12 +21,39 @@ Sprite::~Sprite()
 }
 
 	void Sprite::initialize(glm::vec2 pos, int w, int h, std::string path)
+	void Sprite::setPosition(glm::vec2& newPosition)
 {
-	tex = gines::ResourceManager::getTexture(path);
-	position = pos;
-		width = w;
-		height = h;
+		if (position != newPosition)
+		{
+			doPositionUpdate = true;
+			position = newPosition;
+		}
+	}
+	void Sprite::setPosition(float _x, float _y)
+	{
+		if (position.x != _x || position.y != _y)
+		{//If check may be insufficient due to foating point inaccuracy
+			doPositionUpdate = true;
+			position.x = _x;
+			position.y = _y;
+		}
+	}
+	void Sprite::setRotation(float newRotation)
+	{
+		if (rotation != newRotation)
+		{
+			rotation = newRotation;
+			doRotationUpdate = true;
+		}
+	}
+	void Sprite::rotate(float incrementation)
+	{
+		rotation += incrementation;
+		doRotationUpdate = true;
 
+	}
+	void Sprite::updatePosition()
+	{
 	glGenBuffers(1, &vboID);
 	
 	/////////////////////////
@@ -81,6 +109,22 @@ Sprite::~Sprite()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	/////////////////////////
+
+		doPositionUpdate = false;
+	}
+	void Sprite::updateRotation()
+	{
+		doRotationUpdate = false;
+	}
+
+	void Sprite::initialize(glm::vec2 pos, int w, int h)
+	{
+		position = pos;
+		width = w;
+		height = h;
+
+		doRotationUpdate = true;
+		doPositionUpdate = true;
 }
 
 
@@ -91,6 +135,29 @@ void Sprite::draw()
 			if (cameras[c]->isEnabled())
 		{
 			cameras[c]->enableViewport();
+			if (gameObject != nullptr)
+			{
+				if (gameObjectPosition != gameObject->transform().getPosition())
+				{//Game object has moved
+					gameObjectPosition = gameObject->transform().getPosition();
+					doPositionUpdate = true;
+				}
+				if (gameObjectRotation != gameObject->transform().getRotation())
+				{//Game object has rotated
+					gameObjectRotation = gameObject->transform().getRotation();
+					doRotationUpdate = true;
+				}
+			}
+
+			if (doPositionUpdate)
+			{
+				updatePosition();
+			}
+			if (doRotationUpdate)
+			{
+				updateRotation();
+			}
+
 			glUniformMatrix4fv(colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cameras[c]->getCameraMatrix()));
 
 	glBindTexture(GL_TEXTURE_2D, tex.id);
