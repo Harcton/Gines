@@ -65,15 +65,15 @@ namespace gines
 		//Inform memory leaks
 		if (textCount != 0)
 		{
-			std::cout << "\nSome Text objects were not deallocated! Remaining gines::Text count: " << textCount;
+			Message("Some Text objects were not deallocated! Remaining gines::Text count: " + textCount, gines::Message::Warning);
 		}
 		if (fonts.size() != 0)
 		{
-			std::cout << "\nSome Font objects were not deallocated! Remaining font count: " << fonts.size();
+			Message("Some Font objects were not deallocated! Remaining font count: " + fonts.size(), gines::Message::Warning);
 		}
 
 		//Uninitialization complete
-		std::cout << "\nText rendering uninitialized";
+		Message("Text rendering uninitialized", gines::Message::Info);
 		textRenderingInitialized = false;
 	}
 	
