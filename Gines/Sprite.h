@@ -7,6 +7,11 @@
 #include "GLTexture.h"
 #include "Vertex.h"
 #include "Component.h"
+
+struct AABB {
+
+};
+
 namespace gines
 {
 	class Sprite : public Component

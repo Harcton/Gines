@@ -63,7 +63,7 @@ namespace gines
 		
 		initializeShaders(); 
 
-		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
+		glClearColor(0.003f, 0.01f, 0.003f, 10.0f); //0.003f, 0.01f, 0.003f, 1.0f
 		Message("Initialized successfully!", gines::Message::Info);
 		Message("Powered by... Gines(2015)", gines::Message::Info);
 		return true;
