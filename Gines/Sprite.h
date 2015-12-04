@@ -4,7 +4,7 @@
 #include <glm\glm.hpp>
 #include <GL\glew.h>
 #include <cstddef>
-
+#include "GLTexture.h"
 #include "Vertex.h"
 #include "Component.h"
 namespace gines
@@ -15,7 +15,7 @@ namespace gines
 		Sprite();
 		~Sprite();
 
-		void initialize(glm::vec2 pos, int width, int height);
+	void initialize(glm::vec2 pos, int w, int h, std::string path);
 		void draw();
 		void setPosition(glm::vec2& newPosition);
 		void setPosition(float _x, float _y);

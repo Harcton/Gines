@@ -5,6 +5,8 @@
 
 #include <SDL/SDL.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Text.h"
 #include "Gines.h"
@@ -17,6 +19,7 @@
 #include "PhysicsComponent.h"
 #include "GameObject.h"
 #include "GLTexture.h"
+#include "ResourceManager.h"
 #include "ImageLoader.h"
 #include "Camera.h"
 
@@ -35,7 +38,6 @@ gines::GameObject camera4;
 
 //
 gines::Sprite sprite;
-GLTexture tex;
 //
 
 //Test console function
@@ -85,7 +87,7 @@ int main(int argc, char** argv)
 	camera4.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
 	camera4.getComponent<gines::Text>()->setString("_C4");
 	camera4.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
-
+		
 	//GameObject Test
 	go.addComponent<gines::Transform>();
 	go.addComponent<gines::Text>();
@@ -104,8 +106,8 @@ int main(int argc, char** argv)
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
 	// Rendering debug initializations 
-	sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100);
-	tex = gines::ImageLoader::loadPNG("Textures/mr-gines.png");
+	sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
+	
 	// Rendering end 
 
 	//Game loop
@@ -121,7 +123,6 @@ int main(int argc, char** argv)
 		
 		 gines::colorProgram.use();
 		 glActiveTexture(GL_TEXTURE0);
-		 glBindTexture(GL_TEXTURE_2D, tex.id);
 		 GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
 		 glUniform1i(textureLocation, 0);
 		 sprite.draw();
@@ -167,7 +168,7 @@ int main(int argc, char** argv)
 void handleInput()
 {
 	float moveSpeed = 5 * texts.size();
-	// These will likely be handled within the inputManager's handleInput function in the future. Will remain here for now.
+	
 	if (gines::inputManager.isKeyHeld(SDLK_ESCAPE))
 	{
 		run = false;
