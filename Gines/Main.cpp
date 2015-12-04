@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 	// Rendering debug initializations
 	camera1.addComponent<gines::Sprite>();
 	camera1.getComponent<gines::Sprite>()->initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
-	//sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
+	sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
 	
 	// Rendering end 
 
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
 		 glActiveTexture(GL_TEXTURE0);
 		 GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
 		 glUniform1i(textureLocation, 0);
-		 //sprite.draw();
+		 sprite.draw();
 		 glBindTexture(GL_TEXTURE_2D, 0);
 		 gines::colorProgram.unuse();
 
