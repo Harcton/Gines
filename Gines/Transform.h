@@ -48,9 +48,6 @@ namespace gines
 		float getRotation() { return rotation; }
 		float getRotationDeg() { return rotation * (180 / M_PI); }
 
-		//Misc
-		void print();
-
 	private:
 		void clampRotation(float& rotation);
 		glm::vec2 position;

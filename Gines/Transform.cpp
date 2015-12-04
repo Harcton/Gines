@@ -83,12 +83,4 @@ namespace gines
 
 		//std::cout << "\nTransform update()";
 	}
-
-	void Transform::print() {
-		std::cout << "\nTransform:";
-		std::cout << "\n\tX, Y: " << position.x << ", " << position.y;
-		std::cout << "\n\txScale, yScale: " << scale.x << ", " << scale.y;
-		std::cout << "\n\tRotation: " << rotation;
-		std::cout << "\n";
-	}
 }

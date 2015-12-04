@@ -108,7 +108,7 @@ namespace gines
 			glDeleteShader(vertexShaderID);
 			glDeleteShader(fragmentShaderID);
 
-			if (errorLog.size() > 0){ std::printf("\n%s", &(errorLog[0])); }
+			if (errorLog.size() > 0){ Message(&(errorLog[0]), gines::Message::Error); }
 			Message("Shaders failed to link!", gines::Message::Warning);
 		}
 
