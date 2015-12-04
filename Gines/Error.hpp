@@ -68,23 +68,23 @@ namespace gines
 		switch (level)
 		{
 		case gines::Message::Trace:
-			Msg << "\tTrace: " << tempMessage << std::endl;
+			Msg << "\t[TRACE] " << tempMessage << std::endl;
 			std::cout << Msg.str();
 			break;
 		case gines::Message::Debug:
-			Msg << "\tDebug: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
+			Msg << "\t[DEBUG] " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 			break;
 		case gines::Message::Info:
-			Msg << "\tInfo: " << tempMessage << line << std::endl;
+			Msg << "\t[INFO] " << tempMessage << std::endl;
 			std::cout << Msg.str();
 			break;
 		case gines::Message::Warning:
-			Msg << "\tWarning: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
+			Msg << "\t[WARNING] " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 			break;
 		case gines::Message::Error:
-			Msg << "\tError: " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
+			Msg << "\t[ERROR] " << tempMessage << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 
 			//Handle error
@@ -93,7 +93,7 @@ namespace gines
 			system("pause");
 			break;
 		case gines::Message::Fatal:
-			Msg << "\tFatal: " << message << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
+			Msg << "\t[FATAL] " << message << "\n\t\t\tFile: " << file << "\n\t\t\tLine: " << line << std::endl;
 			std::cout << Msg.str();
 
 			system("pause");
