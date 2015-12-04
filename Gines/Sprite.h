@@ -16,14 +16,17 @@ namespace gines
 		~Sprite();
 
 	void initialize(glm::vec2 pos, int w, int h, std::string path);
-		void draw();
+		void render();
 		void setPosition(glm::vec2& newPosition);
 		void setPosition(float _x, float _y);
 		void setRotation(float newRotation);
 		void rotate(float incrementation);
+		void setOrigin(float _x, float _y);
+		void setOrigin(glm::vec2& vec);
 
 	private:
 		glm::vec2 position;
+		glm::vec2 origin;//Center of rotation, drawing point, default left corner
 		float rotation;
 		int width;
 		int height;

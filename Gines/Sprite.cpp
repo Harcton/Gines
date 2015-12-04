@@ -9,7 +9,15 @@ namespace gines
 {
 	extern GLSLProgram colorProgram;
 
-	Sprite::Sprite() : position(0, 0), rotation(0), width(0), height(0), doBufferUpdate(true)
+	glm::vec2 rotatePoint(float x, float y, float rotation)
+	{
+		glm::vec2 returnVec;
+		returnVec.x = x * cos(rotation) - y * sin(rotation);
+		returnVec.y = x * sin(rotation) + y * cos(rotation);
+		return returnVec;
+	}
+
+	Sprite::Sprite() : position(0, 0), origin(0, 0), rotation(0), width(0), height(0), doBufferUpdate(true)
 	{
 	}
 
@@ -41,10 +49,27 @@ namespace gines
 	void Sprite::setPosition(float _x, float _y)
 	{
 		if (position.x != _x || position.y != _y)
-		{//If check may be insufficient due to foating point inaccuracy
+		{//If check may be insufficient due to floating point inaccuracy
 			doBufferUpdate = true;
 			position.x = _x;
 			position.y = _y;
+		}
+	}
+	void Sprite::setOrigin(float _x, float _y)
+	{
+		if (origin.x != _x || origin.y != _y)
+		{
+			doBufferUpdate = true;
+			origin.x = _x;
+			origin.y = _y;
+		}
+	}
+	void Sprite::setOrigin(glm::vec2& vec)
+	{
+		if (origin != vec)
+		{
+			doBufferUpdate = true;
+			origin = vec;
 		}
 	}
 	void Sprite::setRotation(float newRotation)
@@ -67,28 +92,48 @@ namespace gines
 
 		VertexPositionColorTexture vertexData[6];
 
-	vertexData[0].position.x = position.x + width;
-	vertexData[0].position.y = position.y + height;
+		//Position/rotation in world coordinates
+		float x = position.x;
+		float y = position.y;
+		float rot = rotation;
+		if (gameObject != nullptr)
+		{
+			x += gameObject->transform().getPosition().x;
+			y += gameObject->transform().getPosition().y;
+			rot += gameObject->transform().getRotation();
+		}
+
+		//Corner positions in local space
+		glm::vec2 topLeft = rotatePoint(-origin.x, -origin.y, rot);
+		glm::vec2 bottomLeft = rotatePoint(-origin.x, -origin.y + height, rot);
+		glm::vec2 topRight = rotatePoint(-origin.x + width, -origin.y, rot);
+		glm::vec2 bottomRight = rotatePoint(-origin.x + width, -origin.y + height, rot);
+
+		topLeft.x += x;
+		topLeft.y += y;
+		bottomLeft.x += x;
+		bottomLeft.y += y;
+		topRight.x += x;
+		topRight.y += y;
+		bottomRight.x += x;
+		bottomRight.y += y;
+		
+		vertexData[0].position = bottomRight;
 		vertexData[0].uv = glm::vec2(1.0f, 1.0f);
 
-	vertexData[1].position.x = position.x;
-	vertexData[1].position.y = position.y + height;
+		vertexData[1].position = bottomLeft;
 		vertexData[1].uv = glm::vec2(0.0f, 1.0f);
 
-	vertexData[2].position.x = position.x;
-	vertexData[2].position.y = position.y;
+		vertexData[2].position = topLeft;
 		vertexData[2].uv = glm::vec2(0.0f, 0.0f);
 
-	vertexData[3].position.x = position.x;
-	vertexData[3].position.y = position.y;
+		vertexData[3].position = topLeft;
 		vertexData[3].uv = glm::vec2(0.0f, 0.0f);
 
-	vertexData[4].position.x = position.x + width;
-	vertexData[4].position.y = position.y;
+		vertexData[4].position = topRight;
 		vertexData[4].uv = glm::vec2(1.0f, 0.0f);
 
-	vertexData[5].position.x = position.x + width;
-	vertexData[5].position.y = position.y + height;
+		vertexData[5].position = bottomRight;
 		vertexData[5].uv = glm::vec2(1.0f, 1.0f);
 
 		for (int i = 0; i < 6; i++)
@@ -122,8 +167,14 @@ namespace gines
 
 
 	//////
-	void Sprite::draw()
+	void Sprite::render()
 	{
+		//Prepare for sprite drawing
+		gines::colorProgram.use();
+		glActiveTexture(GL_TEXTURE0);
+		GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
+		glUniform1i(textureLocation, 0);
+
 		for (unsigned c = 0; c < cameras.size(); c++)
 			if (cameras[c]->isEnabled())
 		{
@@ -149,13 +200,13 @@ namespace gines
 
 			glUniformMatrix4fv(colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cameras[c]->getCameraMatrix()));
 
-	glBindTexture(GL_TEXTURE_2D, tex.id);
+			glBindTexture(GL_TEXTURE_2D, tex.id);
 
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
 			glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(2);
 
 
 
@@ -171,11 +222,13 @@ namespace gines
 
 
 			glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(2);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
+		glBindTexture(GL_TEXTURE_2D, 0);
+		colorProgram.unuse();
 	}
 	//////
 

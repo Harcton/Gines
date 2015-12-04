@@ -108,7 +108,9 @@ int main(int argc, char** argv)
 	// Rendering debug initializations
 	camera1.addComponent<gines::Sprite>();
 	camera1.getComponent<gines::Sprite>()->initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
-	//sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
+	/******************************/sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
+	camera1.getComponent<gines::Sprite>()->setOrigin(50, 50);
+
 	
 	// Rendering end 
 
@@ -123,13 +125,7 @@ int main(int argc, char** argv)
 
 		//Sprite & shader debugging
 		
-		 gines::colorProgram.use();
-		 glActiveTexture(GL_TEXTURE0);
-		 GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
-		 glUniform1i(textureLocation, 0);
-		 //sprite.draw();
-		 glBindTexture(GL_TEXTURE_2D, 0);
-		 gines::colorProgram.unuse();
+		 //sprite.render();
 
 		 //
 		 go.update();
@@ -220,6 +216,10 @@ void handleInput()
 	}
 
 	//Camera movement
+	if (gines::inputManager.isKeyHeld(SDLK_z))
+		camera1.transform().rotate(0.1f);
+	if (gines::inputManager.isKeyHeld(SDLK_x))
+		camera1.transform().rotate(-0.1f);
 	if (gines::inputManager.isKeyHeld(SDLK_w))
 		camera1.transform().move(glm::vec2(0, 1));
 	if (gines::inputManager.isKeyHeld(SDLK_s))
