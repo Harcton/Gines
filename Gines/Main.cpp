@@ -38,7 +38,6 @@ gines::GameObject camera4;
 
 //
 gines::Sprite sprite;
-GLTexture tex;
 //
 
 //Test console function
@@ -107,8 +106,8 @@ int main(int argc, char** argv)
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
 	// Rendering debug initializations 
-	sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100);
-	tex = gines::ImageLoader::loadPNG("Textures/mr-gines.png");
+	sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
+	
 	// Rendering end 
 
 	//Game loop
@@ -124,7 +123,6 @@ int main(int argc, char** argv)
 		
 		 gines::colorProgram.use();
 		 glActiveTexture(GL_TEXTURE0);
-		 glBindTexture(GL_TEXTURE_2D, tex.id);
 		 GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
 		 glUniform1i(textureLocation, 0);
 		 sprite.draw();

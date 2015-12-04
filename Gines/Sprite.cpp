@@ -10,21 +10,16 @@ namespace gines
 
 Sprite::Sprite()
 {
-	////
-	
-	////
+
 }
 
 
 Sprite::~Sprite()
 {
-	////
 		glDeleteBuffers(1, &vboID);
-	
-	////
 }
 
-	void Sprite::initialize(glm::vec2 pos, int w, int h)
+	void Sprite::initialize(glm::vec2 pos, int w, int h, std::string path)
 {
 	tex = gines::ResourceManager::getTexture(path);
 	position = pos;
