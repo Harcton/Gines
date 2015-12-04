@@ -78,9 +78,6 @@ int main(int argc, char** argv)
 	gines::console.addVariable("run", run);
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
-
-	glm::mat4 pasimatriisi = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f);
-
 	// Rendering debug initializations 
 	sprites.push_back(new Sprite());
 	sprites.back()->initialize(glm::vec2(0.0f, 0.0f), 500, 500, "Textures/mr-gines.png");
@@ -109,7 +106,6 @@ int main(int argc, char** argv)
 		 glActiveTexture(GL_TEXTURE0);
 
 		 glUniform1i(gines::colorProgram.getUniformLocation("texture1"), 0);
-		 glUniformMatrix4fv(gines::colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(pasimatriisi));
 		 for (int i = 0; i < sprites.size(); i++)
 		 {
 			 sprites[i]->draw();

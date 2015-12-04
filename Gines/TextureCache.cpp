@@ -23,12 +23,12 @@ GLTexture TextureCache::getTexture(std::string path)
 		//insert it into the map
 		std::pair<std::string, GLTexture> texPair(path, newTex);
 		textureMap.insert(texPair);
-		std::cout << "\nUsing cached texture\n";
+		std::cout << "\nLoaded texture!\n";
 		return newTex;
 		
 	}
 	//returns the texture
-	std::cout << "\nFound texture in map! Using...\n";
+	std::cout << "\nUsing texture from cache!\n";
 	return mapIt->second;
 
 }

@@ -123,7 +123,7 @@ namespace gines
 	Transform& GameObject::transform() {
 		if (transformComponent == nullptr)
 		{
-			Message("Trying to access transform on game object that doesn't have one!", Log::Level::Warning);
+			Message("Trying to access transform on game object that doesn't have one!", gines::Message::Warning);
 			//TODO: warning: trying to access transform component which does not exist
 			//logError("\nWarning: trying to access transform shortcut which does not exist!");
 			return nulltransform;

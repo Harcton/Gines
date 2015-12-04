@@ -23,8 +23,8 @@ namespace gines
 
 	bool initialize()
 	{
-		Message("asdasdasd", Log::Level::Trace);
-		Message("Initialize started...", Log::Level::Info);
+		Message("asdasdasd", gines::Message::Trace);
+		Message("Initialize started...", gines::Message::Info);
 
 		SDL_Init(SDL_INIT_VIDEO);
 		mWindow = SDL_CreateWindow("SDL project",
@@ -34,40 +34,39 @@ namespace gines
 
 		if (mWindow == NULL)
 		{
-			Message("Initialization failed! Failed to create window!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to create window!", gines::Message::Fatal);
 			return false;
 		}
 
 		if ((renderingContex = SDL_GL_CreateContext(mWindow)) == NULL)
 		{
-			Message("Initialization failed! Failed to create SDL rendering context!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to create SDL rendering context!", gines::Message::Fatal);
 			return false;
 		}
 
 		if (glewInit() != GLEW_OK)
 		{
-			Message("Initialization failed! Failed to initializez glew!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to initializez glew!", gines::Message::Fatal);
 			return false;
 		}
 
 		if (!gines::initializeTime())
 		{
-			Message("Initialization failed! Failed to initialize time!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to initialize time!", gines::Message::Fatal);
 			return false;
 		}
 
 		if (console.initialize() != 0)
 		{
-			Message("Initialization failed! Failed to initialize console!", Log::Level::Fatal);
+			Message("Initialization failed! Failed to initialize console!", gines::Message::Fatal);
 			return false;
 		}
 		
 		initializeShaders(); 
 
-		//glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
-		glClearColor(1.0f, 0.01f, 0.003f, 1.0f);
-		Message("Initialized successfully!", Log::Level::Info);
-		Message("Powered by... Gines(2015)", Log::Level::Info);
+		glClearColor(0.003f, 0.01f, 0.003f, 1.0f);
+		Message("Initialized successfully!", gines::Message::Info);
+		Message("Powered by... Gines(2015)", gines::Message::Info);
 		return true;
 
 	}
@@ -87,7 +86,7 @@ namespace gines
 		console.unitialize();
 		uninitializeTextRendering();
 
-		Message("Exited succesfully", Log::Level::Info);
+		Message("Exited succesfully", gines::Message::Info);
 		std::getchar();
 		return 0;
 	}

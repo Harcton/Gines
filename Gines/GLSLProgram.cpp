@@ -79,8 +79,8 @@ namespace gines
 
 			glDeleteShader(id);
 
-			if (errorLog.size() > 0){ Message(&errorLog[0], Log::Level::Error); }
-			Message(("glGetShaderiv(id, GL_COMPILE_STATUS, &success) failed! (" + filePath + ")").c_str(), Log::Level::Error);
+			if (errorLog.size() > 0){ Message(&errorLog[0], gines::Message::Error); }
+			Message(("glGetShaderiv(id, GL_COMPILE_STATUS, &success) failed! (" + filePath + ")").c_str(), gines::Message::Error);
 		}
 	}
 	void GLSLProgram::linkShaders()
@@ -129,7 +129,7 @@ namespace gines
 		GLint location = glGetUniformLocation(programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX)
 		{
-			Message(("Uniform " + uniformName + " not found!").c_str(), Log::Level::Error);
+			Message(("Uniform " + uniformName + " not found!").c_str(), gines::Message::Error);
 			return 0;
 		}
 		return location;
