@@ -17,17 +17,25 @@ namespace gines
 
 		void initialize(glm::vec2 pos, int width, int height);
 		void draw();
+		void setPosition(glm::vec2& newPosition);
+		void setPosition(float _x, float _y);
+		void setRotation(float newRotation);
+		void rotate(float incrementation);
 
 	private:
 		glm::vec2 position;
+		float rotation;
 		int width;
 		int height;
-
-		////
-		float x;
-		float y;
 		GLuint vboID;
-		////
+
+		//Game object tracking
+		bool doPositionUpdate;
+		bool doRotationUpdate;
+		glm::vec2 gameObjectPosition;	//Previous position of game object
+		float gameObjectRotation;		//Previous rotation of game object
+		void updatePosition();			
+		void updateRotation();
 
 	};
 }
