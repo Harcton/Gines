@@ -22,6 +22,7 @@
 #include "ResourceManager.h"
 #include "ImageLoader.h"
 #include "Camera.h"
+#include "CollisionBox.h"
 
 //DEEBUGGIA...
 void handleInput();
@@ -61,7 +62,7 @@ int main(int argc, char** argv)
 	//Camera test
 	camera1.addComponent<gines::Transform>();
 	camera1.addComponent<gines::Camera>();
-	camera1.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.0f, WINDOW_HEIGHT*0.5f), glm::vec2(WINDOW_WIDTH*0.25f, WINDOW_HEIGHT*0.25f));
+	camera1.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.0f, WINDOW_HEIGHT*0.5f), glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f));
 	camera1.addComponent<gines::Text>();
 	camera1.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
 	camera1.getComponent<gines::Text>()->setString("_C1");
@@ -82,7 +83,7 @@ int main(int argc, char** argv)
 	camera3.getComponent<gines::Text>()->setColor(0.0f, 0.6f, 0.0f);
 	camera4.addComponent<gines::Transform>();
 	camera4.addComponent<gines::Camera>();
-	camera4.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.0f), glm::vec2(WINDOW_WIDTH*0.33f, WINDOW_HEIGHT*0.33f));
+	camera4.getComponent<gines::Camera>()->setViewport(glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.0f), glm::vec2(WINDOW_WIDTH*0.5f, WINDOW_HEIGHT*0.5f));
 	camera4.addComponent<gines::Text>();
 	camera4.getComponent<gines::Text>()->setFont(gines::ginesFontPath, 50);
 	camera4.getComponent<gines::Text>()->setString("_C4");
@@ -106,11 +107,20 @@ int main(int argc, char** argv)
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
 	// Rendering debug initializations
+	///******************************/sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
 	camera1.addComponent<gines::Sprite>();
 	camera1.getComponent<gines::Sprite>()->initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
-	/******************************/sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
 	camera1.getComponent<gines::Sprite>()->setOrigin(50, 50);
+	camera1.addComponent<gines::CollisionBox>();
+	camera1.getComponent<gines::CollisionBox>()->setSize(100, 100);
+	camera1.getComponent<gines::CollisionBox>()->setOrigin(50, 50);
 
+	camera2.addComponent<gines::Sprite>();
+	camera2.getComponent<gines::Sprite>()->initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
+	camera2.getComponent<gines::Sprite>()->setOrigin(50, 50);
+	camera2.addComponent<gines::CollisionBox>();
+	camera2.getComponent<gines::CollisionBox>()->setSize(100, 100);
+	camera2.getComponent<gines::CollisionBox>()->setOrigin(50, 50);
 	
 	// Rendering end 
 
@@ -215,19 +225,20 @@ void handleInput()
 		std::cout << mouseCoordinates.x << "  " << mouseCoordinates.y << std::endl;
 	}
 
+	float camSpeed = 2.5f;
 	//Camera movement
 	if (gines::inputManager.isKeyHeld(SDLK_z))
 		camera1.transform().rotate(0.1f);
 	if (gines::inputManager.isKeyHeld(SDLK_x))
 		camera1.transform().rotate(-0.1f);
 	if (gines::inputManager.isKeyHeld(SDLK_w))
-		camera1.transform().move(glm::vec2(0, 1));
+		camera1.transform().move(glm::vec2(0, camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_s))
-		camera1.transform().move(glm::vec2(0, -1));
+		camera1.transform().move(glm::vec2(0, -camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_d))
-		camera1.transform().move(glm::vec2(1, 0));
+		camera1.transform().move(glm::vec2(camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_a))
-		camera1.transform().move(glm::vec2(-1, 0));
+		camera1.transform().move(glm::vec2(-camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_e))
 		camera1.getComponent<gines::Camera>()->setScale(camera1.getComponent<gines::Camera>()->getScale() + 0.01f);
 	if (gines::inputManager.isKeyHeld(SDLK_q))
@@ -235,13 +246,13 @@ void handleInput()
 
 	//Camera2 movement
 	if (gines::inputManager.isKeyHeld(SDLK_i))
-		camera2.transform().move(glm::vec2(0, 1));
+		camera2.transform().move(glm::vec2(0, camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_k))
-		camera2.transform().move(glm::vec2(0, -1));
+		camera2.transform().move(glm::vec2(0, -camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_l))
-		camera2.transform().move(glm::vec2(1, 0));
+		camera2.transform().move(glm::vec2(camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_j))
-		camera2.transform().move(glm::vec2(-1, 0));
+		camera2.transform().move(glm::vec2(-camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_o))
 		camera2.getComponent<gines::Camera>()->setScale(camera2.getComponent<gines::Camera>()->getScale() + 0.01f);
 	if (gines::inputManager.isKeyHeld(SDLK_u))
@@ -249,13 +260,13 @@ void handleInput()
 
 	//Camera3 movement
 	if (gines::inputManager.isKeyHeld(SDLK_UP))
-		camera3.transform().move(glm::vec2(0, 1));
+		camera3.transform().move(glm::vec2(0, camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_DOWN))
-		camera3.transform().move(glm::vec2(0, -1));
+		camera3.transform().move(glm::vec2(0, -camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_RIGHT))
-		camera3.transform().move(glm::vec2(1, 0));
+		camera3.transform().move(glm::vec2(camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_LEFT))
-		camera3.transform().move(glm::vec2(-1, 0));
+		camera3.transform().move(glm::vec2(-camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_PAGEUP))
 		camera3.getComponent<gines::Camera>()->setScale(camera3.getComponent<gines::Camera>()->getScale() + 0.01f);
 	if (gines::inputManager.isKeyHeld(SDLK_PAGEDOWN))
@@ -263,13 +274,13 @@ void handleInput()
 
 	//Camera4 movement
 	if (gines::inputManager.isKeyHeld(SDLK_KP_8))
-		camera4.transform().move(glm::vec2(0, 1));
+		camera4.transform().move(glm::vec2(0, camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_KP_5))
-		camera4.transform().move(glm::vec2(0, -1));
+		camera4.transform().move(glm::vec2(0, -camSpeed));
 	if (gines::inputManager.isKeyHeld(SDLK_KP_6))
-		camera4.transform().move(glm::vec2(1, 0));
+		camera4.transform().move(glm::vec2(camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_KP_4))
-		camera4.transform().move(glm::vec2(-1, 0));
+		camera4.transform().move(glm::vec2(-camSpeed, 0));
 	if (gines::inputManager.isKeyHeld(SDLK_KP_9))
 		camera4.getComponent<gines::Camera>()->setScale(camera4.getComponent<gines::Camera>()->getScale() + 0.01f);
 	if (gines::inputManager.isKeyHeld(SDLK_KP_7))

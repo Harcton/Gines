@@ -41,7 +41,8 @@ namespace gines
 	}
 
 	void Transform::move(float x, float y) {
-		position += glm::vec2(x, y);
+		position.x += x;
+		position.y += y;
 	}
 
 	//Set absolute position

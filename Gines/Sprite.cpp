@@ -4,19 +4,12 @@
 #include "Camera.h"
 #include "GLSLProgram.h"
 #include "GameObject.h"
+#include "Geometry.h"
 
 namespace gines
 {
 	extern GLSLProgram colorProgram;
-
-	glm::vec2 rotatePoint(float x, float y, float rotation)
-	{
-		glm::vec2 returnVec;
-		returnVec.x = x * cos(rotation) - y * sin(rotation);
-		returnVec.y = x * sin(rotation) + y * cos(rotation);
-		return returnVec;
-	}
-
+	
 	Sprite::Sprite() : position(0, 0), origin(0, 0), rotation(0), width(0), height(0), doBufferUpdate(true)
 	{
 	}
@@ -93,30 +86,19 @@ namespace gines
 		VertexPositionColorTexture vertexData[6];
 
 		//Position/rotation in world coordinates
-		float x = position.x;
-		float y = position.y;
-		float rot = rotation;
+		glm::vec2 worldPos = position;
+		float worldRot = rotation;
 		if (gameObject != nullptr)
 		{
-			x += gameObject->transform().getPosition().x;
-			y += gameObject->transform().getPosition().y;
-			rot += gameObject->transform().getRotation();
+			worldPos += gameObject->transform().getPosition();
+			worldRot += gameObject->transform().getRotation();
 		}
 
-		//Corner positions in local space
-		glm::vec2 topLeft = rotatePoint(-origin.x, -origin.y, rot);
-		glm::vec2 bottomLeft = rotatePoint(-origin.x, -origin.y + height, rot);
-		glm::vec2 topRight = rotatePoint(-origin.x + width, -origin.y, rot);
-		glm::vec2 bottomRight = rotatePoint(-origin.x + width, -origin.y + height, rot);
-
-		topLeft.x += x;
-		topLeft.y += y;
-		bottomLeft.x += x;
-		bottomLeft.y += y;
-		topRight.x += x;
-		topRight.y += y;
-		bottomRight.x += x;
-		bottomRight.y += y;
+		//Corner positions in world space
+		glm::vec2 topLeft = rotatePoint(-origin.x, -origin.y, worldRot) + worldPos;
+		glm::vec2 bottomLeft = rotatePoint(-origin.x, -origin.y + height, worldRot) + worldPos;
+		glm::vec2 topRight = rotatePoint(-origin.x + width, -origin.y, worldRot) + worldPos;
+		glm::vec2 bottomRight = rotatePoint(-origin.x + width, -origin.y + height, worldRot) + worldPos;
 		
 		vertexData[0].position = bottomRight;
 		vertexData[0].uv = glm::vec2(1.0f, 1.0f);
