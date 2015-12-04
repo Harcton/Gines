@@ -23,6 +23,7 @@
 #include "ImageLoader.h"
 #include "Camera.h"
 
+
 //DEEBUGGIA...
 void handleInput();
 void increaseTextCount();
@@ -111,7 +112,7 @@ int main(int argc, char** argv)
 	/******************************/sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100, "Textures/mr-gines.png");
 	camera1.getComponent<gines::Sprite>()->setOrigin(50, 50);
 	
-	
+
 	// Rendering end 
 
 	//Game loop

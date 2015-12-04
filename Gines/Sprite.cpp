@@ -169,6 +169,7 @@ namespace gines
 	//////
 	void Sprite::render()
 	{
+		
 		//Prepare for sprite drawing
 		gines::colorProgram.use();
 		glActiveTexture(GL_TEXTURE0);
@@ -200,13 +201,14 @@ namespace gines
 
 			glUniformMatrix4fv(colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cameras[c]->getCameraMatrix()));
 
-	glBindTexture(GL_TEXTURE_2D, tex.id);
-
+			glBindTexture(GL_TEXTURE_2D, tex.id);
+			
+			
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
-
+			
 			glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(2);
 
 
 
@@ -222,13 +224,17 @@ namespace gines
 
 
 			glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(2);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			
+
 		}
 		glBindTexture(GL_TEXTURE_2D, 0);
 		colorProgram.unuse();
+
+		
 	}
 	//////
 

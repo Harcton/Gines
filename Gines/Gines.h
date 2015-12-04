@@ -2,6 +2,7 @@
 
 #include "Error.hpp"
 
+
 #include "GLSLProgram.h"
 #include "InputManager.h"
 #include "Console.h"
