@@ -1,7 +1,12 @@
+#include <glm/gtc/type_ptr.hpp>//glm::value_ptr
 #include "Sprite.h"
+#include "Camera.h"
+#include "GLSLProgram.h"
 
 namespace gines
 {
+	extern GLSLProgram colorProgram;
+
 	Sprite::Sprite()
 	{
 		////
@@ -20,11 +25,11 @@ namespace gines
 		////
 	}
 
-	void Sprite::initialize(glm::vec2 pos, int width, int height)
+	void Sprite::initialize(glm::vec2 pos, int w, int h)
 	{
 		position = pos;
-		width = width;
-		height = height;
+		width = w;
+		height = h;
 
 
 		/////////////////////////
@@ -94,26 +99,32 @@ namespace gines
 	//////
 	void Sprite::draw()
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		for (unsigned c = 0; c < cameras.size(); c++)
+			if (cameras[c]->isEnabled())
+		{
+			cameras[c]->enableViewport();
+			glUniformMatrix4fv(colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cameras[c]->getCameraMatrix()));
 
-		glEnableVertexAttribArray(0);
+			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
-
-		//Position attribute pointer
-
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, position));
-
-		//Color attribute pointer
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, color));
-
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, uv));
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+			glEnableVertexAttribArray(0);
 
 
-		glDisableVertexAttribArray(0);
+			//Position attribute pointer
+			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, position));
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+			//Color attribute pointer
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, color));
+
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, uv));
+
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+			glDisableVertexAttribArray(0);
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
 	}
 	//////
 

@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 	gines::console.addVariable("fontSize", gines::consoleFontSize);
 
 	// Rendering debug initializations 
-	sprite.initialize(glm::vec2(-1.0f, -1.0f), 1, 1);
+	sprite.initialize(glm::vec2(-1.0f, -1.0f), 100, 100);
 	tex = gines::ImageLoader::loadPNG("Textures/mr-gines.png");
 	// Rendering end 
 
