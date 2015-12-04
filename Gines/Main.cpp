@@ -176,7 +176,7 @@ void handleInput()
 	if (gines::inputManager.isKeyPressed(SDLK_RCTRL))
 	{
 		increaseTextCount();
-		std::cout << "\nText count increased! texts.size(): " << texts.size();
+		Message("Text count increased! texts.size(): " + texts.size(), gines::Message::Info);
 	}
 	if (gines::inputManager.isKeyHeld(SDLK_UP))
 	{
@@ -213,7 +213,6 @@ void handleInput()
 	if (gines::inputManager.isKeyHeld(SDL_BUTTON_LEFT))
 	{
 		glm::vec2 mouseCoordinates = gines::inputManager.getMouseCoordinates();
-		std::cout << mouseCoordinates.x << "  " << mouseCoordinates.y << std::endl;
 	}
 
 	//Camera movement
@@ -303,7 +302,7 @@ void increaseTextCount()
 	int glyphsToRender = 0;
 	for (unsigned i = 0; i < texts.size(); i++)
 		glyphsToRender += texts[i]->getGlyphsToRender();
-	std::cout << "\nGlyphs to render: " << glyphsToRender;
+	Message("Glyphs to render: " + glyphsToRender, gines::Message::Info);
 }
 
 /////////////

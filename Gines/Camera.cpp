@@ -12,7 +12,6 @@ namespace gines
 	Camera::Camera() : enabled(true), doMatrixUpdate(true), scale(1), orthoMatrix(1.0f), cameraMatrix(1.0f), gameObjectPosition(0, 0), viewportPosition(0), viewportSize(0)
 	{
 		cameras.push_back(this);
-		std::cout << "\nCameras: " << cameras.size();
 	}
 	Camera::~Camera()
 	{
@@ -29,7 +28,6 @@ namespace gines
 	{
 		viewportPosition = position;
 		viewportSize = size;
-		std::cout << "\nSize:" << viewportSize.x << ", " << viewportSize.y;
 		orthoMatrix = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT);
 		//orthoMatrix = glm::ortho(position.x, (float)WINDOW_WIDTH, position.y, (float)WINDOW_HEIGHT);
 		//orthoMatrix = glm::ortho(position.x, viewportSize.x, position.y, viewportSize.y);

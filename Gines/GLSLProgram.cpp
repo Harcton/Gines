@@ -24,13 +24,13 @@ namespace gines
 		vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 		if (vertexShaderID == 0)
 		{
-			std::cout << "glCreateShader(GL_VERTEX_SHADER) failed!";
+			Message("glCreateShader(GL_VERTEX_SHADER) failed!", gines::Message::Error);
 			return;
 		}
 		fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 		if (fragmentShaderID == 0)
 		{
-			std::cout << "glCreateShader(GL_FRAGMENT_SHADER) failed!";
+			Message("glCreateShader(GL_FRAGMENT_SHADER) failed!", gines::Message::Error);
 			return;
 		}
 
@@ -44,7 +44,7 @@ namespace gines
 		std::ifstream vertexFile(filePath);
 		if (vertexFile.fail())
 		{
-			std::cout << "std::ifstream vertexFile(vertexShaderPath) failed! (" + filePath + ")";
+			Message("std::ifstream vertexFile(vertexShaderPath) failed!", gines::Message::Error);
 			return;
 		}
 
@@ -108,8 +108,8 @@ namespace gines
 			glDeleteShader(vertexShaderID);
 			glDeleteShader(fragmentShaderID);
 
-			if (errorLog.size() > 0){ std::printf("\n%s", &(errorLog[0])); }
-			std::cout << "Shaders failed to link!";
+			if (errorLog.size() > 0){ Message(&(errorLog[0]), gines::Message::Error); }
+			Message("Shaders failed to link!", gines::Message::Warning);
 		}
 
 
