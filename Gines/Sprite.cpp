@@ -120,21 +120,21 @@ namespace gines
 
 		for (int i = 0; i < 6; i++)
 		{
-			vertexData[i].color.r = 1;
+			vertexData[i].color.r = 0;
 			vertexData[i].color.g = 0;
 			vertexData[i].color.b = 1;
 			vertexData[i].color.a = 1;
 		}
 
-		vertexData[1].color.r = 0;
+		vertexData[1].color.r = 1;
 		vertexData[1].color.g = 0;
-		vertexData[1].color.b = 1;
+		vertexData[1].color.b = 0;
 		vertexData[1].color.a = 1;
 
 
 		vertexData[4].color.r = 1;
 		vertexData[4].color.g = 0;
-		vertexData[4].color.b = 0;
+		vertexData[4].color.b = 1;
 		vertexData[4].color.a = 1;
 
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);

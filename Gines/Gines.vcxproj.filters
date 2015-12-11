@@ -112,7 +112,7 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="CollisionBox.cpp">
-      <Filter>Source Files\GameObject\Components</Filter>
+      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

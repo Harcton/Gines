@@ -1,5 +1,4 @@
-#ifndef SPRITEBATCH_H
-#define SPRITEBATCH_H
+#pragma once
 
 #include <GL\glew.h>
 #include <glm\glm.hpp>
@@ -20,7 +19,7 @@ namespace gines
 	};
 
 
-	struct Glyph
+	struct SpriteInfo
 	{
 		GLuint tex;
 		float drawDepth;
@@ -57,16 +56,15 @@ namespace gines
 		void createBatches();
 		void sort();
 
-		static bool compareFrontBack(Glyph* a, Glyph* b);
-		static bool compareBackFront(Glyph* a, Glyph* b);
-		static bool compareTexture(Glyph* a, Glyph* b);
+		static bool compareFrontBack(SpriteInfo* a, SpriteInfo* b);
+		static bool compareBackFront(SpriteInfo* a, SpriteInfo* b);
+		static bool compareTexture(SpriteInfo* a, SpriteInfo* b);
 
 		SortType type;
 		GLuint vbo;
 		
-		std::vector<Glyph*> glyphs;
+		std::vector<SpriteInfo*> SpriteData;
 		std::vector<Batch> batches;
 	};
 }
-#endif
 

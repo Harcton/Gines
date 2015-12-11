@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
+
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <vector>
@@ -43,4 +43,3 @@ namespace gines
 	extern gines::Camera guiCamera;
 }
 
-#endif

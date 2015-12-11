@@ -1,5 +1,4 @@
-#ifndef PhyiscsComponent_h_
-#define PhysicsComponent_h_
+#pragma once
 
 #include "Component.h"
 
@@ -16,4 +15,3 @@ namespace gines
 	private:
 	};
 }
-#endif

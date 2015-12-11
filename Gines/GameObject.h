@@ -1,5 +1,4 @@
-#ifndef GameObject_h_
-#define GameObject_h_
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -162,4 +161,3 @@ namespace gines
 		std::vector<Component*> components;
 	};
 }
-#endif

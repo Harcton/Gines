@@ -1,5 +1,5 @@
-#ifndef IOMANAGER_H
-#define IOMANAGER_H
+#pragma once
+
 #include <vector>
 #include <string>
 #include <fstream>
@@ -16,4 +16,3 @@ namespace gines
 		static bool readToBuffer(std::string filePath, std::vector<unsigned char>& buffer);
 	};
 }
-#endif

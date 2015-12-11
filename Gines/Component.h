@@ -1,5 +1,4 @@
-#ifndef Component_h_
-#define Component_h_
+#pragma once
 #include <glm/vec2.hpp>
 #include <iostream>
 #define _USE_MATH_DEFINES
@@ -41,4 +40,3 @@ namespace gines
 
 */
 
-#endif

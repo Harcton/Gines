@@ -1,5 +1,5 @@
-#ifndef CONSOLE_H
-#define CONSOLE_H
+#pragma once
+
 #include <string>
 #include <vector>
 #include "Text.h"
@@ -76,4 +76,3 @@ namespace gines
 
 	};
 }
-#endif

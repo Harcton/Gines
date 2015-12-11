@@ -1,5 +1,4 @@
-#ifndef IMAGELOADER_H
-#define IMAGELOADER_H
+#pragma once
 
 #include "Error.hpp"
 #include "GLTexture.h"
@@ -15,5 +14,3 @@ namespace gines
 
 	};
 }
-
-#endif

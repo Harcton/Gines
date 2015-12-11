@@ -1,5 +1,4 @@
-#ifndef GLSLPROGRAM
-#define GLSLPROGRAM
+#pragma once
 
 #include "Error.hpp"
 #include <GL/glew.h>
@@ -33,4 +32,3 @@ namespace gines
 		GLuint fragmentShaderID;
 	};
 }
-#endif

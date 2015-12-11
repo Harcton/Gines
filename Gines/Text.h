@@ -1,6 +1,4 @@
-#ifndef TEXT_H
-#define TEXT_H
-
+#pragma once
 
 #include <map>
 #include <string>
@@ -88,4 +86,3 @@ namespace gines
 		glm::vec2 gameObjectPosition;//Game object position tracking
 	};
 }
-#endif
