@@ -18,7 +18,9 @@ namespace gines
 		void setScale(float);
 		void setViewport(glm::vec2& bottomLeftPosition, glm::vec2& size);
 
-		glm::vec2 getPosition();
+		//glm::vec2 getPosition();
+		void setPosition(float _x, float _y);
+		void setPosition(glm::vec2& pos);
 		float getScale();
 		glm::mat4 getCameraMatrix();
 		bool isEnabled(){ return enabled; }
@@ -35,8 +37,10 @@ namespace gines
 		glm::vec2 gameObjectPosition;//Game object position tracking
 		glm::vec2 viewportPosition;
 		glm::vec2 viewportSize;
+		glm::vec2 position;//Cameras position relative to game object
 	};
 	extern std::vector<gines::Camera*> cameras;//Vector of all cameras the application has
+	extern gines::Camera guiCamera;
 }
 
 #endif

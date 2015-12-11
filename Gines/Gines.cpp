@@ -1,5 +1,6 @@
 #include "Gines.h"
 #include "Time.h"
+#include "Camera.h"
 
 #include <SDL/SDL.h>
 #include <GL/glew.h>
@@ -10,7 +11,6 @@ int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
 SDL_GLContext renderingContex;
 SDL_Window *mWindow = nullptr;
-
 
 namespace gines
 {
@@ -60,6 +60,18 @@ namespace gines
 			Message("Initialization failed! Failed to initialize console!", gines::Message::Fatal);
 			return false;
 		}
+
+		//GUI camera instance initialization
+		guiCamera.setViewport(glm::vec2(0, 0), glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT));
+		guiCamera.setPosition(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+		for (unsigned i = 0; i < cameras.size(); i++)
+		{//Remove from cameras vector
+			if (cameras[i] == &guiCamera)
+			{
+				cameras.erase(cameras.begin() + i);
+				break;
+			}
+		}
 		
 		initializeShaders(); 
 
@@ -96,6 +108,7 @@ namespace gines
 		glClear(GL_COLOR_BUFFER_BIT);
 		inputManager.update();
 		console.update();
+		guiCamera.update();
 	}
 	void endMainLoop()
 	{

@@ -50,6 +50,7 @@ namespace gines
 			return false;
 		}
 
+		fpsCounter->useCameras(false);
 		fpsCounter->setColor(glm::vec4(0.12f, 0.45f, 0.07f, 1.0f));
 		fpsCounter->setPosition(glm::vec2(5, WINDOW_HEIGHT - fpsCounter->getFontHeight()));
 		Message("Time initialized successfully!", gines::Message::Info);

@@ -5,6 +5,11 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gines", "Gines\Gines.vcxproj", "{F516D291-1B8C-462D-BF00-9AA497A164EF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo", "Demo\Demo.vcxproj", "{2A76EFAA-ADB4-4D81-809F-47039CE3F9F9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F516D291-1B8C-462D-BF00-9AA497A164EF} = {F516D291-1B8C-462D-BF00-9AA497A164EF}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +20,10 @@ Global
 		{F516D291-1B8C-462D-BF00-9AA497A164EF}.Debug|Win32.Build.0 = Debug|Win32
 		{F516D291-1B8C-462D-BF00-9AA497A164EF}.Release|Win32.ActiveCfg = Release|Win32
 		{F516D291-1B8C-462D-BF00-9AA497A164EF}.Release|Win32.Build.0 = Release|Win32
+		{2A76EFAA-ADB4-4D81-809F-47039CE3F9F9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A76EFAA-ADB4-4D81-809F-47039CE3F9F9}.Debug|Win32.Build.0 = Debug|Win32
+		{2A76EFAA-ADB4-4D81-809F-47039CE3F9F9}.Release|Win32.ActiveCfg = Release|Win32
+		{2A76EFAA-ADB4-4D81-809F-47039CE3F9F9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

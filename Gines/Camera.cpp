@@ -8,6 +8,7 @@ extern int WINDOW_HEIGHT;
 namespace gines
 {
 	std::vector<gines::Camera*> cameras;
+	gines::Camera guiCamera;
 
 	Camera::Camera() : enabled(true), doMatrixUpdate(true), scale(1), orthoMatrix(1.0f), cameraMatrix(1.0f), gameObjectPosition(0, 0), viewportPosition(0), viewportSize(0)
 	{
@@ -34,21 +35,31 @@ namespace gines
 	}
 	void Camera::update()
 	{
-		if (gameObjectPosition != gameObject->transform().getPosition())
+		if (gameObject != nullptr)
 		{
-			gameObjectPosition = gameObject->transform().getPosition();
-			doMatrixUpdate = true;
+			if (gameObjectPosition != gameObject->transform().getPosition())
+			{
+				gameObjectPosition = gameObject->transform().getPosition();
+				doMatrixUpdate = true;
+			}
 		}
 
 		if (doMatrixUpdate == false)
 			return;
 
 		//Translate
-		//glm::vec3 translate(screenPortPosition.x - screenPortSize.x*0.5f - gameObject->transform().getPosition().x,
-		//	/******************/screenPortPosition.y - screenPortSize.y*0.5f - gameObject->transform().getPosition().y, 0.0f);
-		glm::vec3 translate(-gameObject->transform().getPosition().x + viewportSize.x*0.5f/ (viewportSize.x / WINDOW_WIDTH),// + viewportSize.x * (1 - (WINDOW_WIDTH - viewportSize.x) / viewportSize.x)
-			/**************/-gameObject->transform().getPosition().y + viewportSize.y*0.5f/ (viewportSize.y / WINDOW_HEIGHT), 0.0f);//  + viewportSize.y * (1 - (WINDOW_HEIGHT - viewportSize.y) / viewportSize.y)
-		//glm::vec3 translate(WINDOW_WIDTH / 2 - gameObject->transform().getPosition().x, WINDOW_HEIGHT / 2 - gameObject->transform().getPosition().y, 0.0f);
+		glm::vec3 translate;
+		if (gameObject != nullptr)
+		{//Game object exists
+			translate.x = -position.x - gameObject->transform().getPosition().x + viewportSize.x*0.5f / (viewportSize.x / WINDOW_WIDTH);
+			translate.y = -position.y -gameObject->transform().getPosition().y + viewportSize.y*0.5f/ (viewportSize.y / WINDOW_HEIGHT), 0.0f;
+		}
+		else
+		{//No game object
+			translate.x = -position.x + viewportSize.x*0.5f / (viewportSize.x / WINDOW_WIDTH);
+			translate.y = -position.y + viewportSize.y*0.5f / (viewportSize.y / WINDOW_HEIGHT), 0.0f;
+		}
+
 		cameraMatrix = glm::translate(orthoMatrix, translate);
 
 		//Scale
@@ -64,6 +75,17 @@ namespace gines
 	void Camera::enableViewport()
 	{
 		glViewport(viewportPosition.x, viewportPosition.y, viewportSize.x, viewportSize.y);
+	}
+	void Camera::setPosition(float _x, float _y)
+	{
+		position.x = _x;
+		position.y = _y;
+		doMatrixUpdate = true;
+	}
+	void Camera::setPosition(glm::vec2& pos)
+	{
+		position = pos;
+		doMatrixUpdate = true;
 	}
 
 	void Camera::setScale(float newScale){ scale = newScale; doMatrixUpdate = true; }

@@ -16,6 +16,7 @@
 
 namespace gines
 {
+	class Camera;
 	void uninitializeTextRendering();
 	struct Character
 	{
@@ -62,6 +63,7 @@ namespace gines
 
 		void updateGlyphsToRender();
 		void updateBuffers(); 
+		void useCameras(bool setting){ useCamerasVectorForRendering = setting; }
 
 		//Getters
 		int getFontHeight();
@@ -70,6 +72,8 @@ namespace gines
 		std::string getString();
 
 	private:
+		void renderToCamera(Camera* cam);
+		bool useCamerasVectorForRendering = true;
 		int glyphsToRender = 0;
 		GLuint vertexArrayData = 0;
 		GLuint* textures = nullptr;

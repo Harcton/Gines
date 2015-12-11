@@ -91,15 +91,16 @@ namespace gines
 
 		//Free children memory
 		while (!children.empty()) {
-			state::disable(GINES_GO_NOTIFY_PARENT);//Clear this bit so that this is  not notified
-			delete children[0];
-			children.erase(children.begin());
+			state::disable(GINES_GO_NOTIFY_PARENT);//Clear this bit so that this is not notified
+			delete children.back();
+			children.pop_back();
 		}
 
 		//Remove self from game objects vector
 		for (unsigned i = 0; i < gameObjects.size(); i++) {
 			if (gameObjects[i] == this) {
 				gameObjects.erase(gameObjects.begin() + i);
+				break;
 			}
 		}
 	}
@@ -184,6 +185,8 @@ namespace gines
 	}
 	void GameObject::addChild(std::string childName) {
 		children.push_back(getGameObject(childName));
+		if (children.back() == nullptr)
+			children.back() = new GameObject(childName);
 	}
 	void GameObject::addChild(GameObject* childObject) {
 		children.push_back(childObject);

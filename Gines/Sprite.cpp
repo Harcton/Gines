@@ -158,65 +158,76 @@ namespace gines
 		GLint textureLocation = gines::colorProgram.getUniformLocation("texture1");
 		glUniform1i(textureLocation, 0);
 
-		for (unsigned c = 0; c < cameras.size(); c++)
-			if (cameras[c]->isEnabled())
-		{
-			cameras[c]->enableViewport();
-			if (gameObject != nullptr)
+		if (useCamerasVectorForRendering)
+		{//Render using cameras vector
+			for (unsigned c = 0; c < cameras.size(); c++)
+				if (cameras[c]->isEnabled())
 			{
-				if (gameObjectPosition != gameObject->transform().getPosition())
-				{//Game object has moved
-					gameObjectPosition = gameObject->transform().getPosition();
-					doBufferUpdate = true;
-				}
-				if (gameObjectRotation != gameObject->transform().getRotation())
-				{//Game object has rotated
-					gameObjectRotation = gameObject->transform().getRotation();
-					doBufferUpdate = true;
-				}
+				renderToCamera(cameras[c]);
 			}
-
-			if (doBufferUpdate)
-			{
-				updateBuffer();
-			}
-
-			glUniformMatrix4fv(colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cameras[c]->getCameraMatrix()));
-
-			glBindTexture(GL_TEXTURE_2D, tex.id);
-			
-			
-			glBindBuffer(GL_ARRAY_BUFFER, vboID);
-			
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-			glEnableVertexAttribArray(2);
-
-
-
-			//Position attribute pointer
-			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, position));
-
-			//Color attribute pointer
-			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, color));
-
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, uv));
-
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-
-
-			glDisableVertexAttribArray(0);
-			glDisableVertexAttribArray(1);
-			glDisableVertexAttribArray(2);
-
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			
-
 		}
+		else
+		{//render to "gui camera"
+			renderToCamera(&guiCamera);
+		}
+
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 		colorProgram.unuse();
 
 		
+	}
+	void Sprite::renderToCamera(Camera* cam)
+	{
+		cam->enableViewport();
+		if (gameObject != nullptr)
+		{
+			if (gameObjectPosition != gameObject->transform().getPosition())
+			{//Game object has moved
+				gameObjectPosition = gameObject->transform().getPosition();
+				doBufferUpdate = true;
+			}
+			if (gameObjectRotation != gameObject->transform().getRotation())
+			{//Game object has rotated
+				gameObjectRotation = gameObject->transform().getRotation();
+				doBufferUpdate = true;
+			}
+		}
+
+		if (doBufferUpdate)
+		{
+			updateBuffer();
+		}
+
+		glUniformMatrix4fv(colorProgram.getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(cam->getCameraMatrix()));
+
+		glBindTexture(GL_TEXTURE_2D, tex.id);
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+
+
+
+		//Position attribute pointer
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, position));
+
+		//Color attribute pointer
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, color));
+
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexPositionColorTexture), (void*)offsetof(VertexPositionColorTexture, uv));
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	//////
 

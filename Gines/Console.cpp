@@ -30,6 +30,7 @@ namespace gines
 		consoleText->setColor(consoleTextColor);
 		consoleText->setPosition(glm::vec2(CONSOLE_BORDER, CONSOLE_BORDER));
 		consoleText->setString("><");
+		consoleText->useCameras(false);
 		log("Console initialized");
 		Message("Console initialized successfully!", gines::Message::Info);
 
@@ -71,6 +72,7 @@ namespace gines
 		lines.back()->setFont(ginesFontPath, consoleFontSize);
 		lines.back()->setColor(consoleTextColor);
 		lines.back()->setString(str);
+		lines.back()->useCameras(false);
 
 		updateLinePositions();
 	}

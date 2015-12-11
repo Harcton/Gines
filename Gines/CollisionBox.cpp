@@ -1,6 +1,5 @@
 #include <vector>
 #include "CollisionBox.h"
-#include "Geometry.h"
 #include "Gameobject.h"
 
 namespace gines

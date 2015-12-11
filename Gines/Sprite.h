@@ -14,6 +14,7 @@ struct AABB {
 
 namespace gines
 {
+	class Camera;
 	class Sprite : public Component
 	{
 	public:
@@ -28,8 +29,11 @@ namespace gines
 		void rotate(float incrementation);
 		void setOrigin(float _x, float _y);
 		void setOrigin(glm::vec2& vec);
+		void useCameras(bool setting){ useCamerasVectorForRendering = setting; }
 
 	private:
+		bool useCamerasVectorForRendering = true;
+		void renderToCamera(Camera* cam);
 		glm::vec2 position;
 		glm::vec2 origin;//Center of rotation, drawing point, default left corner
 		float rotation;
