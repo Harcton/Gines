@@ -1,5 +1,4 @@
-#ifndef TEXTURECACHE_H
-#define TEXTURECACHE_H
+#pragma once
 
 #include <map>
 #include <GL\glew.h>
@@ -16,5 +15,3 @@ public:
 private:
 	std::map<std::string, GLTexture> textureMap;
 };
-
-#endif

@@ -1,9 +1,8 @@
-#ifndef INPUTMANAGER_H
-#define INPUTMANAGER_H
+#pragma once
+
 #include <glm\glm.hpp>
 #include <unordered_map>
-//#include <SDL\SDL.h>
-//#include "Gines.h"
+
 namespace gines
 {
 
@@ -14,7 +13,6 @@ namespace gines
 		~InputManager();
 
 		void update(); // For keeping track of pressed keys
-
 
 		void keyPress(unsigned int keyID);
 		void keyRelease(unsigned int keyID);
@@ -40,8 +38,3 @@ namespace gines
 		bool wasKeyHeld(unsigned int keyID);
 	};
 }
-
-#endif
-
-
-// https://www.youtube.com/watch?v=Epyih-LEbig

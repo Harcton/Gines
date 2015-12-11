@@ -1,5 +1,4 @@
-#ifndef VERTEX_H
-#define VERTEX_H
+#pragma once
 
 #include <GL/glew.h>
 #include <glm\glm.hpp>
@@ -17,4 +16,3 @@ struct VertexPositionColor // For Triangles
 	glm::vec4 color;
 };
 
-#endif

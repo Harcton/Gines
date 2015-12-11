@@ -1,5 +1,4 @@
-#ifndef RESOURCEMANAGER_H
-#define RESOURCEMANAGER_H
+#pragma once
 
 #include <string>
 #include "TextureCache.h"
@@ -8,7 +7,6 @@
 
 namespace gines
 {
-
 	class ResourceManager
 	{
 	public:
@@ -17,7 +15,5 @@ namespace gines
 	private:
 		static TextureCache texCache;
 	};
-
 }
 
-#endif

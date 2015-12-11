@@ -19,11 +19,11 @@ namespace gines
 
 	}
 
-	void SpriteBatch::begin(SortType sortType /* default sorting type is SortType::TEXTURE */)
+	void SpriteBatch::begin(SortType sortType)// default sorting type is SortType::TEXTURE 
 	{
 		type = sortType;
 		batches.clear();
-		glyphs.clear();
+		SpriteData.clear();
 	}
 
 	void SpriteBatch::end()
@@ -34,36 +34,36 @@ namespace gines
 
 	void SpriteBatch::draw(const glm::vec4& dRect, const glm::vec4& UVRect, GLuint texture, float depth, const glm::vec4& color)
 	{
-		Glyph* nGlyph = new Glyph;
+		SpriteInfo* SInfo = new SpriteInfo;
 
-		nGlyph->tex = texture;
-		nGlyph->drawDepth = depth;
+		SInfo->tex = texture;
+		SInfo->drawDepth = depth;
 
-		nGlyph->topLeft.color = color;
-		nGlyph->topLeft.position.x = dRect.x;
-		nGlyph->topLeft.position.y = dRect.y + dRect.w;
-		nGlyph->topLeft.uv.x = UVRect.x;
-		nGlyph->topLeft.uv.y = UVRect.y + UVRect.w;
+		SInfo->topLeft.color = color;
+		SInfo->topLeft.position.x = dRect.x;
+		SInfo->topLeft.position.y = dRect.y + dRect.w;
+		SInfo->topLeft.uv.x = UVRect.x;
+		SInfo->topLeft.uv.y = UVRect.y + UVRect.w;
 
-		nGlyph->bottomLeft.color = color;
-		nGlyph->bottomLeft.position.x = dRect.x;
-		nGlyph->bottomLeft.position.y = dRect.y;
-		nGlyph->bottomLeft.uv.x = UVRect.x;
-		nGlyph->bottomLeft.uv.y = UVRect.y;
+		SInfo->bottomLeft.color = color;
+		SInfo->bottomLeft.position.x = dRect.x;
+		SInfo->bottomLeft.position.y = dRect.y;
+		SInfo->bottomLeft.uv.x = UVRect.x;
+		SInfo->bottomLeft.uv.y = UVRect.y;
 
-		nGlyph->bottomRight.color = color;
-		nGlyph->bottomRight.position.x = dRect.x + dRect.z;
-		nGlyph->bottomRight.position.y = dRect.y;
-		nGlyph->bottomRight.uv.x = UVRect.x + UVRect.z;
-		nGlyph->bottomRight.uv.y = UVRect.y;
+		SInfo->bottomRight.color = color;
+		SInfo->bottomRight.position.x = dRect.x + dRect.z;
+		SInfo->bottomRight.position.y = dRect.y;
+		SInfo->bottomRight.uv.x = UVRect.x + UVRect.z;
+		SInfo->bottomRight.uv.y = UVRect.y;
 
-		nGlyph->topRight.color = color;
-		nGlyph->topRight.position.x = dRect.x + dRect.z;
-		nGlyph->topRight.position.y = dRect.y + dRect.w;
-		nGlyph->topRight.uv.x = UVRect.x + UVRect.z;
-		nGlyph->topRight.uv.y = UVRect.y + UVRect.w;
+		SInfo->topRight.color = color;
+		SInfo->topRight.position.x = dRect.x + dRect.z;
+		SInfo->topRight.position.y = dRect.y + dRect.w;
+		SInfo->topRight.uv.x = UVRect.x + UVRect.z;
+		SInfo->topRight.uv.y = UVRect.y + UVRect.w;
 
-		glyphs.push_back(nGlyph);
+		SpriteData.push_back(SInfo);
 	}
 
 	void SpriteBatch::renderBatch()
@@ -99,9 +99,9 @@ namespace gines
 	void SpriteBatch::createBatches()
 	{
 		std::vector<VertexPositionColorTexture> vertices;
-		vertices.resize(glyphs.size() * 6);
+		vertices.resize(SpriteData.size() * 6);
 
-		if (glyphs.empty())
+		if (SpriteData.empty()) // If there is nothing in the glyph vector to make batches from
 		{
 			return;
 		}
@@ -109,34 +109,34 @@ namespace gines
 		int offs = 0;
 		int currVertex = 0;
 
-		batches.emplace_back(offs, 6, glyphs[0]->tex);
+		batches.emplace_back(offs, 6, SpriteData[0]->tex); // Creates and pushes back an item
 
-		vertices[currVertex++] = glyphs[0]->topLeft;
-		vertices[currVertex++] = glyphs[0]->bottomLeft;
-		vertices[currVertex++] = glyphs[0]->bottomRight;
-		vertices[currVertex++] = glyphs[0]->bottomRight;
-		vertices[currVertex++] = glyphs[0]->topRight;
-		vertices[currVertex++] = glyphs[0]->topLeft;
+		vertices[currVertex++] = SpriteData[0]->topLeft;
+		vertices[currVertex++] = SpriteData[0]->bottomLeft;
+		vertices[currVertex++] = SpriteData[0]->bottomRight;
+		vertices[currVertex++] = SpriteData[0]->bottomRight;
+		vertices[currVertex++] = SpriteData[0]->topRight;
+		vertices[currVertex++] = SpriteData[0]->topLeft;
 
 		offs += 6;
 
-		for (int i = 1; i < glyphs.size(); i++)
+		for (int i = 1; i < SpriteData.size(); i++)
 		{
-			if (glyphs[i]->tex != glyphs[i - 1]->tex)
+			if (SpriteData[i]->tex != SpriteData[i - 1]->tex)
 			{
-				batches.emplace_back(offs, 6, glyphs[i]->tex);
+				batches.emplace_back(offs, 6, SpriteData[i]->tex);
 			}
 			else
 			{
 				batches.back().verticeAmount += 6;
 			}
 			
-			vertices[currVertex++] = glyphs[i]->topLeft;
-			vertices[currVertex++] = glyphs[i]->bottomLeft;
-			vertices[currVertex++] = glyphs[i]->bottomRight;
-			vertices[currVertex++] = glyphs[i]->bottomRight;
-			vertices[currVertex++] = glyphs[i]->topRight;
-			vertices[currVertex++] = glyphs[i]->topLeft;
+			vertices[currVertex++] = SpriteData[i]->topLeft;
+			vertices[currVertex++] = SpriteData[i]->bottomLeft;
+			vertices[currVertex++] = SpriteData[i]->bottomRight;
+			vertices[currVertex++] = SpriteData[i]->bottomRight;
+			vertices[currVertex++] = SpriteData[i]->topRight;
+			vertices[currVertex++] = SpriteData[i]->topLeft;
 			offs += 6;
 		}
 		
@@ -154,28 +154,28 @@ namespace gines
 		switch (type) // Switch by sorting method
 		{
 		case SortType::BACK_FRONT:
-			std::stable_sort(glyphs.begin(), glyphs.end(), compareBackFront);
+			std::stable_sort(SpriteData.begin(), SpriteData.end(), compareBackFront);
 			break;
 		case SortType::FRONT_BACK:
-			std::stable_sort(glyphs.begin(), glyphs.end(), compareFrontBack);
+			std::stable_sort(SpriteData.begin(), SpriteData.end(), compareFrontBack);
 			break;
 		case SortType::TEXTURE:
-			std::stable_sort(glyphs.begin(), glyphs.end(), compareTexture);
+			std::stable_sort(SpriteData.begin(), SpriteData.end(), compareTexture);
 			break;
 		}
 	}
 
-	bool SpriteBatch::compareFrontBack(Glyph* a, Glyph* b)
+	bool SpriteBatch::compareFrontBack(SpriteInfo* a, SpriteInfo* b)
 	{
 		return(a->drawDepth < b->drawDepth);
 	}
 
-	bool SpriteBatch::compareBackFront(Glyph* a, Glyph* b)
+	bool SpriteBatch::compareBackFront(SpriteInfo* a, SpriteInfo* b)
 	{
 		return(a->drawDepth > b->drawDepth);
 	}
 
-	bool SpriteBatch::compareTexture(Glyph* a, Glyph* b)
+	bool SpriteBatch::compareTexture(SpriteInfo* a, SpriteInfo* b)
 	{
 		return(a->tex < b->tex);
 	}

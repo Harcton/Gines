@@ -2,6 +2,7 @@
 #include "Gines.h"
 #include <SDL/SDL_events.h>
 #include <SDL\SDL.h>
+#include <iostream>
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -33,10 +34,10 @@ namespace gines
 			default:
 				break;
 			case SDL_KEYDOWN:
-				gines::inputManager.keyPress(mEvent.key.keysym.sym);
+				inputManager.keyPress(mEvent.key.keysym.sym);
 				break;
 			case SDL_KEYUP:
-				gines::inputManager.keyRelease(mEvent.key.keysym.sym);
+				inputManager.keyRelease(mEvent.key.keysym.sym);
 				break;
 			case SDL_MOUSEMOTION:
 				inputManager.setMouseCoordinates(mEvent.motion.x, mEvent.motion.y);
@@ -84,16 +85,6 @@ namespace gines
 		}
 	}
 
-	bool InputManager::isKeyPressed(unsigned int keyID)
-	{	//Checks if the key was pressed this frame and WASN'T last frame.
-		bool isPressed;
-		if (isKeyHeld(keyID) == true && wasKeyHeld(keyID) == false)
-		{
-			return true;
-		}
-		return false;
-	}
-
 	bool InputManager::wasKeyHeld(unsigned int keyID)
 	{
 		auto it = previousKeyMap.find(keyID);
@@ -105,5 +96,14 @@ namespace gines
 		{ // Didn't find key
 			return false;
 		}
+	}
+
+	bool InputManager::isKeyPressed(unsigned int keyID)
+	{	//Checks if the key was pressed this frame and WASN'T last frame.
+		if (isKeyHeld(keyID) == true && wasKeyHeld(keyID) == false)
+		{
+			return true;
+		}
+		return false;
 	}
 }
